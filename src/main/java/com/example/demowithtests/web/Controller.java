@@ -1,12 +1,17 @@
 package com.example.demowithtests.web;
 
 import com.example.demowithtests.domain.Employee;
+import com.example.demowithtests.dto.EmployeeDto;
+import com.example.demowithtests.dto.EmployeeReadDto;
 import com.example.demowithtests.service.Service;
+import com.example.demowithtests.util.config.EmployeeConverter;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -15,12 +20,20 @@ import java.util.List;
 public class Controller {
 
     private final Service service;
+    private final EmployeeConverter converter;
 
     //Операция сохранения юзера в базу данных
     @PostMapping("/users")
     @ResponseStatus(HttpStatus.CREATED)
-    public Employee saveEmployee(@RequestBody Employee employee) {
+    /*public Employee saveEmployee(@RequestBody Employee employee) {
         return service.create(employee);
+    }*/
+    public EmployeeDto saveEmployee(@RequestBody @Valid EmployeeDto requestForSave) {
+
+        Employee employee = converter.getMapperFacade().map(requestForSave, Employee.class);
+        EmployeeDto dto = converter.toDto(service.create(employee));
+
+        return dto;
     }
 
     //Получение списка юзеров
@@ -33,10 +46,12 @@ public class Controller {
     //Получения юзера по id
     @GetMapping("/users/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public Employee getEmployeeById(@PathVariable Integer id) {
+    public EmployeeReadDto getEmployeeById(@PathVariable Integer id) {
 
         Employee employee = service.getById(id);
-        return employee;
+        EmployeeReadDto dto = converter.toReadDto(employee);
+
+        return dto;
     }
 
     //Обновление юзера
