@@ -14,12 +14,13 @@ import javax.persistence.*;
 public class Employee {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
 
     private String name;
     private String country;
     private String email;
+    private boolean isDeleted;
 
     public Integer getId() {
         return id;
@@ -53,4 +54,11 @@ public class Employee {
         this.email = email;
     }
 
+    public boolean isDeleted() {
+        return isDeleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        isDeleted = deleted;
+    }
 }
