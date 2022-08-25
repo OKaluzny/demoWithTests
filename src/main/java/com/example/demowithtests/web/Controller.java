@@ -43,7 +43,7 @@ public class Controller {
     @PutMapping("/users/{id}")
     @ResponseStatus(HttpStatus.OK)
     public Employee refreshEmployee(@PathVariable("id") Integer id, @RequestBody Employee employee) {
-
+        employee.setIsUpdated(Boolean.TRUE);
         return service.updateById(id, employee);
     }
 
