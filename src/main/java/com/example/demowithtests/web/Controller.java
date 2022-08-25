@@ -20,6 +20,12 @@ public class Controller {
     @PostMapping("/users")
     @ResponseStatus(HttpStatus.CREATED)
     public Employee saveEmployee(@RequestBody Employee employee) {
+        if (employee.getAge() >=18){
+            employee.setIsAdult(true);
+        } else {
+            employee.setIsAdult(false);
+        }
+
         return service.create(employee);
     }
 
