@@ -45,6 +45,7 @@ public class ServiceBean implements Service {
                     entity.setName(employee.getName());
                     entity.setEmail(employee.getEmail());
                     entity.setCountry(employee.getCountry());
+                    entity.setAge(employee.getAge());
                     return repository.save(entity);
                 })
                 .orElseThrow(() -> new EntityNotFoundException("Employee not found with id = " + id));
@@ -64,6 +65,6 @@ public class ServiceBean implements Service {
     @Override
     public void removeAll() {
         repository.deleteAll();
-
     }
+
 }
