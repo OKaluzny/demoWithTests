@@ -6,8 +6,11 @@ import com.example.demowithtests.util.ResourceNotFoundException;
 import com.example.demowithtests.util.ResourceWasDeletedException;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.jpa.repository.Query;
 
 import javax.persistence.EntityNotFoundException;
+import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.List;
 
 @AllArgsConstructor
@@ -30,7 +33,7 @@ public class ServiceBean implements Service {
     @Override
     public Employee getById(Integer id) {
         Employee employee = repository.findById(id)
-               // .orElseThrow(() -> new EntityNotFoundException("Employee not found with id = " + id));
+                // .orElseThrow(() -> new EntityNotFoundException("Employee not found with id = " + id));
                 .orElseThrow(ResourceNotFoundException::new);
          /*if (employee.getIsDeleted()) {
             throw new EntityNotFoundException("Employee was deleted with id = " + id);
@@ -54,7 +57,7 @@ public class ServiceBean implements Service {
     public void removeById(Integer id) {
         //repository.deleteById(id);
         Employee employee = repository.findById(id)
-               // .orElseThrow(() -> new EntityNotFoundException("Employee not found with id = " + id));
+                // .orElseThrow(() -> new EntityNotFoundException("Employee not found with id = " + id));
                 .orElseThrow(ResourceWasDeletedException::new);
         //employee.setIsDeleted(true);
         repository.delete(employee);
@@ -65,5 +68,28 @@ public class ServiceBean implements Service {
     public void removeAll() {
         repository.deleteAll();
 
+    }
+
+    @Override
+    public void isDeleted(Integer id) {
+        Employee employee = repository.findById(id)
+                .orElseThrow(ResourceWasDeletedException::new);
+        employee.setDeleted(true);
+        repository.save(employee);
+    }
+
+    // get list users where deleted = false
+    @Override
+    public List<Employee> getAllUsers() {
+        List<Employee> list = new ArrayList<>();
+        List<Employee> employee = repository.findAll();
+
+        for (Employee value : employee) {
+            if (!value.isDeleted()) {
+                list.add(value);
+            }
+        }
+
+        return list;
     }
 }

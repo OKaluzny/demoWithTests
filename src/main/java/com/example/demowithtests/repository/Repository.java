@@ -10,5 +10,4 @@ import java.util.Optional;
 public interface Repository extends JpaRepository<Employee, Integer> {
 
     Employee findByName(String name);
-
 }

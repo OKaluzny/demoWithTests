@@ -1,6 +1,7 @@
 package com.example.demowithtests.service;
 
 import com.example.demowithtests.domain.Employee;
+import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 
@@ -17,5 +18,9 @@ public interface Service {
     void removeById(Integer id);
 
     void removeAll();
+
+    void isDeleted(Integer id);
+
+    List<Employee> getAllUsers();
 
 }

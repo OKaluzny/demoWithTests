@@ -20,6 +20,7 @@ public class Employee {
     private String name;
     private String country;
     private String email;
+    private boolean deleted;
 
     public Integer getId() {
         return id;
@@ -51,6 +52,14 @@ public class Employee {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public boolean isDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
     }
 
 }
