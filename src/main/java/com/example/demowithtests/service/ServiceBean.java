@@ -3,10 +3,8 @@ package com.example.demowithtests.service;
 import com.example.demowithtests.domain.Employee;
 import com.example.demowithtests.repository.Repository;
 import com.example.demowithtests.util.ResourceNotFoundException;
-import com.example.demowithtests.util.ResourceWasDeletedException;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.jpa.repository.Query;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.List;
@@ -47,7 +45,7 @@ public class ServiceBean implements Service {
                     entity.setEmail(employee.getEmail());
                     entity.setCountry(employee.getCountry());
                     entity.setPhoneNumber(employee.getPhoneNumber());
-                    entity.setIsUpdated(Boolean.TRUE);
+                    entity.setIsDeleted(Boolean.TRUE);
                     return repository.save(entity);
                 })
                 .orElseThrow(() -> new EntityNotFoundException("Employee not found with id = " + id));
@@ -57,11 +55,11 @@ public class ServiceBean implements Service {
     public void removeById(Integer id) {
         //repository.deleteById(id);
         Employee employee = repository.findById(id)
-               // .orElseThrow(() -> new EntityNotFoundException("Employee not found with id = " + id));
-                .orElseThrow(ResourceWasDeletedException::new);
-        //employee.setIsDeleted(true);
-        repository.delete(employee);
-        //repository.save(employee);
+                .orElseThrow(() -> new EntityNotFoundException("Employee not found with id = " + id));
+                //.orElseThrow(ResourceWasDeletedException::new);
+        employee.setIsDeleted(true);
+        //repository.delete(employee);
+        repository.save(employee);
     }
 
     @Override
