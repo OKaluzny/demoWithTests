@@ -45,7 +45,6 @@ public class ServiceBean implements Service {
                     entity.setEmail(employee.getEmail());
                     entity.setCountry(employee.getCountry());
                     entity.setPhoneNumber(employee.getPhoneNumber());
-                    entity.setIsDeleted(Boolean.TRUE);
                     return repository.save(entity);
                 })
                 .orElseThrow(() -> new EntityNotFoundException("Employee not found with id = " + id));
