@@ -51,6 +51,8 @@ public class ServiceBean implements Service {
                 .orElseThrow(() -> new EntityNotFoundException("Employee not found with id = " + id));
     }
 
+
+
     @Override
     public void removeById(Integer id) {
         //repository.deleteById(id);
@@ -65,6 +67,14 @@ public class ServiceBean implements Service {
     @Override
     public void removeAll() {
         repository.deleteAll();
+    }
+
+    @Override
+    public void isDeleted(Integer id) {
+        Employee employee = repository.findById(id)
+                .orElseThrow(ResourceWasDeletedException::new);
+        employee.setIsDeleted(true);
+        repository.save(employee);
     }
 
 }

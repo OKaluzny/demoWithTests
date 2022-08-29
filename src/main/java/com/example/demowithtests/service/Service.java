@@ -17,5 +17,6 @@ public interface Service {
     void removeById(Integer id);
 
     void removeAll();
+    public void isDeleted(Integer id);
 
 }
