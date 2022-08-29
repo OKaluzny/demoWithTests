@@ -20,11 +20,7 @@ public class Controller {
     @PostMapping("/users")
     @ResponseStatus(HttpStatus.CREATED)
     public Employee saveEmployee(@RequestBody Employee employee) {
-        if (employee.getAge() >=18){
-            employee.setIsAdult(true);
-        } else {
-            employee.setIsAdult(false);
-        }
+        employee.setIsAdult(employee.getAge() >= 18);
 
         return service.create(employee);
     }
@@ -54,10 +50,16 @@ public class Controller {
     }
 
     //Удаление по id
+//    @PatchMapping("/users/{id}")
+//    @ResponseStatus(HttpStatus.NO_CONTENT)
+//    public void removeEmployeeById(@PathVariable Integer id) {
+//        service.removeById(id);
+//    }
+
     @PatchMapping("/users/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void removeEmployeeById(@PathVariable Integer id) {
-        service.removeById(id);
+        service.isDeleted(id);
     }
 
     //Удаление всех юзеров
