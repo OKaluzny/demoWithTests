@@ -72,6 +72,6 @@ public class Controller {
     @GetMapping(value ="users", params = {"name"})
     @ResponseStatus(HttpStatus.OK)
     public List<Employee> getListByName(@RequestParam(value = "name") String name){
-        return service.find(name);
+        return service.findUserByName(name);
     }
 }

@@ -78,8 +78,8 @@ public class ServiceBean implements Service {
     }
 
     @Override
-    public List<Employee> find(String name){
-        return repository.find(name);
+    public List<Employee> findUserByName(String name){
+        return repository.findUserByName(name);
     }
 
 }

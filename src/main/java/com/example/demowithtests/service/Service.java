@@ -19,6 +19,6 @@ public interface Service {
     void removeAll();
     void isDeleted(Integer id);
 
-    List<Employee> find(String name);
+    List<Employee> findUserByName(String name);
 
 }

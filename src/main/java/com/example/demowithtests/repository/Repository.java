@@ -13,7 +13,8 @@ public interface Repository extends JpaRepository<Employee, Integer> {
     Employee findByName(String name);
 
     @Query(value = "SELECT * FROM users WHERE name = ?1", nativeQuery = true)
-    List<Employee> find(String name);
+    List<Employee> findUserByName(String name);
+
 
 
 }
