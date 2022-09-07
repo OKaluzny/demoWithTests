@@ -83,8 +83,8 @@ public class ServiceBean implements Service {
     }
 
     @Override
-    public List<Employee> findAdultUser() {
-        return repository.findAdultUser();
+    public List<Employee> findAdultUser(Boolean isAdult) {
+        return repository.findAdultUser(isAdult);
     }
 
     @Override

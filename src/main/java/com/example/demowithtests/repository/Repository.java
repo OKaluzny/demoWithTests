@@ -16,8 +16,11 @@ public interface Repository extends JpaRepository<Employee, Integer> {
     List<Employee> findUserByName(String name);
 
     @Query("SELECT user FROM Employee user WHERE user.isAdult = true ")
-    List<Employee> findAdultUser();
+    List<Employee> findAdultUser(Boolean isAdult);
 
     @Query("SELECT user FROM Employee user WHERE user.country = ?1")
     List<Employee> findEmployeeByCountry(String country);
+
+//    @Query("SELECT user FROM Employee user WHERE user.country = ?1")
+//    List<Employee> findEmployeeByEmail();
 }

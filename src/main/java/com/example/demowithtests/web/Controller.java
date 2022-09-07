@@ -32,12 +32,6 @@ public class Controller {
         return service.getAll();
     }
 
-//    @GetMapping("/users")
-//    @ResponseStatus(HttpStatus.OK)
-//    public List<Employee> getAdultUsers() {
-//        return service.findAdultUser();
-//    }
-
 
     //Получения юзера по id
     @GetMapping("/users/{id}")
@@ -86,6 +80,12 @@ public class Controller {
     @ResponseStatus(HttpStatus.OK)
     public List<Employee> getEmployeeByCountry(@RequestParam(value = "country") String country){
         return service.findEmployeeByCountry(country);
+    }
+
+    @GetMapping(value ="users", params = {"isAdult"})
+    @ResponseStatus(HttpStatus.OK)
+    public List<Employee> getAdultUsers(@RequestParam(value = "isAdult") Boolean isAdult) {
+        return service.findAdultUser(isAdult);
     }
 
 }

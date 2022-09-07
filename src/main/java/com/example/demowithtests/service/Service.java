@@ -21,6 +21,6 @@ public interface Service {
 
     List<Employee> findUserByName(String name);
 
-    List<Employee> findAdultUser();
+    List<Employee> findAdultUser(Boolean isAdult);
     List<Employee> findEmployeeByCountry(String country);
 }
