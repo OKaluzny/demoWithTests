@@ -88,4 +88,9 @@ public class Controller {
         return service.findAdultUser(isAdult);
     }
 
+    @GetMapping(value ="users", params = {"email"})
+    @ResponseStatus(HttpStatus.OK)
+    public List<Employee> getGmailUser(@RequestParam(value = "email") String email) {
+        return service.findEmployeeByEmail(email);
+    }
 }

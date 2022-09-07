@@ -92,4 +92,9 @@ public class ServiceBean implements Service {
         return repository.findEmployeeByCountry(country);
     }
 
+    @Override
+    public List<Employee> findEmployeeByEmail(String email) {
+        return repository.findEmployeeByEmail(email);
+    }
+
 }
