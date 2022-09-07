@@ -25,6 +25,7 @@ public class Employee {
     private String country;
     private String email;
 
+    private Boolean isUpdated;
     private Integer phoneNumber;
     private Boolean isDeleted = Boolean.FALSE;
 

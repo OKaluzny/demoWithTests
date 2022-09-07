@@ -18,6 +18,7 @@ public class ServiceBean implements Service {
 
     @Override
     public Employee create(Employee employee) {
+        employee.setIsUpdated(false);
         return repository.save(employee);
     }
 
@@ -45,6 +46,7 @@ public class ServiceBean implements Service {
                     entity.setEmail(employee.getEmail());
                     entity.setCountry(employee.getCountry());
                     entity.setPhoneNumber(employee.getPhoneNumber());
+                    entity.setIsUpdated(true);
                     return repository.save(entity);
                 })
                 .orElseThrow(() -> new EntityNotFoundException("Employee not found with id = " + id));
