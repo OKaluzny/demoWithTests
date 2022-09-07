@@ -11,8 +11,7 @@ import java.util.List;
 public interface Repository extends JpaRepository<Employee, Integer> {
 
     Employee findByName(String name);
-    @Query(value = "UPDATE users SET isDeleted = true WHERE id = ?1", nativeQuery = true) //sql
-    void hideUser (Integer id);
+
     @Query(value = "SELECT * FROM users WHERE name = ?1", nativeQuery = true) //sql
     List<Employee> findUserByName(String name);
 

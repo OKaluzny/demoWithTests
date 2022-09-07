@@ -50,11 +50,6 @@ public class Controller {
         return service.updateById(id, employee);
     }
 
-    @PatchMapping(value ="users", params = {"id"})
-    @ResponseStatus(HttpStatus.OK)
-    public void getAdultUsers(@RequestParam(value = "id") Integer id) {
-        service.hideUser(id);
-    }
 
     //Удаление по id
     @DeleteMapping("/users/{id}")

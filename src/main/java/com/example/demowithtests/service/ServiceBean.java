@@ -67,10 +67,6 @@ public class ServiceBean implements Service {
         repository.deleteAll();
     }
 
-    @Override
-    public void hideUser(Integer id) {
-        repository.hideUser(id);
-    }
 
 
     @Override
