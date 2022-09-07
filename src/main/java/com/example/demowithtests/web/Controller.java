@@ -50,17 +50,17 @@ public class Controller {
         return service.updateById(id, employee);
     }
 
-    //Удаление по id
-//    @PatchMapping("/users/{id}")
-//    @ResponseStatus(HttpStatus.NO_CONTENT)
-//    public void removeEmployeeById(@PathVariable Integer id) {
-//        service.removeById(id);
-//    }
+    @PatchMapping(value ="users", params = {"id"})
+    @ResponseStatus(HttpStatus.OK)
+    public void getAdultUsers(@RequestParam(value = "id") Integer id) {
+        service.hideUser(id);
+    }
 
-    @PatchMapping("/users/{id}")
+    //Удаление по id
+    @DeleteMapping("/users/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void removeEmployeeById(@PathVariable Integer id) {
-        service.isDeleted(id);
+        service.removeById(id);
     }
 
     //Удаление всех юзеров
@@ -87,6 +87,7 @@ public class Controller {
     public List<Employee> getAdultUsers(@RequestParam(value = "isAdult") Boolean isAdult) {
         return service.findAdultUser(isAdult);
     }
+
 
     @GetMapping(value ="users", params = {"email"})
     @ResponseStatus(HttpStatus.OK)

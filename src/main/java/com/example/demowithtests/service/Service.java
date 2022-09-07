@@ -17,10 +17,9 @@ public interface Service {
     void removeById(Integer id);
 
     void removeAll();
-    void isDeleted(Integer id);
 
+    void hideUser (Integer id);
     List<Employee> findUserByName(String name);
-
     List<Employee> findAdultUser(Boolean isAdult);
     List<Employee> findEmployeeByCountry(String country);
     List<Employee> findEmployeeByEmail(String email);
