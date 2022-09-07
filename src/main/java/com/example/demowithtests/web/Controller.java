@@ -65,25 +65,28 @@ public class Controller {
         service.removeAll();
     }
 
+    //Получение юзеров по имени
     @GetMapping(value ="users", params = {"name"})
     @ResponseStatus(HttpStatus.OK)
     public List<Employee> getListByName(@RequestParam(value = "name") String name){
         return service.findUserByName(name);
     }
 
+    //Получение юзеров по стране
     @GetMapping(value ="users", params = {"country"})
     @ResponseStatus(HttpStatus.OK)
     public List<Employee> getEmployeeByCountry(@RequestParam(value = "country") String country){
         return service.findEmployeeByCountry(country);
     }
 
+    //Получение совершеннолетних юзеров
     @GetMapping(value ="users", params = {"isAdult"})
     @ResponseStatus(HttpStatus.OK)
     public List<Employee> getAdultUsers(@RequestParam(value = "isAdult") Boolean isAdult) {
         return service.findAdultUser(isAdult);
     }
 
-
+    //Получение юзеров которые используют почту Гугла
     @GetMapping(value ="users", params = {"email"})
     @ResponseStatus(HttpStatus.OK)
     public List<Employee> getGmailUser(@RequestParam(value = "email") String email) {

@@ -23,4 +23,5 @@ public interface Repository extends JpaRepository<Employee, Integer> {
 
     @Query(value ="SELECT * FROM users WHERE email LIKE '%gmail.com'", nativeQuery = true) //sql
     List<Employee> findEmployeeByEmail(String email);
+
 }
