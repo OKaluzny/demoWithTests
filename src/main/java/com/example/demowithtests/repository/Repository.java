@@ -15,6 +15,9 @@ public interface Repository extends JpaRepository<Employee, Integer> {
     @Query(value = "SELECT * FROM users WHERE name = ?1", nativeQuery = true)
     List<Employee> findUserByName(String name);
 
+    @Query("SELECT user FROM Employee user WHERE user.isAdult = true ")
+    List<Employee> findAdultUser();
 
-
+    @Query("SELECT user FROM Employee user WHERE user.country = ?1")
+    List<Employee> findEmployeeByCountry(String country);
 }

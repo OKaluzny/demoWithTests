@@ -32,6 +32,13 @@ public class Controller {
         return service.getAll();
     }
 
+//    @GetMapping("/users")
+//    @ResponseStatus(HttpStatus.OK)
+//    public List<Employee> getAdultUsers() {
+//        return service.findAdultUser();
+//    }
+
+
     //Получения юзера по id
     @GetMapping("/users/{id}")
     @ResponseStatus(HttpStatus.OK)
@@ -74,4 +81,11 @@ public class Controller {
     public List<Employee> getListByName(@RequestParam(value = "name") String name){
         return service.findUserByName(name);
     }
+
+    @GetMapping(value ="users", params = {"country"})
+    @ResponseStatus(HttpStatus.OK)
+    public List<Employee> getEmployeeByCountry(@RequestParam(value = "country") String country){
+        return service.findEmployeeByCountry(country);
+    }
+
 }

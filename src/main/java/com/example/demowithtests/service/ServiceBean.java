@@ -82,4 +82,14 @@ public class ServiceBean implements Service {
         return repository.findUserByName(name);
     }
 
+    @Override
+    public List<Employee> findAdultUser() {
+        return repository.findAdultUser();
+    }
+
+    @Override
+    public List<Employee> findEmployeeByCountry(String country) {
+        return repository.findEmployeeByCountry(country);
+    }
+
 }
