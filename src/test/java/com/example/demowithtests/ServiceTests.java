@@ -2,7 +2,6 @@ package com.example.demowithtests;
 
 import com.example.demowithtests.domain.Employee;
 import com.example.demowithtests.repository.Repository;
-import com.example.demowithtests.service.Service;
 import com.example.demowithtests.service.ServiceBean;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -28,6 +27,7 @@ public class ServiceTests {
 
     @InjectMocks
     private ServiceBean service;
+
 
     @Test
     public void whenSaveEmployee_shouldReturnEmployee() {

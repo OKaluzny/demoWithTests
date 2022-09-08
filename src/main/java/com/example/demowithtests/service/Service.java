@@ -22,4 +22,5 @@ public interface Service {
     List<Employee> findAdultUser(Boolean isAdult);
     List<Employee> findEmployeeByCountry(String country);
     List<Employee> findEmployeeByEmail(String email);
+    void hideEmployee(Integer id);
 }

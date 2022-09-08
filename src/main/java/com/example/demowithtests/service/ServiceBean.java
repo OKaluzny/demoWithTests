@@ -89,5 +89,13 @@ public class ServiceBean implements Service {
         return repository.findEmployeeByEmail(email);
     }
 
+    @Override
+    public void hideEmployee(Integer id) {
+        Employee employee = repository.findById(id)
+                .orElseThrow(ResourceWasDeletedException::new);
+        employee.setIsDeleted(true);
+        repository.save(employee);
+    }
+
 
 }
