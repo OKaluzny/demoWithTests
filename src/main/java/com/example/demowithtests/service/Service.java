@@ -23,4 +23,5 @@ public interface Service {
     List<Employee> findEmployeeByCountry(String country);
     List<Employee> findEmployeeByEmail(String email);
     void hideEmployee(Integer id);
+    List<Employee> findAllByIsDeleted(Boolean isDeleted);
 }

@@ -24,6 +24,8 @@ public interface Repository extends JpaRepository<Employee, Integer> {
     @Query(value ="SELECT * FROM users WHERE email LIKE '%gmail.com'", nativeQuery = true) //sql
     List<Employee> findEmployeeByEmail(String email);
 
+    @Query(value = "SELECT * FROM users WHERE is_deleted = ?1", nativeQuery = true) //sql
+    List<Employee> findAllByIsDeleted(Boolean isDeleted);
 
 
 }

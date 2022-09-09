@@ -98,4 +98,12 @@ public class Controller {
     public List<Employee> getGmailUser(@RequestParam(value = "email") String email) {
         return service.findEmployeeByEmail(email);
     }
+
+    //Получение юзеров по полю isDeleted
+    @GetMapping(value ="users", params = {"isdeleted"})
+    @ResponseStatus(HttpStatus.OK)
+    public List<Employee> getUserByIsDeletedValue(@RequestParam(value = "isdeleted") Boolean isDeleted) {
+        return service.findAllByIsDeleted(isDeleted);
+    }
+
 }

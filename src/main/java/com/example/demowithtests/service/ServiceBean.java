@@ -97,5 +97,10 @@ public class ServiceBean implements Service {
         repository.save(employee);
     }
 
+    @Override
+    public List<Employee> findAllByIsDeleted(Boolean isDeleted) {
+        return repository.findAllByIsDeleted(isDeleted);
+    }
+
 
 }
