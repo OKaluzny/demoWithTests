@@ -50,12 +50,12 @@ public class Controller {
         return service.updateById(id, employee);
     }
 
+    //Скрыть юзера
     @PatchMapping ("/users/{id}")
     @ResponseStatus(HttpStatus.OK)
     public void hideEmployee(@PathVariable("id") Integer id) {
         service.hideEmployee(id);
     }
-
 
     //Удаление по id
     @DeleteMapping("/users/{id}")
@@ -92,7 +92,7 @@ public class Controller {
         return service.findAdultUser(isAdult);
     }
 
-    //Получение совершеннолетних юзеров
+    //Получение юзеров пользователей гугл почты
     @GetMapping(value ="users", params = {"email"})
     @ResponseStatus(HttpStatus.OK)
     public List<Employee> getGmailUser(@RequestParam(value = "email") String email) {

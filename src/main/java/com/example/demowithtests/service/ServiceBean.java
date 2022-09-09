@@ -1,7 +1,9 @@
 package com.example.demowithtests.service;
 
 import com.example.demowithtests.domain.Employee;
+import com.example.demowithtests.repository.JpqlRepository;
 import com.example.demowithtests.repository.Repository;
+import com.example.demowithtests.repository.SqlRepository;
 import com.example.demowithtests.util.ResourceNotFoundException;
 import com.example.demowithtests.util.ResourceWasDeletedException;
 import lombok.AllArgsConstructor;
@@ -16,6 +18,8 @@ import java.util.List;
 public class ServiceBean implements Service {
 
     private final Repository repository;
+    private final SqlRepository sqlRepository;
+    private final JpqlRepository jpqlRepository;
 
     @Override
     public Employee create(Employee employee) {
@@ -71,22 +75,22 @@ public class ServiceBean implements Service {
 
     @Override
     public List<Employee> findUserByName(String name){
-        return repository.findUserByName(name);
+        return sqlRepository.findUserByName(name);
     }
 
     @Override
     public List<Employee> findAdultUser(Boolean isAdult) {
-        return repository.findAdultUser(isAdult);
+        return jpqlRepository.findAdultUser(isAdult);
     }
 
     @Override
     public List<Employee> findEmployeeByCountry(String country) {
-        return repository.findEmployeeByCountry(country);
+        return jpqlRepository.findEmployeeByCountry(country);
     }
 
     @Override
     public List<Employee> findEmployeeByEmail(String email) {
-        return repository.findEmployeeByEmail(email);
+        return sqlRepository.findEmployeeByEmail(email);
     }
 
     @Override
@@ -99,7 +103,7 @@ public class ServiceBean implements Service {
 
     @Override
     public List<Employee> findAllByIsDeleted(Boolean isDeleted) {
-        return repository.findAllByIsDeleted(isDeleted);
+        return sqlRepository.findAllByIsDeleted(isDeleted);
     }
 
 
