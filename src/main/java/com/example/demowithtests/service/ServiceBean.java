@@ -30,7 +30,7 @@ public class ServiceBean implements Service {
     @Override
     public Employee getById(Integer id) {
         Employee employee = repository.findById(id)
-               // .orElseThrow(() -> new EntityNotFoundException("Employee not found with id = " + id));
+                // .orElseThrow(() -> new EntityNotFoundException("Employee not found with id = " + id));
                 .orElseThrow(ResourceNotFoundException::new);
          /*if (employee.getIsDeleted()) {
             throw new EntityNotFoundException("Employee was deleted with id = " + id);
@@ -57,7 +57,7 @@ public class ServiceBean implements Service {
         //repository.deleteById(id);
         Employee employee = repository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Employee not found with id = " + id));
-                //.orElseThrow(ResourceWasDeletedException::new);
+        //.orElseThrow(ResourceWasDeletedException::new);
         employee.setIsDeleted(true);
         //repository.delete(employee);
         repository.save(employee);
@@ -67,5 +67,30 @@ public class ServiceBean implements Service {
     public void removeAll() {
         repository.deleteAll();
 
+    }
+
+    @Override
+    public List<Employee> findAllByName(String name) {
+        return repository.findAllByName(name);
+    }
+
+    @Override
+    public List<Employee> findUsersWithPhoneNumber() {
+        return repository.findUsersWithPhoneNumber();
+    }
+
+    @Override
+    public List<Employee> findRecordsWhereEmailNull() {
+        List<Employee> emailIsNull = repository.findRecordsWhereEmailNull();
+        for (Employee element : emailIsNull) {
+            element.setEmail(element.getName().charAt(1) + 31 * element.getId() + "@itorg.com");
+            repository.save(element);
+        }
+        return emailIsNull;
+    }
+
+    @Override
+    public List<Employee> findEmployeesByCountry(String country) {
+        return repository.findEmployeesByCountry(country);
     }
 }

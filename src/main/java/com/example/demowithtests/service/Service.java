@@ -18,4 +18,11 @@ public interface Service {
 
     void removeAll();
 
+    List<Employee> findAllByName(String name);
+
+    List<Employee> findUsersWithPhoneNumber();
+
+    List<Employee> findRecordsWhereEmailNull();
+
+    List<Employee> findEmployeesByCountry(String country);
 }
