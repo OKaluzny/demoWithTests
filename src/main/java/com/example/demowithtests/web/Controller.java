@@ -3,7 +3,6 @@ package com.example.demowithtests.web;
 import com.example.demowithtests.domain.Employee;
 import com.example.demowithtests.service.Service;
 import lombok.AllArgsConstructor;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -62,7 +61,7 @@ public class Controller {
         service.removeAll();
     }
 
-    // get all movie is deleted = false
+    // get all users is deleted = false
     @PatchMapping("/users/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void isDeletedEmployee(@PathVariable Integer id) {
@@ -75,4 +74,41 @@ public class Controller {
     public List<Employee> getAll() {
         return service.getAllUsers();
     }
+
+    // get list by name
+    @GetMapping(value = "/users", params = {"name"})
+    @ResponseStatus(HttpStatus.OK)
+    public List<Employee> findByName(@RequestParam(value = "name") String name) {
+        return service.getName(name);
+    }
+
+    // make column access true and get list where access = true
+    @PatchMapping("/usersAccess/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public List<Employee> isAccessUsers(@PathVariable Integer id) {
+        return service.isAccess(id);
+    }
+
+    // add hour work
+    @PutMapping("/usersHour/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public void updateHour(@PathVariable("id") Integer id, @RequestBody Double hour) {
+        service.updateHour(id, hour);
+    }
+
+    // add salary
+    @PatchMapping("/usersInfo/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public void getInfo(@PathVariable("id") Integer id) {
+        service.getSalary(id);
+    }
+
+    // get list name, salary
+    @GetMapping("/usersInfo")
+    @ResponseStatus(HttpStatus.OK)
+    public List<Object> infoSalary() {
+        return service.salaryInfo();
+    }
 }
+
+

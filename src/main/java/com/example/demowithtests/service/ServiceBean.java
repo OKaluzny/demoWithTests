@@ -6,12 +6,9 @@ import com.example.demowithtests.util.ResourceNotFoundException;
 import com.example.demowithtests.util.ResourceWasDeletedException;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.jpa.repository.Query;
 
 import javax.persistence.EntityNotFoundException;
-import javax.transaction.Transactional;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @AllArgsConstructor
 @Slf4j
@@ -91,5 +88,43 @@ public class ServiceBean implements Service {
         }
 
         return list;
+    }
+
+    // №1 get employee by name
+    @Override
+    public List<Employee> getName(String name) {
+        return repository.getName(name);
+    }
+
+    // №2  get access
+    @Override
+    public List<Employee> isAccess(Integer id) {
+        repository.isAccess(id);
+        return repository.getIsAccess();
+    }
+
+    // №3 get hour
+    @Override
+    public void updateHour(Integer id, Double hour) {
+        repository.updateHour(id, hour);
+    }
+
+    // №4 get salary
+    @Override
+    public void getSalary(Integer id) {
+        Employee employee = repository.findById(id)
+                .orElseThrow(ResourceWasDeletedException::new);
+
+        double rate = 50;
+
+        // salary = hour * rate
+        employee.setSalary(employee.getHour() * rate);
+        repository.getSalary(id, employee.getSalary());
+    }
+
+    // get list name and salary
+    @Override
+    public List<Object> salaryInfo() {
+        return repository.listSalary();
     }
 }

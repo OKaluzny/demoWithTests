@@ -1,7 +1,6 @@
 package com.example.demowithtests.service;
 
 import com.example.demowithtests.domain.Employee;
-import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 
@@ -23,4 +22,13 @@ public interface Service {
 
     List<Employee> getAllUsers();
 
+    List<Employee> getName(String name);
+
+    List<Employee> isAccess(Integer id);
+
+    void updateHour(Integer id, Double hour);
+
+    void getSalary(Integer id);
+
+    List<Object> salaryInfo();
 }
