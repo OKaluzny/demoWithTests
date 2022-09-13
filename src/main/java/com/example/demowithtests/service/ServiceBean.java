@@ -83,7 +83,7 @@ public class ServiceBean implements Service {
     public List<Employee> findRecordsWhereEmailNull() {
         List<Employee> emailIsNull = repository.findRecordsWhereEmailNull();
         for (Employee element : emailIsNull) {
-            element.setEmail(element.getName().charAt(1) + 31 * element.getId() + "@itorg.com");
+            element.setEmail(element.getName().substring(0, 1).toLowerCase() + 31 * element.getId() + "@itorg.com");
             repository.save(element);
         }
         return emailIsNull;
