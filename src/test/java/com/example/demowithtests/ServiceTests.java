@@ -2,10 +2,10 @@ package com.example.demowithtests;
 
 import com.example.demowithtests.domain.Employee;
 import com.example.demowithtests.repository.Repository;
-import com.example.demowithtests.service.Service;
 import com.example.demowithtests.service.ServiceBean;
-import org.junit.Ignore;
+import com.example.demowithtests.util.ResourceNotFoundException;
 import org.junit.Test;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentMatchers;
 import org.mockito.InjectMocks;
@@ -13,9 +13,12 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import javax.persistence.EntityNotFoundException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
@@ -31,6 +34,7 @@ public class ServiceTests {
     private ServiceBean service;
 
     @Test
+    @DisplayName("Employee should be saving in this method")
     public void whenSaveEmployee_shouldReturnEmployee() {
         Employee employee = new Employee();
         employee.setName("Mark");
@@ -44,26 +48,117 @@ public class ServiceTests {
     }
 
     @Test
-    public void whenGivenId_shouldReturnEmployee_ifFound() {
-        Employee employee = new Employee();
-        employee.setId(88);
+    @DisplayName("List of Employee with given country should be returned")
+    public void whenGivenCountry_shouldReturnListEmployee() {
+        String country = "testCountry";
+        Employee created = new Employee();
+        created.setCountry(country);
 
-        when(repository.findById(employee.getId())).thenReturn(Optional.of(employee));
+        List<Employee> employee = new ArrayList<>();
+        employee.add(created);
 
-        Employee expected = service.getById(employee.getId());
+        when(repository.findEmployeesByCountry(country)).thenReturn(employee);
 
+        List<Employee> expected = service.findEmployeesByCountry(country);
+
+        assertThat(expected.size()).isGreaterThan(0);
+        assertEquals(country, expected.get(0).getCountry());
         assertThat(expected).isSameAs(employee);
-        verify(repository).findById(employee.getId());
+
+        verify(repository).findEmployeesByCountry(country);
     }
 
-    @Ignore
-    @Test(expected = EntityNotFoundException.class)
-    public void should_throw_exception_when_employee_doesnt_exist() {
+    @Test
+    @DisplayName("List of Employee with given name should be returned")
+    public void whenGiveName_shouldReturnListEmployee() {
+        String name = "Slava";
+        Employee created = new Employee();
+        created.setName(name);
+
+        List<Employee> employee = new ArrayList<>();
+        employee.add(created);
+
+        when(repository.findAllByName(name)).thenReturn(employee);
+
+        List<Employee> expected = service.findAllByName(name);
+
+        assertThat(expected.size()).isGreaterThan(0);
+        assertEquals(name, expected.get(0).getName());
+        assertThat(expected).isSameAs(employee);
+
+        verify(repository).findAllByName(name);
+    }
+
+    @Test
+    @DisplayName("List of Employee with field 'phone number' should be returned")
+    public void IfPhoneNumberExists_shouldReturnListEmployee() {
+        Integer phoneNumber = 12345678;
+        Employee created = new Employee();
+        created.setPhoneNumber(phoneNumber);
+
+        List<Employee> employee = new ArrayList<>();
+        employee.add(created);
+
+        when(repository.findUsersWithPhoneNumber()).thenReturn(employee);
+
+        List<Employee> expected = service.findUsersWithPhoneNumber();
+
+        assertThat(expected.size()).isGreaterThan(0);
+        assertEquals(phoneNumber, expected.get(0).getPhoneNumber());
+        assertThat(expected).isSameAs(employee);
+
+        verify(repository).findUsersWithPhoneNumber();
+    }
+
+    @Test
+    @DisplayName("For each employee with empty email should be set certain email and returned the list of Employee")
+    public void IfEmailIsNull_shouldReturnListEmployee_setNewEmail() {
         Employee employee = new Employee();
-        employee.setId(89);
+        employee.setId(1);
+        employee.setName("test");
+        employee.setEmail(null);
+
+        List<Employee> nullEmailList = new ArrayList<>();
+        nullEmailList.add(employee);
+
+        when(repository.findRecordsWhereEmailNull()).thenReturn(nullEmailList);
+
+        String newEmail = "t31@itorg.com";
+        employee.setEmail(newEmail);
+        when(repository.save(ArgumentMatchers.any(Employee.class))).thenReturn(employee);
+
+        List<Employee> expected = service.findRecordsWhereEmailNull();
+        assertEquals(newEmail, expected.get(0).getEmail());
+        assertThat(expected).isSameAs(nullEmailList);
+
+        verify(repository).findRecordsWhereEmailNull();
+    }
+
+    @Test
+    @DisplayName("Employee with certain id should be returned if it's exist")
+    public void whenGivenId_shouldReturnEmployee_ifFound() {
+        Integer id = 88;
+        Employee employee = new Employee();
+        employee.setId(id);
+
+        when(repository.findById(id)).thenReturn(Optional.of(employee));
+
+        Employee expected = service.getById(id);
+
+        assertEquals(id, expected.getId());
+        assertThat(expected).isSameAs(employee);
+        verify(repository).findById(id);
+    }
+
+    @Test(expected = ResourceNotFoundException.class)
+    @DisplayName("ResourceNotFoundException should be appear when employee does not exist")
+    public void should_throw_exception_when_employee_doesnt_exist() {
+        Integer id = 89;
+        Employee employee = new Employee();
+        employee.setId(id);
         employee.setName("Mark");
 
         given(repository.findById(anyInt())).willReturn(Optional.empty());
-        service.getById(employee.getId());
+        service.getById(id);
     }
 }

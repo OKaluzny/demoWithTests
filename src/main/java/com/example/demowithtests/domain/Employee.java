@@ -28,5 +28,4 @@ public class Employee {
     private Boolean isUpdated;
     private Integer phoneNumber;
     private Boolean isDeleted = Boolean.FALSE;
-
 }

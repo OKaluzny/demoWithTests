@@ -2,7 +2,6 @@ package com.example.demowithtests;
 
 import com.example.demowithtests.domain.Employee;
 import com.example.demowithtests.repository.Repository;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
@@ -13,6 +12,10 @@ import org.springframework.test.annotation.Rollback;
 
 import java.util.List;
 import java.util.Optional;
+
+import static org.assertj.core.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 @DataJpaTest
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
@@ -30,7 +33,7 @@ public class RepositoryTests {
 
         repository.save(employee);
 
-        Assertions.assertThat(employee.getId()).isGreaterThan(0);
+        assertThat(employee.getId()).isGreaterThan(0);
     }
 
     @Test
@@ -39,7 +42,8 @@ public class RepositoryTests {
 
         Employee employee = repository.findById(1).orElseThrow();
 
-        Assertions.assertThat(employee.getId()).isEqualTo(1);
+        assertThat(employee.getId()).isEqualTo(1);
+        assertEquals("Mark", employee.getName());
 
     }
 
@@ -49,7 +53,7 @@ public class RepositoryTests {
 
         List<Employee> employeesList = repository.findAll();
 
-        Assertions.assertThat(employeesList.size()).isGreaterThan(0);
+        assertThat(employeesList.size()).isGreaterThan(0);
 
     }
 
@@ -63,7 +67,8 @@ public class RepositoryTests {
         employee.setName("Martin");
         Employee employeeUpdated = repository.save(employee);
 
-        Assertions.assertThat(employeeUpdated.getName()).isEqualTo("Martin");
+        assertThat(employeeUpdated.getName()).isEqualTo("Martin");
+        assertThat(employee.getName()).isEqualTo(repository.findById(1).orElseThrow().getName());
 
     }
 
@@ -86,7 +91,74 @@ public class RepositoryTests {
             employee1 = optionalAuthor.get();
         }
 
-        Assertions.assertThat(employee1).isNull();
+        assertThat(employee1).isNull();
     }
 
+    @Test
+    @Order(6)
+    public void getListOfEmployeeWithPhoneNumberTest() {
+        Integer phoneNumber = 12345678;
+        Employee employee = new Employee();
+        employee.setPhoneNumber(phoneNumber);
+
+        repository.save(employee);
+
+        List<Employee> employeesList = repository.findUsersWithPhoneNumber();
+
+        assertThat(employeesList.size()).isGreaterThan(0);
+        assertEquals(phoneNumber, employeesList.get(0).getPhoneNumber());
+        assertThat(repository.findById(2).orElseThrow().getPhoneNumber()).isSameAs(phoneNumber);
+
+    }
+
+    @Test
+    @Order(7)
+    public void getEmployeesByCountryTest() {
+        String country = "Ukraine";
+        Employee employee = new Employee();
+        employee.setName("Matt");
+        employee.setCountry(country);
+
+        repository.save(employee);
+
+        List<Employee> employeesList = repository.findEmployeesByCountry(country);
+
+        assertThat(employeesList.size()).isGreaterThan(0);
+        assertEquals(country, employeesList.get(0).getCountry());
+        assertThat(repository.findById(3).orElseThrow().getCountry()).isSameAs(country);
+
+    }
+
+    @Test
+    @Order(8)
+    public void getEmployeesWithNameTest() {
+        String name = "Kenny";
+        Employee employee = new Employee();
+        employee.setName(name);
+
+        repository.save(employee);
+
+        List<Employee> employeesList = repository.findAllByName(name);
+
+        assertThat(employeesList.size()).isGreaterThan(0);
+        assertEquals(name, employeesList.get(0).getName());
+        assertThat(repository.findById(4).orElseThrow().getName()).isSameAs(name);
+
+    }
+
+    @Test
+    @Order(9)
+    public void getEmployeesWithNullEmailTest() {
+        Employee employee = new Employee();
+        employee.setEmail(null);
+
+        repository.save(employee);
+
+        List<Employee> employeesList = repository.findRecordsWhereEmailNull();
+
+        assertThat(employeesList.size()).isGreaterThan(0);
+        assertNull(employeesList.get(0).getEmail());
+        assertThat(repository.findById(5).orElseThrow().getEmail()).isEqualTo(null);
+
+    }
 }
