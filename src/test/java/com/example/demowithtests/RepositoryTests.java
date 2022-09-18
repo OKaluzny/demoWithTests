@@ -116,7 +116,6 @@ public class RepositoryTests {
     public void getEmployeesByCountryTest() {
         String country = "Ukraine";
         Employee employee = new Employee();
-        employee.setName("Matt");
         employee.setCountry(country);
 
         repository.save(employee);
