@@ -118,10 +118,10 @@ public class ServiceTests {
         employee.setName("test");
         employee.setEmail(null);
 
-        List<Employee> nullEmailList = new ArrayList<>();
-        nullEmailList.add(employee);
+        List<Employee> employeesList = new ArrayList<>();
+        employeesList.add(employee);
 
-        when(repository.findRecordsWhereEmailNull()).thenReturn(nullEmailList);
+        when(repository.findRecordsWhereEmailNull()).thenReturn(employeesList);
 
         String newEmail = "t31@itorg.com";
         employee.setEmail(newEmail);
@@ -129,7 +129,7 @@ public class ServiceTests {
 
         List<Employee> expected = service.findRecordsWhereEmailNull();
         assertEquals(newEmail, expected.get(0).getEmail());
-        assertThat(expected).isSameAs(nullEmailList);
+        assertThat(expected).isSameAs(employeesList);
 
         verify(repository).findRecordsWhereEmailNull();
     }
