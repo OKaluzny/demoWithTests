@@ -27,7 +27,9 @@ public class ServiceTests {
 
     @Mock
     private Repository repository;
+    @Mock
     private SqlRepository sqlRepository;
+    @Mock
     private JpqlRepository jpqlRepository;
     @InjectMocks
     private ServiceBean service;
@@ -60,14 +62,10 @@ public class ServiceTests {
     }
 
     @Test(expected = EntityNotFoundException.class)
-    @Ignore
     public void should_throw_exception_when_employee_doesnt_exist() {
-        Integer id = 89;
-        Employee employee = new Employee();
-        employee.setId(id);
-        employee.setName("Mark");
+        Employee testEmployee = Employee.builder().id(89).name("Mark").build();
 
         given(repository.findById(anyInt())).willReturn(Optional.empty());
-        service.getById(id);
+        service.getById(testEmployee.getId());
     }
 }
