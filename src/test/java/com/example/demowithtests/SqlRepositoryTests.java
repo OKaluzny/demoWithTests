@@ -1,6 +1,7 @@
 package com.example.demowithtests;
 
 import com.example.demowithtests.domain.Employee;
+import com.example.demowithtests.repository.JpqlRepository;
 import com.example.demowithtests.repository.Repository;
 import com.example.demowithtests.repository.SqlRepository;
 import org.junit.jupiter.api.MethodOrderer;
@@ -21,6 +22,8 @@ public class SqlRepositoryTests {
     private Repository repository;
     @Autowired
     private  SqlRepository sqlRepository;
+    @Autowired
+    private JpqlRepository jpqlRepository;
 
     @Test
     public void getEmployeeByNameTest() {
@@ -50,6 +53,26 @@ public class SqlRepositoryTests {
 
         assertThat(employeesTestList.size()).isGreaterThan(0);
         assertEquals(true,employeesTestList.get(0).getIsDeleted());
+    }
+
+    @Test
+    public void getAdultEmployeeTest() {
+        Employee testEmployee = Employee.builder().isAdult(true).build();
+        repository.save(testEmployee);
+        List<Employee> employeesTestList = jpqlRepository.findAdultUser(testEmployee.getIsAdult());
+
+        assertThat(employeesTestList.size()).isGreaterThan(0);
+        assertEquals(true,employeesTestList.get(0).getIsAdult());
+    }
+
+    @Test
+    public void getEmployeeByCountryTest() {
+        Employee testEmployee = Employee.builder().country("Ukraine").build();
+        repository.save(testEmployee);
+        List<Employee> employeesTestList = jpqlRepository.findEmployeeByCountry(testEmployee.getCountry());
+
+        assertThat(employeesTestList.size()).isGreaterThan(0);
+        assertEquals("Ukraine",employeesTestList.get(0).getCountry());
     }
 
 }
