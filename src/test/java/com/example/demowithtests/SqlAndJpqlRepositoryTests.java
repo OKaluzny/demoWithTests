@@ -16,7 +16,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @DataJpaTest
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class SqlRepositoryTests {
+public class SqlAndJpqlRepositoryTests {
 
     @Autowired
     private Repository repository;
