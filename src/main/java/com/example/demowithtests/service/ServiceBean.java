@@ -36,9 +36,9 @@ public class ServiceBean implements Service {
         Employee employee = repository.findById(id)
                .orElseThrow(() -> new EntityNotFoundException("Employee not found with id = " + id));
                 //.orElseThrow(ResourceNotFoundException::new);
-         /*if (employee.getIsDeleted()) {
+         if (employee.getIsDeleted()) {
             throw new EntityNotFoundException("Employee was deleted with id = " + id);
-        }*/
+        }
         return employee;
     }
 
