@@ -71,5 +71,4 @@ public class SqlAndJpqlRepositoryTests {
         assertThat(employeesTestList.size()).isGreaterThan(0);
         assertEquals("Ukraine",employeesTestList.get(0).getCountry());
     }
-
 }
