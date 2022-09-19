@@ -4,9 +4,7 @@ import com.example.demowithtests.domain.Employee;
 import com.example.demowithtests.repository.JpqlRepository;
 import com.example.demowithtests.repository.Repository;
 import com.example.demowithtests.repository.SqlRepository;
-import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import java.util.List;
@@ -15,7 +13,6 @@ import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @DataJpaTest
-@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class SqlAndJpqlRepositoryTests {
 
     @Autowired
