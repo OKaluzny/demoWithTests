@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 @org.springframework.stereotype.Repository
-@Component
+//@Component
 public interface SqlRepository extends JpaRepository<Employee, Integer>{
 
     //Получение юзеров по стране

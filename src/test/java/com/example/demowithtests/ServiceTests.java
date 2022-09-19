@@ -1,8 +1,11 @@
 package com.example.demowithtests;
 
 import com.example.demowithtests.domain.Employee;
+import com.example.demowithtests.repository.JpqlRepository;
 import com.example.demowithtests.repository.Repository;
+import com.example.demowithtests.repository.SqlRepository;
 import com.example.demowithtests.service.ServiceBean;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentMatchers;
@@ -24,7 +27,8 @@ public class ServiceTests {
 
     @Mock
     private Repository repository;
-
+    private SqlRepository sqlRepository;
+    private JpqlRepository jpqlRepository;
     @InjectMocks
     private ServiceBean service;
 
@@ -56,12 +60,14 @@ public class ServiceTests {
     }
 
     @Test(expected = EntityNotFoundException.class)
+    @Ignore
     public void should_throw_exception_when_employee_doesnt_exist() {
+        Integer id = 89;
         Employee employee = new Employee();
-        employee.setId(89);
+        employee.setId(id);
         employee.setName("Mark");
 
         given(repository.findById(anyInt())).willReturn(Optional.empty());
-        service.getById(employee.getId());
+        service.getById(id);
     }
 }
