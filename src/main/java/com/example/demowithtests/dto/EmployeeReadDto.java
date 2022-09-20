@@ -27,7 +27,7 @@ public class EmployeeReadDto {
     @Schema(description = "Age of an employee.", example = "28", required = true)
     public Integer age;
 
-
     //add technical field
     public Date date = Date.from(Instant.now());
+
 }
