@@ -30,8 +30,8 @@ public class ServiceBean implements Service {
     @Override
     public Employee getById(Integer id) {
         Employee employee = repository.findById(id)
-                // .orElseThrow(() -> new EntityNotFoundException("Employee not found with id = " + id));
-                .orElseThrow(ResourceNotFoundException::new);
+                .orElseThrow(() -> new EntityNotFoundException("Employee not found with id = " + id));
+//                .orElseThrow(ResourceNotFoundException::new);
          /*if (employee.getIsDeleted()) {
             throw new EntityNotFoundException("Employee was deleted with id = " + id);
         }*/
