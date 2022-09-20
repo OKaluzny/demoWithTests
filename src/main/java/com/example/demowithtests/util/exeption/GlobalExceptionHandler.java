@@ -1,4 +1,4 @@
-package com.example.demowithtests.util;
+package com.example.demowithtests.util.exeption;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
