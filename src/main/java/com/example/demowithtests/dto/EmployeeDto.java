@@ -24,7 +24,6 @@ public class EmployeeDto {
     public String email;
 
     @NotNull(message = "Age may not be null")
-    @Size(min = 1, max = 3, message = "Age must be between 1 and 3 characters long")
     @Schema(description = "Age of an employee.", example = "28", required = true)
     public Integer age;
 }
