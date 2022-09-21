@@ -22,6 +22,7 @@ public class ServiceBean implements Service {
 
     @Override
     public Employee create(Employee employee) {
+        employee.setIsAdult(employee.getAge() >= 18);
         return repository.save(employee);
     }
 
