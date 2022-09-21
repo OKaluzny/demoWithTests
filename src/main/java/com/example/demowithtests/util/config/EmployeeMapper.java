@@ -1,7 +1,7 @@
 package com.example.demowithtests.util.config;
 
 import com.example.demowithtests.domain.Employee;
-import com.example.demowithtests.dto.EmployeeDto;
+import com.example.demowithtests.dto.createDto.EmployeeDto;
 import ma.glasnost.orika.CustomMapper;
 import ma.glasnost.orika.MappingContext;
 
