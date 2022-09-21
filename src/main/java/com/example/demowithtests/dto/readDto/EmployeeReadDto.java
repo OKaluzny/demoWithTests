@@ -1,14 +1,14 @@
-package com.example.demowithtests.dto;
+package com.example.demowithtests.dto.readDto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.time.Instant;
+import java.util.Date;
 
-public class EmployeeDto {
-
-    public Integer id;
+public class EmployeeReadDto {
 
     @NotNull(message = "Name may not be null")
     @Size(min = 2, max = 32, message = "Name must be between 2 and 32 characters long")
@@ -26,4 +26,8 @@ public class EmployeeDto {
     @NotNull(message = "Age may not be null")
     @Schema(description = "Age of an employee.", example = "28", required = true)
     public Integer age;
+
+    //add technical field
+    public Date date = Date.from(Instant.now());
+
 }
