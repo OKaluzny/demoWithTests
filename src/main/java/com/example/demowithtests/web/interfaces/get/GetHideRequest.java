@@ -13,8 +13,7 @@ public interface GetHideRequest {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "OK. pam pam param."),
             @ApiResponse(responseCode = "400", description = "Invalid input"),
-            @ApiResponse(responseCode = "404", description = "NOT FOUND. Specified employee request not found."),
-            @ApiResponse(responseCode = "409", description = "Employee already exists")})
+            @ApiResponse(responseCode = "404", description = "NOT FOUND. Specified employee request not found.")})
 
     List<Employee> getUserByIsDeletedValue(@RequestParam(value = "isdeleted") Boolean isDeleted);
 }
