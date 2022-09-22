@@ -2,8 +2,11 @@ package com.example.demowithtests.util.config;
 
 import com.example.demowithtests.domain.Employee;
 import com.example.demowithtests.dto.createDto.EmployeeDto;
-import com.example.demowithtests.dto.readDto.EmployeeReadDto;
-import com.example.demowithtests.dto.readDto.EmployeeReadDtoAdmin;
+import com.example.demowithtests.dto.readDto.*;
+import com.example.demowithtests.dto.updateDto.EmployeeUpdateAgeDto;
+import com.example.demowithtests.dto.updateDto.EmployeeUpdateCountryDto;
+import com.example.demowithtests.dto.updateDto.EmployeeUpdateDto;
+import com.example.demowithtests.dto.updateDto.EmployeeUpdateEmailDto;
 import ma.glasnost.orika.MapperFacade;
 import org.springframework.stereotype.Component;
 
@@ -28,10 +31,37 @@ public class EmployeeConverter {
         return mapperFacade.map(entity, EmployeeReadDto.class);
     }
 
-    public EmployeeReadDtoAdmin toReadDtoAdmin(Employee entity) {
-        return mapperFacade.map(entity, EmployeeReadDtoAdmin.class);
+    public EmployeeReadAdminDto toReadDtoAdmin(Employee entity) {
+        return mapperFacade.map(entity, EmployeeReadAdminDto.class);
     }
 
+    public EmployeeReadAllByNameDto toReadAllByName(Employee entity) {
+        return mapperFacade.map(entity, EmployeeReadAllByNameDto.class);
+    }
+
+    public EmployeeReadAllByCountryDto toReadAllByCountry(Employee entity) {
+        return mapperFacade.map(entity, EmployeeReadAllByCountryDto.class);
+    }
+
+    public EmployeeReadAllByGmailDto toReadAllByGmail(Employee entity) {
+        return mapperFacade.map(entity, EmployeeReadAllByGmailDto.class);
+    }
+
+    public EmployeeUpdateDto toUpdateDto (Employee entity) {
+        return mapperFacade.map(entity, EmployeeUpdateDto.class);
+    }
+
+    public EmployeeUpdateAgeDto toUpdateAgeDto (Employee entity) {
+        return mapperFacade.map(entity, EmployeeUpdateAgeDto.class);
+    }
+
+    public EmployeeUpdateCountryDto toUpdateCountryDto (Employee entity) {
+        return mapperFacade.map(entity, EmployeeUpdateCountryDto.class);
+    }
+
+    public EmployeeUpdateEmailDto toUpdateEmailDto (Employee entity) {
+        return mapperFacade.map(entity, EmployeeUpdateEmailDto.class);
+    }
 
     public Employee fromDto(EmployeeDto dto) {
         return mapperFacade.map(dto, Employee.class);
