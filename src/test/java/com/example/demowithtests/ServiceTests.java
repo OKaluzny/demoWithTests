@@ -1,9 +1,8 @@
 package com.example.demowithtests;
 
 import com.example.demowithtests.domain.Employee;
-import com.example.demowithtests.repository.Repository;
-import com.example.demowithtests.service.Service;
-import com.example.demowithtests.service.ServiceBean;
+import com.example.demowithtests.repository.EmployeeRepository;
+import com.example.demowithtests.service.EmployeeServiceBean;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentMatchers;
@@ -24,22 +23,22 @@ import static org.mockito.Mockito.when;
 public class ServiceTests {
 
     @Mock
-    private Repository repository;
+    private EmployeeRepository employeeRepository;
 
     @InjectMocks
-    private ServiceBean service;
+    private EmployeeServiceBean service;
 
     @Test
     public void whenSaveEmployee_shouldReturnEmployee() {
         Employee employee = new Employee();
         employee.setName("Mark");
 
-        when(repository.save(ArgumentMatchers.any(Employee.class))).thenReturn(employee);
+        when(employeeRepository.save(ArgumentMatchers.any(Employee.class))).thenReturn(employee);
 
         Employee created = service.create(employee);
 
         assertThat(created.getName()).isSameAs(employee.getName());
-        verify(repository).save(employee);
+        verify(employeeRepository).save(employee);
     }
 
     @Test
@@ -47,12 +46,12 @@ public class ServiceTests {
         Employee employee = new Employee();
         employee.setId(88);
 
-        when(repository.findById(employee.getId())).thenReturn(Optional.of(employee));
+        when(employeeRepository.findById(employee.getId())).thenReturn(Optional.of(employee));
 
         Employee expected = service.getById(employee.getId());
 
         assertThat(expected).isSameAs(employee);
-        verify(repository).findById(employee.getId());
+        verify(employeeRepository).findById(employee.getId());
     }
 
     @Test(expected = EntityNotFoundException.class)
@@ -61,7 +60,7 @@ public class ServiceTests {
         employee.setId(89);
         employee.setName("Mark");
 
-        given(repository.findById(anyInt())).willReturn(Optional.empty());
+        given(employeeRepository.findById(anyInt())).willReturn(Optional.empty());
         service.getById(employee.getId());
     }
 }

@@ -3,7 +3,7 @@ package com.example.demowithtests.web;
 import com.example.demowithtests.domain.Employee;
 import com.example.demowithtests.dto.EmployeeDto;
 import com.example.demowithtests.dto.EmployeeReadDto;
-import com.example.demowithtests.service.Service;
+import com.example.demowithtests.service.EmployeeService;
 import com.example.demowithtests.util.config.EmployeeConverter;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -11,9 +11,12 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -26,7 +29,7 @@ import java.util.List;
 @Tag(name = "Employee", description = "Employee API")
 public class Controller {
 
-    private final Service service;
+    private final EmployeeService employeeService;
     private final EmployeeConverter converter;
 
     //Операция сохранения юзера в базу данных
@@ -41,7 +44,7 @@ public class Controller {
     public EmployeeDto saveEmployee(@RequestBody @Valid EmployeeDto requestForSave) {
 
         var employee = converter.getMapperFacade().map(requestForSave, Employee.class);
-        var dto = converter.toDto(service.create(employee));
+        var dto = converter.toDto(employeeService.create(employee));
 
         return dto;
     }
@@ -50,7 +53,16 @@ public class Controller {
     @GetMapping("/users")
     @ResponseStatus(HttpStatus.OK)
     public List<Employee> getAllUsers() {
-        return service.getAll();
+        return employeeService.getAll();
+    }
+
+    @GetMapping("/users/p")
+    @ResponseStatus(HttpStatus.OK)
+    public Page<Employee> getPage(@RequestParam(defaultValue = "0") int page,
+                                  @RequestParam(defaultValue = "5") int size
+    ) {
+        Pageable paging = PageRequest.of(page, size);
+        return employeeService.getAllWithPagination(paging);
     }
 
     //Получения юзера по id
@@ -64,7 +76,7 @@ public class Controller {
             @ApiResponse(responseCode = "409", description = "Employee already exists")})
     public EmployeeReadDto getEmployeeById(@PathVariable Integer id) {
         log.debug("getEmployeeById() Controller - start: id = {}", id);
-        var employee = service.getById(id);
+        var employee = employeeService.getById(id);
         log.debug("getById() Controller - to dto start: id = {}", id);
         var dto = converter.toReadDto(employee);
         log.debug("getEmployeeById() Controller - end: name = {}", dto.name);
@@ -76,20 +88,34 @@ public class Controller {
     @ResponseStatus(HttpStatus.OK)
     public Employee refreshEmployee(@PathVariable("id") Integer id, @RequestBody Employee employee) {
 
-        return service.updateById(id, employee);
+        return employeeService.updateById(id, employee);
     }
 
     //Удаление по id
     @PatchMapping("/users/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void removeEmployeeById(@PathVariable Integer id) {
-        service.removeById(id);
+        employeeService.removeById(id);
     }
 
     //Удаление всех юзеров
     @DeleteMapping("/users")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void removeAllUsers() {
-        service.removeAll();
+        employeeService.removeAll();
     }
+
+    @GetMapping("/users/country")
+    @ResponseStatus(HttpStatus.OK)
+    public Page<Employee> findByCountry(@RequestParam(required = false) String country,
+                                        @RequestParam(defaultValue = "0") int page,
+                                        @RequestParam(defaultValue = "3") int size,
+                                        @RequestParam(defaultValue = "") List<String> sortList,
+                                        @RequestParam(defaultValue = "DESC") Sort.Direction sortOrder) {
+        //Pageable paging = PageRequest.of(page, size);
+        //Pageable paging = PageRequest.of(page, size, Sort.by("name").ascending());
+        return employeeService.findByCountryContaining(country, page, size, sortList, sortOrder.toString());
+    }
+
+
 }
