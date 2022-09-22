@@ -64,9 +64,6 @@ public class ServiceTests {
         service.getById(employee.getId());
     }
 
-
-
-
     // №1
     @Test
     public void whenGivenName_shouldReturnList_ifFound() {
@@ -86,18 +83,42 @@ public class ServiceTests {
 
         service.isAccess(employee.getId());
 
-        verify(repository).getIsAccess();
+        verify(repository).isAccess(employee.getId());
     }
 
-
     // №3
-    @Test()
-    public void whenGetHour() {
+    @Test
+    public void whenListAccess() {
         Employee employee = new Employee();
         employee.setId(7);
 
-        service.updateHour(employee.getId(), 23.0);
+        service.isAccess(employee.getId());
 
-        verify(repository).updateHour(employee.getId(), 23.0);
+        verify(repository).getIsAccess();
+    }
+
+    // №4
+    @Test
+    public void whenDeleted() {
+        Employee employee = new Employee();
+        employee.setId(7);
+
+        when(repository.findById(employee.getId())).thenReturn(Optional.of(employee));
+
+        service.isDeleted(employee.getId());
+
+        verify(repository).save(employee);
+    }
+
+    // №5
+    @Test
+    public void whenGivenCountry_shouldReturnList_ifFound() {
+        Employee employee = new Employee();
+        employee.setName("Nick");
+        employee.setCountry("Ukraine");
+
+        service.getListCountry(employee.getCountry());
+
+        verify(repository).getListCountry(employee.getCountry());
     }
 }

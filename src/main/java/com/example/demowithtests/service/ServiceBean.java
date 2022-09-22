@@ -103,28 +103,40 @@ public class ServiceBean implements Service {
         return repository.getIsAccess();
     }
 
-    // №3 get hour
     @Override
-    public void updateHour(Integer id, Double hour) {
-        repository.updateHour(id, hour);
+    public List<Employee> getListCountry(String country) {
+        return repository.getListCountry(country);
     }
 
+    @Override
+    public void updateEmail(Integer id, String email) {
+        repository.updateEmail(id, email);
+
+    }
+
+
+    //    // №3 get hour
+//    @Override
+//    public void updateHour(Integer id, Double hour) {
+//        repository.updateHour(id, hour);
+//    }
+//
     // №4 get salary
-    @Override
-    public void getSalary(Integer id) {
-        Employee employee = repository.findById(id)
-                .orElseThrow(ResourceWasDeletedException::new);
-
-        double rate = 50;
-
-        // salary = hour * rate
-        employee.setSalary(employee.getHour() * rate);
-        repository.getSalary(id, employee.getSalary());
-    }
-
-    // get list name and salary
-    @Override
-    public List<Object> salaryInfo() {
-        return repository.listSalary();
-    }
+//    @Override
+//    public void getSalary(Integer id) {
+//        Employee employee = repository.findById(id)
+//                .orElseThrow(ResourceWasDeletedException::new);
+//
+//        double rate = 50;
+//
+//        // salary = hour * rate
+//        employee.setSalary(employee.getHour() * rate);
+//        repository.getSalary(id, employee.getSalary());
+//    }
+//
+//    // get list name and salary
+//    @Override
+//    public List<Object> salaryInfo() {
+//        return repository.listSalary();
+//    }
 }

@@ -26,9 +26,14 @@ public interface Service {
 
     List<Employee> isAccess(Integer id);
 
-    void updateHour(Integer id, Double hour);
+    List<Employee> getListCountry(String country);
 
-    void getSalary(Integer id);
+    void updateEmail(Integer id, String email);
 
-    List<Object> salaryInfo();
+
+//    void updateHour(Integer id, Double hour);
+
+//    void getSalary(Integer id);
+//
+//    List<Object> salaryInfo();
 }

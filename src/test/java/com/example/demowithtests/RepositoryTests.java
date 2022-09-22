@@ -89,4 +89,68 @@ public class RepositoryTests {
         Assertions.assertThat(employee1).isNull();
     }
 
+    @Test
+    @Order(6)
+    public void listNameEmployeeTest() {
+
+        Employee employee = new Employee();
+        employee.setName("Vlad");
+
+        repository.save(employee);
+
+        List<Employee> employeesList = repository.getName(employee.getName());
+
+        Assertions.assertThat(employeesList.size()).isGreaterThan(0);
+    }
+
+    @Test
+    @Order(7)
+    public void listCountryEmployeeTest() {
+
+        Employee employee = new Employee();
+        employee.setId(55);
+        employee.setName("Vlad");
+        employee.setCountry("Ukraine");
+
+        repository.save(employee);
+
+        List<Employee> employeesList = repository.getListCountry(employee.getCountry());
+
+        Assertions.assertThat(employeesList.size()).isGreaterThan(0);
+    }
+
+    @Test
+    @Order(8)
+    @Rollback(value = false)
+    public void updateEmailTest() {
+
+        Employee employee = new Employee();
+        employee.setName("Vlad");
+        employee.setEmail("email");
+
+        repository.save(employee);
+
+        employee.setEmail("emailTest@.com");
+        Employee employeeUpdated = repository.save(employee);
+
+        Assertions.assertThat(employeeUpdated.getEmail()).isEqualTo("emailTest@.com");
+
+    }
+
+//    @Test
+//    @Order(9)
+//    @Rollback(value = false)
+//    public void isAccessTest() {
+//
+//        Employee employee = new Employee();
+//        employee.setId(8);
+//        employee.setName("Vlad");
+//
+//        repository.save(employee);
+//        repository.isAccess(8);
+//        Employee employeeUpdated = repository.save(employee);
+//
+//        Assertions.assertThat(employeeUpdated.isAccess()).isEqualTo(true);
+//
+//    }
 }

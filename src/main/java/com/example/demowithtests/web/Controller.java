@@ -89,26 +89,45 @@ public class Controller {
         return service.isAccess(id);
     }
 
-    // add hour work
-    @PutMapping("/usersHour/{id}")
+
+
+    // get list by country
+    @GetMapping(value = "/users", params = {"country"})
     @ResponseStatus(HttpStatus.OK)
-    public void updateHour(@PathVariable("id") Integer id, @RequestBody Double hour) {
-        service.updateHour(id, hour);
+    public List<Employee> findByCountry(@RequestParam(value = "country") String country) {
+        return service.getListCountry(country);
     }
 
-    // add salary
-    @PatchMapping("/usersInfo/{id}")
+    @PatchMapping (value = "/users/{id}",params = {"email"})
     @ResponseStatus(HttpStatus.OK)
-    public void getInfo(@PathVariable("id") Integer id) {
-        service.getSalary(id);
+//    public Employee refreshEmail(@PathVariable("id") Integer id, @RequestBody String email) {
+    public Employee refreshEmail(@PathVariable("id") Integer id, @RequestParam(value = "email") String email) {
+
+        service.updateEmail(id, email);
+        return service.getById(id);
     }
 
-    // get list name, salary
-    @GetMapping("/usersInfo")
-    @ResponseStatus(HttpStatus.OK)
-    public List<Object> infoSalary() {
-        return service.salaryInfo();
-    }
+
+//    // add hour work
+//    @PutMapping("/usersHour/{id}")
+//    @ResponseStatus(HttpStatus.OK)
+//    public void updateHour(@PathVariable("id") Integer id, @RequestBody Double hour) {
+//        service.updateHour(id, hour);
+//    }
+//
+//    // add salary
+//    @PatchMapping("/usersInfo/{id}")
+//    @ResponseStatus(HttpStatus.OK)
+//    public void getInfo(@PathVariable("id") Integer id) {
+//        service.getSalary(id);
+//    }
+//
+//    // get list name, salary
+//    @GetMapping("/usersInfo")
+//    @ResponseStatus(HttpStatus.OK)
+//    public List<Object> infoSalary() {
+//        return service.salaryInfo();
+//    }
 }
 
 

@@ -20,10 +20,10 @@ public class Employee {
     private String name;
     private String country;
     private String email;
-    private Double hour;
-    private Double salary;
     private boolean deleted;
     private boolean access;
+//    private double hour;
+//    private Double salary;
 
     public Integer getId() {
         return id;
@@ -73,19 +73,21 @@ public class Employee {
         this.access = access;
     }
 
-    public Double getHour() {
-        return hour;
-    }
+//    public double getHour() {
+//        return hour;
+//    }
+//
+//    public void setHour(double hour) {
+//        this.hour = hour;
+//    }
 
-    public void setHour(Double hour) {
-        this.hour = hour;
-    }
+//
+//    public Double getSalary() {
+//        return salary;
+//    }
+//
+//    public void setSalary(Double salary) {
+//        this.salary = salary;
+//    }
 
-    public Double getSalary() {
-        return salary;
-    }
-
-    public void setSalary(Double salary) {
-        this.salary = salary;
-    }
 }

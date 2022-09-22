@@ -28,20 +28,31 @@ public interface Repository extends JpaRepository<Employee, Integer> {
     @Query("select e from Employee e where e.access = true")
     List<Employee> getIsAccess();
 
+    // №3 -
+    @Query("select e from Employee e where e.country = ?1")
+    List<Employee> getListCountry(String country);
+
+    @Modifying
+    @Transactional
+    @Query("update Employee e set e.email = ?2 where e.id = ?1")
+    void updateEmail(Integer id, String email);
+
+
     // №3 - update column hour work employee
-    @Modifying
-    @Transactional
-    @Query(value = "update users set hour = ?2 where id = ?1", nativeQuery = true)
-    void updateHour(Integer id, Double hour);
+//    @Modifying
+//    @Transactional
+////    @Query(value = "update users set hour = ?2 where id = ?1", nativeQuery = true)
+//    @Query("update Employee e set e.hour = ?2 where e.id = ?1")
+//    void updateHour(Integer id, Double hour);
 
-    // №4 - salary by id
-    @Modifying
-    @Transactional
-    @Query("update Employee e set e.salary = ?2 where e.id = ?1")
-    void getSalary(Integer id, Double salary);
-
-    // get list employee name and employee salary
-    @Query("select e.name, e.salary from Employee e")
-    List<Object> listSalary();
+//    // №4 - salary by id
+//    @Modifying
+//    @Transactional
+//    @Query("update Employee e set e.salary = ?2 where e.id = ?1")
+//    void getSalary(Integer id, Double salary);
+//
+//    // get list employee name and employee salary
+//    @Query("select e.name, e.salary from Employee e")
+//    List<Object> listSalary();
 
 }
