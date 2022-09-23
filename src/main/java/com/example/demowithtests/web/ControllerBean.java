@@ -17,32 +17,29 @@ import java.util.List;
 @RestController
 @AllArgsConstructor
 @RequestMapping(value = "/api", produces = MediaType.APPLICATION_JSON_VALUE)
-public class Controller {
+public class ControllerBean implements ControllerDto {
 
     private final Service service;
     private final EmployeeMapper mapper;
 
     @PostMapping("/users")
-    @ResponseStatus(HttpStatus.CREATED)
     public Employee saveEmployee(@RequestBody Employee employee) {
         return service.create(employee);
     }
 
+    @Override
     @PostMapping("/users/create_dto")
-    @ResponseStatus(HttpStatus.CREATED)
     public EmployeeCreateDto saveEmployeeDto(@RequestBody Employee employee) {
-
         return mapper.createDto(service.create(employee));
     }
 
     @GetMapping("/users")
-    @ResponseStatus(HttpStatus.OK)
     public List<Employee> getAllUsers() {
         return service.getAll();
     }
 
+    @Override
     @GetMapping("/users/dtos")
-    @ResponseStatus(HttpStatus.OK)
     public List<EmployeeToReadDto> getAllEmployeeDto() {
         return mapper.toDtoList(service.getAll());
     }
@@ -50,20 +47,17 @@ public class Controller {
     @GetMapping("/users/{id}")
     @ResponseStatus(HttpStatus.OK)
     public Employee getEmployeeById(@PathVariable Integer id) {
-
-        Employee employee = service.getById(id);
-        return employee;
+        return service.getById(id);
     }
 
+    @Override
     @GetMapping(value = "/users/country_dto", params = {"country"})
-    @ResponseStatus(HttpStatus.OK)
     public List<EmployeeToReadDto> getEmployeeByCountry(@RequestParam(value = "country") String country) {
-
         return mapper.readByCountry(service.findEmployeesByCountry(country));
     }
 
+    @Override
     @GetMapping("/users/{id}/dto")
-    @ResponseStatus(HttpStatus.OK)
     public EmployeeToReadDto getEmployeeByIdDto(@PathVariable Integer id) {
         return mapper.employeeToReadDto(service.getById(id));
     }
@@ -74,15 +68,21 @@ public class Controller {
         return service.updateById(id, employee);
     }
 
-    @PatchMapping("/users/{id}/phone_number_dto")
+    @PutMapping("/users/{id}/update_dto")
     @ResponseStatus(HttpStatus.OK)
+    public EmployeeUpdateDto refreshEmployeeDto(@PathVariable("id") Integer id, @RequestBody Employee employee) {
+        return mapper.updateEmployeeDto(service.updateById(id, employee));
+    }
+
+    @Override
+    @PatchMapping("/users/{id}/phone_number_dto")
     public EmployeeUpdateDto refreshDtoPhoneNumber(@PathVariable("id") Integer id,
                                                    @RequestParam(value = "phoneNumber") Integer phoneNumber) {
         return mapper.updatePhoneNumberDto(service.updatePhoneById(id, phoneNumber));
     }
 
+    @Override
     @GetMapping("/users/tech")
-    @ResponseStatus(HttpStatus.OK)
     public List<EmployeeReadTechDto> getAllUsersTech() {
         return mapper.getTechDto(service.getAll());
     }
