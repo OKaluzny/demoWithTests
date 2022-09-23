@@ -160,4 +160,24 @@ public class ServiceTests {
         given(repository.findById(anyInt())).willReturn(Optional.empty());
         service.getById(id);
     }
+
+    @Test
+    @DisplayName("Update phone number of employee with certain id")
+    public void update_phoneNumberOfEmployeeById_returnEmployee() {
+        Integer id = 20;
+        Integer phoneNumber = 12345678;
+        Employee employee = new Employee();
+        employee.setId(id);
+
+        when(repository.findById(id)).thenReturn(Optional.of(employee));
+        employee.setPhoneNumber(phoneNumber);
+
+        repository.save(employee);
+
+        Employee expected = service.updatePhoneById(id, phoneNumber);
+
+        assertEquals(phoneNumber, expected.getPhoneNumber());
+        assertThat(expected).isSameAs(employee);
+        verify(repository).findById(id);
+    }
 }
