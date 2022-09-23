@@ -24,4 +24,6 @@ public interface EmployeeMapper {
 
     List<EmployeeToReadDto> readByCountry (List<Employee> employeeList);
 
+    EmployeeUpdateDto updateEmployeeDto(Employee employee);
+
 }
