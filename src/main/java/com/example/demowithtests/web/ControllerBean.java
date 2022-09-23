@@ -68,8 +68,8 @@ public class ControllerBean implements ControllerDto {
         return service.updateById(id, employee);
     }
 
+    @Override
     @PutMapping("/users/{id}/update_dto")
-    @ResponseStatus(HttpStatus.OK)
     public EmployeeUpdateDto refreshEmployeeDto(@PathVariable("id") Integer id, @RequestBody Employee employee) {
         return mapper.updateEmployeeDto(service.updateById(id, employee));
     }

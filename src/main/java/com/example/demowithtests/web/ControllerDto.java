@@ -68,7 +68,7 @@ public interface ControllerDto {
             @ApiResponse(responseCode = "201", description = "OK. Employee was updated"),
             @ApiResponse(responseCode = "400", description = "Invalid input"),
             @ApiResponse(responseCode = "404", description = "NOT FOUND. Specified employee request not found.")})
-    public EmployeeUpdateDto refreshEmployeeDto(@PathVariable("id") Integer id, @RequestBody Employee employee);
+    EmployeeUpdateDto refreshEmployeeDto(@PathVariable("id") Integer id, @RequestBody Employee employee);
 
     @ResponseStatus(HttpStatus.OK)
     @Operation(summary = "This is endpoint allows to view all technical fields.", description = "Create request to view technical fields.", tags = {"Employee"})
