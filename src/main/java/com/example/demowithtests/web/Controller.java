@@ -1,7 +1,12 @@
 package com.example.demowithtests.web;
 
 import com.example.demowithtests.domain.Employee;
+import com.example.demowithtests.dto.EmployeeCreateDto;
+import com.example.demowithtests.dto.EmployeeReadTechDto;
+import com.example.demowithtests.dto.EmployeeToReadDto;
+import com.example.demowithtests.dto.EmployeeUpdateDto;
 import com.example.demowithtests.service.Service;
+import com.example.demowithtests.util.config.mapstruct.EmployeeMapper;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -15,36 +20,33 @@ import java.util.List;
 public class Controller {
 
     private final Service service;
+    private final EmployeeMapper mapper;
 
-    /**
-     * This method saves new Employee object
-     *
-     * @param employee The name of the object of the Employee which we are saving
-     * @return New Employee
-     */
     @PostMapping("/users")
     @ResponseStatus(HttpStatus.CREATED)
     public Employee saveEmployee(@RequestBody Employee employee) {
         return service.create(employee);
     }
 
-    /**
-     * This method returns all the employees in the table
-     *
-     * @return List of all Employees
-     */
+    @PostMapping("/users/create_dto")
+    @ResponseStatus(HttpStatus.CREATED)
+    public EmployeeCreateDto saveEmployeeDto(@RequestBody Employee employee) {
+
+        return mapper.createDto(service.create(employee));
+    }
+
     @GetMapping("/users")
     @ResponseStatus(HttpStatus.OK)
     public List<Employee> getAllUsers() {
         return service.getAll();
     }
 
-    /**
-     * This method searches the Employee with specified id
-     *
-     * @param id The id of the certain employee
-     * @return Employee
-     */
+    @GetMapping("/users/dtos")
+    @ResponseStatus(HttpStatus.OK)
+    public List<EmployeeToReadDto> getAllEmployeeDto() {
+        return mapper.toDtoList(service.getAll());
+    }
+
     @GetMapping("/users/{id}")
     @ResponseStatus(HttpStatus.OK)
     public Employee getEmployeeById(@PathVariable Integer id) {
@@ -53,77 +55,68 @@ public class Controller {
         return employee;
     }
 
-    /**
-     * This method updates already existing Employee
-     *
-     * @param id       The id of the certain employee
-     * @param employee The employee we want to update
-     * @return Employee
-     */
+    @GetMapping(value = "/users/country_dto", params = {"country"})
+    @ResponseStatus(HttpStatus.OK)
+    public List<EmployeeToReadDto> getEmployeeByCountry(@RequestParam(value = "country") String country) {
+
+        return mapper.readByCountry(service.findEmployeesByCountry(country));
+    }
+
+    @GetMapping("/users/{id}/dto")
+    @ResponseStatus(HttpStatus.OK)
+    public EmployeeToReadDto getEmployeeByIdDto(@PathVariable Integer id) {
+        return mapper.employeeToReadDto(service.getById(id));
+    }
+
     @PutMapping("/users/{id}")
     @ResponseStatus(HttpStatus.OK)
     public Employee refreshEmployee(@PathVariable("id") Integer id, @RequestBody Employee employee) {
         return service.updateById(id, employee);
     }
 
-    /**
-     * This method deletes certain employee from the table
-     *
-     * @param id The id of the certain employee
-     */
+    @PatchMapping("/users/{id}/phone_number_dto")
+    @ResponseStatus(HttpStatus.OK)
+    public EmployeeUpdateDto refreshDtoPhoneNumber(@PathVariable("id") Integer id,
+                                                   @RequestParam(value = "phoneNumber") Integer phoneNumber) {
+        return mapper.updatePhoneNumberDto(service.updatePhoneById(id, phoneNumber));
+    }
+
+    @GetMapping("/users/tech")
+    @ResponseStatus(HttpStatus.OK)
+    public List<EmployeeReadTechDto> getAllUsersTech() {
+        return mapper.getTechDto(service.getAll());
+    }
+
     @PatchMapping("/users/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void removeEmployeeById(@PathVariable Integer id) {
         service.removeById(id);
     }
 
-    /**
-     * This method removes all employees from the table
-     */
     @DeleteMapping("/users")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void removeAllUsers() {
         service.removeAll();
     }
 
-    /**
-     * This method searches all employees with the certain name
-     *
-     * @param name The name of request parameter
-     * @return List of Employees with specified name
-     */
     @GetMapping(value = "/users", params = {"name"})
     @ResponseStatus(HttpStatus.OK)
     public List<Employee> getAllByName(@RequestParam(value = "name") String name) {
         return service.findAllByName(name);
     }
 
-    /**
-     * This method searches all employees with the filled field phoneNumber
-     *
-     * @return List of Employees
-     */
     @GetMapping(value = "/users/phone_number")
     @ResponseStatus(HttpStatus.OK)
     public List<Employee> getUsersWithPhoneNumber() {
         return service.findUsersWithPhoneNumber();
     }
 
-    /**
-     * This method searches users with no email
-     * @return List of Employees
-     */
     @GetMapping("/users/no_email")
     @ResponseStatus(HttpStatus.OK)
     public List<Employee> generateEmail() {
         return service.findRecordsWhereEmailNull();
     }
 
-    /**
-     * This method find users by field "country"
-     * @param country This is country of employee
-     * @return List of Employees
-     */
     @GetMapping(value = "/users", params = {"country"})
     @ResponseStatus(HttpStatus.OK)
     public List<Employee> getUsersByCountry(@RequestParam(value = "country") String country) {
