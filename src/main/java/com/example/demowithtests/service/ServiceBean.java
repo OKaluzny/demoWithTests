@@ -1,7 +1,11 @@
 package com.example.demowithtests.service;
 
 import com.example.demowithtests.domain.Employee;
+import com.example.demowithtests.dto.EmployeeCreateDto;
+import com.example.demowithtests.dto.EmployeeToReadDto;
+import com.example.demowithtests.dto.EmployeeUpdateDto;
 import com.example.demowithtests.repository.Repository;
+import com.example.demowithtests.util.config.mapstruct.EmployeeMapper;
 import com.example.demowithtests.util.exception.ResourceNotFoundException;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -92,5 +96,12 @@ public class ServiceBean implements Service {
     @Override
     public List<Employee> findEmployeesByCountry(String country) {
         return repository.findEmployeesByCountry(country);
+    }
+
+    @Override
+    public Employee updatePhoneById(Integer id, Integer phoneNumber) {
+        Employee employee = repository.findById(id).orElseThrow();
+        employee.setPhoneNumber(phoneNumber);
+        return employee;
     }
 }
