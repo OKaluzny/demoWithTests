@@ -9,7 +9,6 @@ import lombok.*;
 @ToString
 public class EmployeeCreateDto {
 
-    private Integer id;
     private String name;
     private String country;
     private String email;
