@@ -102,6 +102,7 @@ public class ServiceBean implements Service {
     public Employee updatePhoneById(Integer id, Integer phoneNumber) {
         Employee employee = repository.findById(id).orElseThrow();
         employee.setPhoneNumber(phoneNumber);
+        repository.save(employee);
         return employee;
     }
 }
