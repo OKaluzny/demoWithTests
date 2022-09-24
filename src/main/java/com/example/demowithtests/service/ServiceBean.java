@@ -1,7 +1,6 @@
 package com.example.demowithtests.service;
 
 import com.example.demowithtests.domain.Employee;
-import com.example.demowithtests.dto.updateDto.EmployeeUpdateNameDto;
 import com.example.demowithtests.repository.JpqlRepository;
 import com.example.demowithtests.repository.Repository;
 import com.example.demowithtests.repository.SqlRepository;
