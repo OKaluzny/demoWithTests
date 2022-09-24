@@ -32,4 +32,6 @@ public interface Service {
     List<Employee> findAllByIsDeleted(Boolean isDeleted);
 
     Employee updateNameById(Integer id, String name);
+
+    Employee updateCountryById(Integer id, String country);
 }

@@ -13,4 +13,5 @@ public interface Repository extends JpaRepository<Employee, Integer> {
 
     //Обновление поля 'name' по номеру Id
     Employee updateNameById(Integer id, String name);
+    Employee updateCountryById(Integer id, String country);
 }
