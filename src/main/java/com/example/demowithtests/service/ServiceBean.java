@@ -115,5 +115,14 @@ public class ServiceBean implements Service {
         return employee;
     }
 
+    @Override
+    public Employee updateCountryById(Integer id, String country) {
+        Employee employee = repository.findById(id)
+                .orElseThrow(ResourceWasDeletedException::new);
+        employee.setCountry(country);
+        repository.save(employee);
+        return employee;
+    }
+
 
 }
