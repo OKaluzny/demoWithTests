@@ -1,6 +1,7 @@
 package com.example.demowithtests.web.controllers;
 
 import com.example.demowithtests.dto.updateDto.EmployeeUpdateCountryDto;
+import com.example.demowithtests.dto.updateDto.EmployeeUpdateEmailDto;
 import com.example.demowithtests.dto.updateDto.EmployeeUpdateIsDeleted;
 import com.example.demowithtests.dto.updateDto.EmployeeUpdateNameDto;
 import com.example.demowithtests.service.Service;
@@ -8,6 +9,7 @@ import com.example.demowithtests.service.Service;
 import com.example.demowithtests.util.config.EmployeeConverter;
 import com.example.demowithtests.web.interfaces.patch.PatchHideRequest;
 import com.example.demowithtests.web.interfaces.patch.PatchUpdateCountryRequest;
+import com.example.demowithtests.web.interfaces.patch.PatchUpdateEmailRequest;
 import com.example.demowithtests.web.interfaces.patch.PatchUpdateNameRequest;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
@@ -21,7 +23,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping(value = "/api", produces = MediaType.APPLICATION_JSON_VALUE)
 @Slf4j
 @Tag(name = "Employee", description = "Employee API")
-public class PatchController implements PatchHideRequest, PatchUpdateNameRequest, PatchUpdateCountryRequest {
+public class PatchController implements PatchHideRequest, PatchUpdateNameRequest, PatchUpdateCountryRequest, PatchUpdateEmailRequest {
 
     private final Service service;
     private final EmployeeConverter converter;
@@ -35,6 +37,7 @@ public class PatchController implements PatchHideRequest, PatchUpdateNameRequest
         return dto;
     }
 
+    //Изменить имя по id
     @Override
     @PatchMapping ("/users/name/{id}")
     @ResponseStatus(HttpStatus.OK)
@@ -44,12 +47,22 @@ public class PatchController implements PatchHideRequest, PatchUpdateNameRequest
         return dto;
     }
 
+    //Изменить страну по id
     @Override
     @PatchMapping ("/users/country/{id}")
     @ResponseStatus(HttpStatus.OK)
     public EmployeeUpdateCountryDto updateCountryById(@PathVariable("id") Integer id, @RequestParam(value = "country") String country) {
         var employee = service.updateCountryById(id,country);
         var dto = converter.toUpdateCountryDto(employee);
+        return dto;
+    }
+
+    @Override
+    @PatchMapping ("/users/email/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public EmployeeUpdateEmailDto updateEmailById(@PathVariable("id") Integer id, @RequestParam(value = "email") String email) {
+        var employee = service.updateEmailById(id,email);
+        var dto = converter.toUpdateEmailDto(employee);
         return dto;
     }
 }

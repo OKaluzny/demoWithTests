@@ -124,5 +124,14 @@ public class ServiceBean implements Service {
         return employee;
     }
 
+    @Override
+    public Employee updateEmailById(Integer id, String email) {
+        Employee employee = repository.findById(id)
+                .orElseThrow(ResourceWasDeletedException::new);
+        employee.setEmail(email);
+        repository.save(employee);
+        return employee;
+    }
+
 
 }
