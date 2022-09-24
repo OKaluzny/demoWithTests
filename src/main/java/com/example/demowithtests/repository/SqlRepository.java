@@ -25,8 +25,4 @@ public interface SqlRepository extends JpaRepository<Employee, Integer>{
     @Query(value = "SELECT * FROM users WHERE is_deleted = ?1", nativeQuery = true) //sql
     List<Employee> findAllByIsDeleted(Boolean isDeleted);
 
-    @Transactional
-    @Modifying
-    @Query (value = "UPDATE users SET email = 'test' WHERE name = 'Olga'", nativeQuery = true)
-    List<Employee> updateEmployeeByName();
 }
