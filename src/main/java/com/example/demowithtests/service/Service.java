@@ -35,4 +35,7 @@ public interface Service {
 
     Employee updateCountryById(Integer id, String country);
     Employee updateEmailById(Integer id, String email);
+    Employee updateAgeById(Integer id, Integer age);
+
+
 }

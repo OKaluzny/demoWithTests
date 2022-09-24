@@ -132,5 +132,14 @@ public class ServiceBean implements Service {
         return employee;
     }
 
+    @Override
+    public Employee updateAgeById(Integer id, Integer age) {
+        Employee employee = repository.findById(id)
+                .orElseThrow(ResourceWasDeletedException::new);
+        employee.setAge(age);
+        repository.save(employee);
+        return employee;
+    }
+
 
 }

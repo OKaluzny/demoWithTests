@@ -7,10 +7,7 @@ import com.example.demowithtests.dto.updateDto.EmployeeUpdateNameDto;
 import com.example.demowithtests.service.Service;
 
 import com.example.demowithtests.util.config.EmployeeConverter;
-import com.example.demowithtests.web.interfaces.patch.PatchHideRequest;
-import com.example.demowithtests.web.interfaces.patch.PatchUpdateCountryRequest;
-import com.example.demowithtests.web.interfaces.patch.PatchUpdateEmailRequest;
-import com.example.demowithtests.web.interfaces.patch.PatchUpdateNameRequest;
+import com.example.demowithtests.web.interfaces.patch.*;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,7 +20,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping(value = "/api", produces = MediaType.APPLICATION_JSON_VALUE)
 @Slf4j
 @Tag(name = "Employee", description = "Employee API")
-public class PatchController implements PatchHideRequest, PatchUpdateCountryRequest, PatchUpdateEmailRequest, PatchUpdateNameRequest {
+public class PatchController implements PatchHideRequest, PatchUpdateCountryRequest, PatchUpdateEmailRequest, PatchUpdateNameRequest, PatchUpdateAgeRequest {
 
     private final Service service;
     private final EmployeeConverter converter;
@@ -62,6 +59,15 @@ public class PatchController implements PatchHideRequest, PatchUpdateCountryRequ
     @ResponseStatus(HttpStatus.OK)
     public EmployeeUpdateEmailDto updateEmailById(@PathVariable("id") Integer id, @RequestParam(value = "email") String email) {
         var employee = service.updateEmailById(id,email);
+        var dto = converter.toUpdateEmailDto(employee);
+        return dto;
+    }
+
+    @Override
+    @PatchMapping ("/users/age/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public EmployeeUpdateEmailDto updateAgeById(@PathVariable("id") Integer id, @RequestParam(value = "email") Integer age) {
+        var employee = service.updateAgeById(id,age);
         var dto = converter.toUpdateEmailDto(employee);
         return dto;
     }
