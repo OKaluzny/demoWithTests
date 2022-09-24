@@ -11,12 +11,4 @@ import java.util.List;
 public interface Repository extends JpaRepository<Employee, Integer> {
     Employee findByName(String name);
 
-    //Обновление имени по Id
-    Employee updateNameById(Integer id, String name);
-
-    //Обновление страны по Id
-    Employee updateCountryById(Integer id, String country);
-
-    //Обновление почты по Id
-    Employee updateEmailById(Integer id, String email);
 }
