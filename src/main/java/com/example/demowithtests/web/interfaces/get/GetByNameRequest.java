@@ -1,6 +1,7 @@
 package com.example.demowithtests.web.interfaces.get;
 
 import com.example.demowithtests.domain.Employee;
+import com.example.demowithtests.dto.readDto.EmployeeReadAllByNameDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -15,5 +16,5 @@ public interface GetByNameRequest {
             @ApiResponse(responseCode = "400", description = "Invalid input"),
             @ApiResponse(responseCode = "404", description = "NOT FOUND. Specified employee request not found.")})
 
-    List<Employee> getListByName(@RequestParam(value = "name") String name);
+    List<EmployeeReadAllByNameDto> getListByName(@RequestParam(value = "name") String name);
 }

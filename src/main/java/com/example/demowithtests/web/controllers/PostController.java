@@ -1,9 +1,11 @@
 package com.example.demowithtests.web.controllers;
 
 import com.example.demowithtests.domain.Employee;
+import com.example.demowithtests.dto.createDto.EmployeeAdminDto;
 import com.example.demowithtests.dto.createDto.EmployeeDto;
 import com.example.demowithtests.service.Service;
 import com.example.demowithtests.util.config.EmployeeConverter;
+import com.example.demowithtests.web.interfaces.post.PostAdminRequest;
 import com.example.demowithtests.web.interfaces.post.PostRequest;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -18,7 +20,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping(value = "/api", produces = MediaType.APPLICATION_JSON_VALUE)
 @Slf4j
 @Tag(name = "Employee", description = "Employee API")
-public class PostController implements PostRequest {
+public class PostController implements PostRequest, PostAdminRequest {
 
     private final Service service;
     private final EmployeeConverter converter;
@@ -32,5 +34,15 @@ public class PostController implements PostRequest {
         var dto = converter.toDto(service.create(employee));
 
         return dto;
+    }
+
+    @Override
+    @PostMapping("/users/admin")
+    @ResponseStatus(HttpStatus.CREATED)
+    public EmployeeAdminDto saveAdminEmployee(EmployeeAdminDto requestForSave) {
+        var employee = converter.getMapperFacade().map(requestForSave, Employee.class);
+        var dtoAdmin = converter.toAdminDto(service.create(employee));
+
+        return dtoAdmin;
     }
 }

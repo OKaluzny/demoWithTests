@@ -1,6 +1,6 @@
 package com.example.demowithtests.web.interfaces.get;
 
-import com.example.demowithtests.domain.Employee;
+import com.example.demowithtests.dto.readDto.EmployeeReadAllByIsAdultDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -15,5 +15,5 @@ public interface GetAdultRequest {
             @ApiResponse(responseCode = "400", description = "Invalid input"),
             @ApiResponse(responseCode = "404", description = "NOT FOUND. Specified employee request not found.")})
 
-    List<Employee> getAdultUsers(@RequestParam(value = "isAdult") Boolean isAdult);
+    List<EmployeeReadAllByIsAdultDto> getAdultUsers(@RequestParam(value = "isAdult") Boolean isAdult);
 }

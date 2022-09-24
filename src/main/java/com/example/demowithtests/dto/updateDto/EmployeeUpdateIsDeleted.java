@@ -1,15 +1,12 @@
-package com.example.demowithtests.dto.readDto;
+package com.example.demowithtests.dto.updateDto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.time.Instant;
-import java.util.Date;
 
-public class EmployeeReadAdminDto {
-
+public class EmployeeUpdateIsDeleted {
     public Integer id;
 
     @NotNull(message = "Name may not be null")
@@ -30,11 +27,5 @@ public class EmployeeReadAdminDto {
     public Integer age;
 
     @NotNull(message = "Field may not be null")
-    @Schema(description = "true = adult, false = minor")
-    public Boolean isAdult;
-
-    @NotNull(message = "Field may not be null")
     public Boolean isDeleted;
-
-    public Date date = Date.from(Instant.now());
 }

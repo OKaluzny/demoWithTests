@@ -1,6 +1,6 @@
 package com.example.demowithtests.web.interfaces.get;
 
-import com.example.demowithtests.domain.Employee;
+import com.example.demowithtests.dto.readDto.EmployeeReadAllDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -14,6 +14,6 @@ public interface GetAllRequest {
             @ApiResponse(responseCode = "400", description = "Invalid input"),
             @ApiResponse(responseCode = "404", description = "NOT FOUND. Specified employee request not found.")})
 
-    List<Employee> getAllUsers();
+    List<EmployeeReadAllDto> getAllUsers();
 
 }

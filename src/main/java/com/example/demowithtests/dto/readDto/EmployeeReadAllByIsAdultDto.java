@@ -5,13 +5,8 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.time.Instant;
-import java.util.Date;
 
-public class EmployeeReadAdminDto {
-
-    public Integer id;
-
+public class EmployeeReadAllByIsAdultDto {
     @NotNull(message = "Name may not be null")
     @Size(min = 2, max = 32, message = "Name must be between 2 and 32 characters long")
     @Schema(description = "Name of an employee.", example = "Billy", required = true)
@@ -28,13 +23,4 @@ public class EmployeeReadAdminDto {
     @NotNull(message = "Age may not be null")
     @Schema(description = "Age of an employee.", example = "28", required = true)
     public Integer age;
-
-    @NotNull(message = "Field may not be null")
-    @Schema(description = "true = adult, false = minor")
-    public Boolean isAdult;
-
-    @NotNull(message = "Field may not be null")
-    public Boolean isDeleted;
-
-    public Date date = Date.from(Instant.now());
 }

@@ -94,16 +94,22 @@ public class ServiceBean implements Service {
     }
 
     @Override
-    public void hideEmployee(Integer id) {
+    public Employee hideEmployee(Integer id) {
         Employee employee = repository.findById(id)
                 .orElseThrow(ResourceWasDeletedException::new);
         employee.setIsDeleted(true);
         repository.save(employee);
+        return employee;
     }
 
     @Override
     public List<Employee> findAllByIsDeleted(Boolean isDeleted) {
         return sqlRepository.findAllByIsDeleted(isDeleted);
+    }
+
+    @Override
+    public List<Employee> updateEmployeeMailByName() {
+        return sqlRepository.updateEmployeeByName();
     }
 
 
