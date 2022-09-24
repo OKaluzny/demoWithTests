@@ -1,6 +1,7 @@
 package com.example.demowithtests.service;
 
 import com.example.demowithtests.domain.Employee;
+import com.example.demowithtests.dto.updateDto.EmployeeUpdateNameDto;
 import com.example.demowithtests.repository.JpqlRepository;
 import com.example.demowithtests.repository.Repository;
 import com.example.demowithtests.repository.SqlRepository;
@@ -71,8 +72,6 @@ public class ServiceBean implements Service {
         repository.deleteAll();
     }
 
-
-
     @Override
     public List<Employee> findUserByName(String name){
         return sqlRepository.findUserByName(name);
@@ -108,8 +107,12 @@ public class ServiceBean implements Service {
     }
 
     @Override
-    public List<Employee> updateEmployeeMailByName() {
-        return sqlRepository.updateEmployeeByName();
+    public Employee updateNameById(Integer id, String name) {
+        Employee employee = repository.findById(id)
+                .orElseThrow(ResourceWasDeletedException::new);
+        employee.setName(name);
+        repository.save(employee);
+        return employee;
     }
 
 

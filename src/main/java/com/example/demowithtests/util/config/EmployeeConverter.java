@@ -69,6 +69,10 @@ public class EmployeeConverter {
         return mapperFacade.map(entity, EmployeeUpdateIsDeleted.class);
     }
 
+    public EmployeeUpdateNameDto toUpdateNameDto (Employee entity) {
+        return mapperFacade.map(entity, EmployeeUpdateNameDto.class);
+    }
+
     public EmployeeUpdateAgeDto toUpdateAgeDto (Employee entity) {
         return mapperFacade.map(entity, EmployeeUpdateAgeDto.class);
     }

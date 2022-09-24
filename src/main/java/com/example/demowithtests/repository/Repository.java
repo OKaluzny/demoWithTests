@@ -11,4 +11,6 @@ import java.util.List;
 public interface Repository extends JpaRepository<Employee, Integer> {
     Employee findByName(String name);
 
+    //Обновление поля 'name' по номеру Id
+    Employee updateNameById(Integer id, String name);
 }
