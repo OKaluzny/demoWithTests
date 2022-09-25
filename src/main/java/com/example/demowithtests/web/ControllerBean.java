@@ -23,6 +23,7 @@ public class ControllerBean implements ControllerDto {
     private final EmployeeMapper mapper;
 
     @PostMapping("/users")
+    @ResponseStatus(HttpStatus.OK)
     public Employee saveEmployee(@RequestBody Employee employee) {
         return service.create(employee);
     }
