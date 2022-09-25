@@ -13,7 +13,7 @@ import java.util.List;
 //@Component
 public interface SqlRepository extends JpaRepository<Employee, Integer>{
 
-    //Получение юзеров по стране
+    //Получение юзеров по имени
     @Query(value = "SELECT * FROM users WHERE name = ?1", nativeQuery = true) //sql
     List<Employee> findUserByName(String name);
 

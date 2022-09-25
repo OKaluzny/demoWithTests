@@ -102,17 +102,17 @@
             <scope>test</scope>
         </dependency>
         <!-- orika -->
-        <dependency>
-            <groupId>net.rakugakibox.spring.boot</groupId>
-            <artifactId>orika-spring-boot-starter</artifactId>
-            <version>1.9.0</version>
-        </dependency>
-        <dependency>
-            <groupId>ma.glasnost.orika</groupId>
-            <artifactId>orika-core</artifactId>
-            <version>1.5.4</version>
-            <scope>compile</scope>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>net.rakugakibox.spring.boot</groupId>-->
+<!--            <artifactId>orika-spring-boot-starter</artifactId>-->
+<!--            <version>1.9.0</version>-->
+<!--        </dependency>-->
+<!--        <dependency>-->
+<!--            <groupId>ma.glasnost.orika</groupId>-->
+<!--            <artifactId>orika-core</artifactId>-->
+<!--            <version>1.5.4</version>-->
+<!--            <scope>compile</scope>-->
+<!--        </dependency>-->
         <!-- swagger -->
         <dependency>
             <groupId>org.springdoc</groupId>

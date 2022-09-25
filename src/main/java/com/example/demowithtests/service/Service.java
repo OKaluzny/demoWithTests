@@ -1,41 +1,43 @@
 package com.example.demowithtests.service;
 
 import com.example.demowithtests.domain.Employee;
-import com.example.demowithtests.dto.updateDto.EmployeeUpdateNameDto;
+import com.example.demowithtests.dto.createDto.EmployeeDto;
+import com.example.demowithtests.dto.readDto.*;
+import com.example.demowithtests.dto.updateDto.*;
 
 import java.util.List;
 
 public interface Service {
 
-    Employee create(Employee employee);
+    EmployeeDto create(Employee employee);
 
-    List<Employee> getAll();
+    List<EmployeeReadAllDto> getAll();
 
-    Employee getById(Integer id);
+    EmployeeReadDto getById(Integer id);
 
-    Employee updateById(Integer id, Employee plane);
+    EmployeeUpdateDto updateById(Integer id, Employee plane);
 
     void removeById(Integer id);
 
     void removeAll();
 
-    List<Employee> findUserByName(String name);
+    List<EmployeeReadAllByNameDto> findUserByName(String name);
 
-    List<Employee> findAdultUser(Boolean isAdult);
+    List<EmployeeReadAllByIsAdultDto> findAdultUser(Boolean isAdult);
 
-    List<Employee> findEmployeeByCountry(String country);
+    List<EmployeeReadAllByCountryDto> findEmployeeByCountry(String country);
 
-    List<Employee> findEmployeeByEmail(String email);
+    List<EmployeeReadAllByGmailDto> findEmployeeByEmail(String email);
 
-    Employee hideEmployee(Integer id);
+    EmployeeUpdateIsDeletedDto hideEmployee(Integer id);
 
-    List<Employee> findAllByIsDeleted(Boolean isDeleted);
+    List<EmployeeReadAllByIsDeletedDto> findAllByIsDeleted(Boolean isDeleted);
 
-    Employee updateNameById(Integer id, String name);
+    EmployeeUpdateNameDto updateNameById(Integer id, String name);
 
-    Employee updateCountryById(Integer id, String country);
-    Employee updateEmailById(Integer id, String email);
-    Employee updateAgeById(Integer id, Integer age);
+    EmployeeUpdateCountryDto updateCountryById(Integer id, String country);
+    EmployeeUpdateEmailDto updateEmailById(Integer id, String email);
+    EmployeeUpdateAgeDto updateAgeById(Integer id, Integer age);
 
 
 }

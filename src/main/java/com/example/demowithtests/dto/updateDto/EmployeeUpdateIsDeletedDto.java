@@ -7,8 +7,7 @@ import lombok.*;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class EmployeeUpdateCountryDto {
+public class EmployeeUpdateIsDeletedDto {
     public Integer id;
-    public String country;
-
+    public Boolean isDeleted;
 }

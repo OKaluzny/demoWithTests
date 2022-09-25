@@ -1,16 +1,14 @@
 package com.example.demowithtests.dto.updateDto;
 
-import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.*;
 
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotNull;
-
+@Getter
+@Setter
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class EmployeeUpdateEmailDto {
     public Integer id;
-
-    @Email
-    @NotNull
-    @Schema(description = "Email address of an employee.", example = "billys@mail.com", required = true)
     public String email;
 
 }

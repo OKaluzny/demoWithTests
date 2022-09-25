@@ -1,12 +1,9 @@
 package com.example.demowithtests.web.controllers;
 
-import com.example.demowithtests.dto.updateDto.EmployeeUpdateCountryDto;
-import com.example.demowithtests.dto.updateDto.EmployeeUpdateEmailDto;
-import com.example.demowithtests.dto.updateDto.EmployeeUpdateIsDeleted;
-import com.example.demowithtests.dto.updateDto.EmployeeUpdateNameDto;
+import com.example.demowithtests.dto.updateDto.*;
 import com.example.demowithtests.service.Service;
 
-import com.example.demowithtests.util.config.EmployeeConverter;
+import com.example.demowithtests.util.config.mapstruct.EmployeeDtoMapper;
 import com.example.demowithtests.web.interfaces.patch.*;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
@@ -23,15 +20,13 @@ import org.springframework.web.bind.annotation.*;
 public class PatchController implements PatchHideRequest, PatchUpdateCountryRequest, PatchUpdateEmailRequest, PatchUpdateNameRequest, PatchUpdateAgeRequest {
 
     private final Service service;
-    private final EmployeeConverter converter;
+    private final EmployeeDtoMapper mapper;
     //Скрыть юзера
     @Override
     @PatchMapping ("/users/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public EmployeeUpdateIsDeleted hideAdminEmployee(@PathVariable("id") Integer id) {
-        var employee = service.hideEmployee(id);
-        var dto = converter.toUpdateIsDeletedDto(employee);
-        return dto;
+    public EmployeeUpdateIsDeletedDto hideAdminEmployee(@PathVariable("id") Integer id) {
+        return mapper.updateIsDeletedByIdEmployeeDto(service.hideEmployee(id));
     }
 
     //Изменить имя по id
@@ -39,9 +34,7 @@ public class PatchController implements PatchHideRequest, PatchUpdateCountryRequ
     @PatchMapping ("/users/name/{id}")
     @ResponseStatus(HttpStatus.OK)
     public EmployeeUpdateNameDto updateNameById(@PathVariable("id") Integer id,@RequestParam(value = "name") String name) {
-        var employee = service.updateNameById(id,name);
-        var dto = converter.toUpdateNameDto(employee);
-        return dto;
+        return mapper.updateNameByIdEmployeeDto(service.updateNameById(id, name));
     }
 
     //Изменить страну по id
@@ -49,26 +42,21 @@ public class PatchController implements PatchHideRequest, PatchUpdateCountryRequ
     @PatchMapping ("/users/country/{id}")
     @ResponseStatus(HttpStatus.OK)
     public EmployeeUpdateCountryDto updateCountryById(@PathVariable("id") Integer id, @RequestParam(value = "country") String country) {
-        var employee = service.updateCountryById(id,country);
-        var dto = converter.toUpdateCountryDto(employee);
-        return dto;
+        return mapper.updateCountryByIdEmployeeDto(service.updateCountryById(id, country));
     }
 
+    //Изменить почту по id
     @Override
     @PatchMapping ("/users/email/{id}")
     @ResponseStatus(HttpStatus.OK)
     public EmployeeUpdateEmailDto updateEmailById(@PathVariable("id") Integer id, @RequestParam(value = "email") String email) {
-        var employee = service.updateEmailById(id,email);
-        var dto = converter.toUpdateEmailDto(employee);
-        return dto;
+        return mapper.updateEmailByIdEmployeeDto(service.updateEmailById(id, email));
     }
 
     @Override
     @PatchMapping ("/users/age/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public EmployeeUpdateEmailDto updateAgeById(@PathVariable("id") Integer id, @RequestParam(value = "email") Integer age) {
-        var employee = service.updateAgeById(id,age);
-        var dto = converter.toUpdateEmailDto(employee);
-        return dto;
+    public EmployeeUpdateAgeDto updateAgeById(@PathVariable("id") Integer id, @RequestParam(value = "age") Integer age) {
+        return mapper.updateAgeByIdEmployeeDto(service.updateAgeById(id, age));
     }
 }

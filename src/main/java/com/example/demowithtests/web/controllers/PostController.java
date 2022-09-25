@@ -4,7 +4,7 @@ import com.example.demowithtests.domain.Employee;
 import com.example.demowithtests.dto.createDto.EmployeeAdminDto;
 import com.example.demowithtests.dto.createDto.EmployeeDto;
 import com.example.demowithtests.service.Service;
-import com.example.demowithtests.util.config.EmployeeConverter;
+import com.example.demowithtests.util.config.mapstruct.EmployeeDtoMapper;
 import com.example.demowithtests.web.interfaces.post.PostAdminRequest;
 import com.example.demowithtests.web.interfaces.post.PostRequest;
 
@@ -23,26 +23,20 @@ import org.springframework.web.bind.annotation.*;
 public class PostController implements PostRequest, PostAdminRequest {
 
     private final Service service;
-    private final EmployeeConverter converter;
+    private final EmployeeDtoMapper mapper;
 
     //Операция сохранения юзера в базу данных
     @Override
     @PostMapping("/users")
     @ResponseStatus(HttpStatus.CREATED)
     public EmployeeDto saveEmployee(EmployeeDto requestForSave) {
-        var employee = converter.getMapperFacade().map(requestForSave, Employee.class);
-        var dto = converter.toDto(service.create(employee));
-
-        return dto;
+        return mapper.createEmployeeDto(service.create(Employee.builder().build()));
     }
 
     @Override
     @PostMapping("/users/admin")
     @ResponseStatus(HttpStatus.CREATED)
     public EmployeeAdminDto saveAdminEmployee(EmployeeAdminDto requestForSave) {
-        var employee = converter.getMapperFacade().map(requestForSave, Employee.class);
-        var dtoAdmin = converter.toAdminDto(service.create(employee));
-
-        return dtoAdmin;
+        return mapper.createAdminEmployeeDto(service.create(Employee.builder().build()));
     }
 }

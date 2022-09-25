@@ -1,14 +1,14 @@
 package com.example.demowithtests.web.controllers;
 
-import com.example.demowithtests.domain.Employee;
 import com.example.demowithtests.dto.readDto.*;
 import com.example.demowithtests.service.Service;
-import com.example.demowithtests.util.config.EmployeeConverter;
+import com.example.demowithtests.util.config.mapstruct.EmployeeDtoMapper;
 import com.example.demowithtests.web.interfaces.get.*;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.mapstruct.factory.Mappers;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -28,15 +28,13 @@ public class GetController implements GetAllRequest,
         GetGmailUsersRequest,
         GetHideRequest {
     private final Service service;
-    private final EmployeeConverter converter;
 
     //Получение списка юзеров
     @Override
     @GetMapping("/users")
     @ResponseStatus(HttpStatus.OK)
     public List<EmployeeReadAllDto> getAllUsers() {
-        var employeeList= service.getAll();
-        return converter.toReadAllDto(employeeList);
+        return (List<EmployeeReadAllDto>) mapper.getAllEmployeeDto(service.getAll());
     }
 
     //Получения юзера по id
@@ -44,12 +42,7 @@ public class GetController implements GetAllRequest,
     @GetMapping("/users/{id}")
     @ResponseStatus(HttpStatus.OK)
     public EmployeeReadDto getEmployeeById(@PathVariable Integer id) {
-        log.debug("getEmployeeById() Controller - start: id = {}", id);
-        var employee = service.getById(id);
-        log.debug("getById() Controller - to dto start: id = {}", id);
-        var dto = converter.toReadDto(employee);
-        log.debug("getEmployeeById() Controller - end: name = {}", dto.name);
-        return dto;
+        return (EmployeeReadDto)mapper.readByIdEmployeeDto(service.getById(id));
     }
 
     //Получение юзеров по имени
@@ -57,8 +50,7 @@ public class GetController implements GetAllRequest,
     @GetMapping(value ="users", params = {"name"})
     @ResponseStatus(HttpStatus.OK)
     public List<EmployeeReadAllByNameDto> getListByName(@RequestParam(value = "name") String name){
-        var employeeList = service.findUserByName(name);
-        return converter.toReadAllByNameDto(employeeList);
+        return (List<EmployeeReadAllByNameDto>) mapper.getAllByNameEmployeeDto(service.findUserByName(name));
     }
 
     //Получение юзеров по стране
@@ -66,8 +58,7 @@ public class GetController implements GetAllRequest,
     @GetMapping(value ="users", params = {"country"})
     @ResponseStatus(HttpStatus.OK)
     public List<EmployeeReadAllByCountryDto> getEmployeeByCountry(@RequestParam(value = "country") String country){
-        var employeeList = service.findEmployeeByCountry(country);
-        return converter.toReadAllByCountryDto(employeeList);
+        return (List<EmployeeReadAllByCountryDto>) mapper.getAllByCountryEmployeeDto(service.findEmployeeByCountry(country));
     }
 
     //Получение совершеннолетних юзеров
@@ -75,8 +66,7 @@ public class GetController implements GetAllRequest,
     @GetMapping(value ="users", params = {"isAdult"})
     @ResponseStatus(HttpStatus.OK)
     public List<EmployeeReadAllByIsAdultDto> getAdultUsers(@RequestParam(value = "isAdult") Boolean isAdult) {
-        var employeeList = service.findAdultUser(isAdult);
-        return converter.toReadAllByIsAdultDto(employeeList);
+        return (List<EmployeeReadAllByIsAdultDto>) mapper.getAllByIsAdultEmployeeDto(service.findAdultUser(isAdult));
     }
 
     //Получение юзеров пользователей гугл почты
@@ -84,8 +74,7 @@ public class GetController implements GetAllRequest,
     @GetMapping(value ="users", params = {"email"})
     @ResponseStatus(HttpStatus.OK)
     public List<EmployeeReadAllByGmailDto> getGmailUser(@RequestParam(value = "email") String email) {
-        var employeeList = service.findEmployeeByEmail(email);
-        return converter.toReadAllByGmailDto(employeeList);
+        return (List<EmployeeReadAllByGmailDto>) mapper.getAllByGmailEmployeeDto(service.findEmployeeByEmail(email));
     }
 
     //Получение юзеров по полю isDeleted
@@ -93,7 +82,6 @@ public class GetController implements GetAllRequest,
     @GetMapping(value ="users", params = {"isdeleted"})
     @ResponseStatus(HttpStatus.OK)
     public List<EmployeeReadAllByIsDeletedDto> getUserByIsDeletedValue(@RequestParam(value = "isdeleted") Boolean isDeleted) {
-        var employeeList = service.findAllByIsDeleted(isDeleted);
-        return converter.toReadAllByIsDeletedDto(employeeList);
+        return (List<EmployeeReadAllByIsDeletedDto>) mapper.getAllByIsDeletedEmployeeDto(service.findAllByIsDeleted(isDeleted));
     }
 }
