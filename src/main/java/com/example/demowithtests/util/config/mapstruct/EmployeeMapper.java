@@ -18,6 +18,8 @@ public interface EmployeeMapper {
 
     EmployeeCreateDto createDto (Employee employee);
 
+    Employee createEmployeeFromDto (EmployeeCreateDto employeeCreateDto);
+
     EmployeeUpdateDto updatePhoneNumberDto (Employee employee);
 
     List<EmployeeReadTechDto> getTechDto (List<Employee> employee);
@@ -25,5 +27,7 @@ public interface EmployeeMapper {
     List<EmployeeToReadDto> readByCountry (List<Employee> employeeList);
 
     EmployeeUpdateDto updateEmployeeDto(Employee employee);
+
+    Employee updateEmployeeFromDto (EmployeeUpdateDto employeeUpdateDto);
 
 }

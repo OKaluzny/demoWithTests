@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -30,7 +31,8 @@ public class ControllerBean implements ControllerDto {
 
     @Override
     @PostMapping("/users/create_dto")
-    public EmployeeCreateDto saveEmployeeDto(@RequestBody Employee employee) {
+    public EmployeeCreateDto saveEmployeeDto(@RequestBody @Valid EmployeeCreateDto employeeCreateDto) {
+        Employee employee = mapper.createEmployeeFromDto(employeeCreateDto);
         return mapper.createDto(service.create(employee));
     }
 
@@ -71,7 +73,9 @@ public class ControllerBean implements ControllerDto {
 
     @Override
     @PutMapping("/users/{id}/update_dto")
-    public EmployeeUpdateDto refreshEmployeeDto(@PathVariable("id") Integer id, @RequestBody Employee employee) {
+    public EmployeeUpdateDto refreshEmployeeDto(@PathVariable("id") Integer id,
+                                                @RequestBody @Valid EmployeeUpdateDto employeeUpdateDto) {
+        Employee employee = mapper.updateEmployeeFromDto(employeeUpdateDto);
         return mapper.updateEmployeeDto(service.updateById(id, employee));
     }
 

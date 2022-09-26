@@ -1,6 +1,5 @@
 package com.example.demowithtests.web;
 
-import com.example.demowithtests.domain.Employee;
 import com.example.demowithtests.dto.EmployeeCreateDto;
 import com.example.demowithtests.dto.EmployeeReadTechDto;
 import com.example.demowithtests.dto.EmployeeToReadDto;
@@ -25,7 +24,7 @@ public interface ControllerDto {
             @ApiResponse(responseCode = "400", description = "Invalid input"),
             @ApiResponse(responseCode = "404", description = "NOT FOUND. Specified employee request not found."),
             @ApiResponse(responseCode = "409", description = "Dto employee already exists")})
-    EmployeeCreateDto saveEmployeeDto(Employee employee);
+    EmployeeCreateDto saveEmployeeDto(EmployeeCreateDto employeeCreateDto);
 
     @ResponseStatus(HttpStatus.OK)
     @Operation(summary = "This is endpoint returned a employee by his id.", description = "Create request to read a employee by id", tags = {"Employee"})
@@ -60,7 +59,7 @@ public interface ControllerDto {
             @ApiResponse(responseCode = "400", description = "Invalid input"),
             @ApiResponse(responseCode = "404", description = "NOT FOUND. Specified employee request not found.")})
     EmployeeUpdateDto refreshDtoPhoneNumber(@PathVariable("id") Integer id,
-                                                   @RequestParam(value = "phoneNumber") Integer phoneNumber);
+                                            @RequestParam(value = "phoneNumber") Integer phoneNumber);
 
     @ResponseStatus(HttpStatus.OK)
     @Operation(summary = "This is endpoint allows to update all fields of employee.", description = "Create request to update employee.", tags = {"Employee"})
@@ -68,7 +67,8 @@ public interface ControllerDto {
             @ApiResponse(responseCode = "201", description = "OK. Employee was updated"),
             @ApiResponse(responseCode = "400", description = "Invalid input"),
             @ApiResponse(responseCode = "404", description = "NOT FOUND. Specified employee request not found.")})
-    EmployeeUpdateDto refreshEmployeeDto(@PathVariable("id") Integer id, @RequestBody Employee employee);
+    EmployeeUpdateDto refreshEmployeeDto(@PathVariable("id") Integer id,
+                                         @RequestBody EmployeeUpdateDto employeeUpdateDto);
 
     @ResponseStatus(HttpStatus.OK)
     @Operation(summary = "This is endpoint allows to view all technical fields.", description = "Create request to view technical fields.", tags = {"Employee"})
