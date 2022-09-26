@@ -29,14 +29,14 @@ public class PostController implements PostRequest, PostAdminRequest {
     @Override
     @PostMapping("/users")
     @ResponseStatus(HttpStatus.CREATED)
-    public EmployeeDto saveEmployee(EmployeeDto requestForSave) {
-        return mapper.createEmployeeDto(service.create(Employee.builder().build()));
+    public EmployeeDto saveEmployee(@RequestBody Employee employee) {
+        return mapper.createEmployeeDto(service.create(employee));
     }
 
     @Override
     @PostMapping("/users/admin")
     @ResponseStatus(HttpStatus.CREATED)
-    public EmployeeAdminDto saveAdminEmployee(EmployeeAdminDto requestForSave) {
-        return mapper.createAdminEmployeeDto(service.create(Employee.builder().build()));
+    public EmployeeAdminDto saveAdminEmployee(@RequestBody Employee employee) {
+        return mapper.createAdminEmployeeDto(service.create(employee));
     }
 }

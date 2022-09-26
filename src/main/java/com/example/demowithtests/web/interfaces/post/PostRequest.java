@@ -1,5 +1,6 @@
 package com.example.demowithtests.web.interfaces.post;
 
+import com.example.demowithtests.domain.Employee;
 import com.example.demowithtests.dto.createDto.EmployeeDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -16,6 +17,6 @@ public interface PostRequest {
             @ApiResponse(responseCode = "404", description = "NOT FOUND. Specified employee request not found."),
             @ApiResponse(responseCode = "409", description = "Employee already exists")})
 
-    EmployeeDto saveEmployee(@RequestBody @Valid EmployeeDto requestForSave);
+    EmployeeDto saveEmployee(Employee employee);
 
 }

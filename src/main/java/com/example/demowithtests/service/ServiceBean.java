@@ -25,27 +25,31 @@ public class ServiceBean implements Service {
     private final SqlRepository sqlRepository;
     private final JpqlRepository jpqlRepository;
 
-    private final EmployeeDtoMapper mapper = Mappers.getMapper(EmployeeDtoMapper.class);
-
     @Override
-    public EmployeeDto create(Employee employee) {
+    public Employee create(Employee employee) {
         employee.setIsAdult(employee.getAge() >= 18);
-        return mapper.createEmployeeDto(repository.save(employee));
+        return repository.save(employee);
     }
 
     @Override
-    public List<EmployeeReadAllDto> getAll() {
-        return (List<EmployeeReadAllDto>) mapper.getAllEmployeeDto(repository.findAll());
+    public List<Employee> getAll() {
+        return repository.findAll();
     }
 
     @Override
-    public EmployeeReadDto getById(Integer id) {
-        return mapper.readByIdEmployeeDto(repository.findById(id).orElseThrow(EntityNotFoundException::new));
+    public Employee getById(Integer id) {
+        Employee employee = repository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Employee not found with id = " + id));
+        //.orElseThrow(ResourceNotFoundException::new);
+        if (employee.getIsDeleted()) {
+            throw new EntityNotFoundException("Employee was deleted with id = " + id);
+        }
+        return employee;
     }
 
     @Override
-    public EmployeeUpdateDto updateById(Integer id, Employee employee) {
-        return mapper.updateByIdEmployeeDto(repository.findById(id)
+    public Employee updateById(Integer id, Employee employee) {
+        return repository.findById(id)
                 .map(entity -> {
                     entity.setName(employee.getName());
                     entity.setEmail(employee.getEmail());
@@ -53,14 +57,14 @@ public class ServiceBean implements Service {
                     entity.setAge(employee.getAge());
                     return repository.save(entity);
                 })
-                .orElseThrow(() -> new EntityNotFoundException("Employee not found with id = " + id)));
+                .orElseThrow(() -> new EntityNotFoundException("Employee not found with id = " + id));
     }
 
     @Override
     public void removeById(Integer id) {
         //repository.deleteById(id);
-         Employee employee = repository.findById(id)
-               // .orElseThrow(() -> new EntityNotFoundException("Employee not found with id = " + id));
+        Employee employee = repository.findById(id)
+                // .orElseThrow(() -> new EntityNotFoundException("Employee not found with id = " + id));
                 .orElseThrow(ResourceWasDeletedException::new);
         //employee.setIsDeleted(true);
         repository.delete(employee);
@@ -73,55 +77,50 @@ public class ServiceBean implements Service {
     }
 
     @Override
-    public List<EmployeeReadAllByNameDto> findUserByName(String name){
-
-        return (List<EmployeeReadAllByNameDto>) mapper.getAllByNameEmployeeDto(sqlRepository.findUserByName(name));
+    public List<Employee> findUserByName(String name){
+        return sqlRepository.findUserByName(name);
     }
 
     @Override
-    public List<EmployeeReadAllByIsAdultDto> findAdultUser(Boolean isAdult) {
-        return (List<EmployeeReadAllByIsAdultDto>) mapper.getAllByIsAdultEmployeeDto(jpqlRepository.findAdultUser(isAdult));
+    public List<Employee> findAdultUser(Boolean isAdult) {
+        return jpqlRepository.findAdultUser(isAdult);
     }
 
     @Override
-    public List<EmployeeReadAllByCountryDto> findEmployeeByCountry(String country) {
-        return (List<EmployeeReadAllByCountryDto>) mapper.getAllByCountryEmployeeDto(jpqlRepository.findEmployeeByCountry(country));
+    public List<Employee> findEmployeeByCountry(String country) {
+        return jpqlRepository.findEmployeeByCountry(country);
     }
 
     @Override
-    public List<EmployeeReadAllByGmailDto> findEmployeeByEmail(String email) {
-        return (List<EmployeeReadAllByGmailDto>) mapper.getAllByGmailEmployeeDto(sqlRepository.findEmployeeByEmail(email));
+    public List<Employee> findEmployeeByEmail(String email) {
+        return sqlRepository.findEmployeeByEmail(email);
     }
 
     @Override
-    public EmployeeUpdateIsDeletedDto hideEmployee(Integer id) {
-        return null;
-    }
-
-//    @Override
-//    public EmployeeUpdateIsDeletedDto hideEmployee(Integer id) {
-//        return mapper.updateIsDeletedByIdEmployeeDto(repository.findById(id)
-//                .map(entity ->{
-//                    entity.setIsDeleted(true);
-//                })
-//                .orElseThrow(ResourceWasDeletedException::new));
-//    }
-
-    @Override
-    public List<EmployeeReadAllByIsDeletedDto> findAllByIsDeleted(Boolean isDeleted) {
-        return (List<EmployeeReadAllByIsDeletedDto>) mapper.updateIsDeletedByIdEmployeeDto((Employee) sqlRepository.findAllByIsDeleted(isDeleted));
-    }
-
-    @Override
-    public EmployeeUpdateNameDto updateNameById(Integer id, String name) {
-        return mapper.updateNameByIdEmployeeDto(repository.findById(id)
-                .orElseThrow(ResourceWasDeletedException::new));
-        EmployeeUpdateNameDto.setName(name);
+    public Employee hideEmployee(Integer id) {
+        Employee employee = repository.findById(id)
+                .orElseThrow(ResourceWasDeletedException::new);
+        employee.setIsDeleted(true);
         repository.save(employee);
+        return employee;
     }
 
     @Override
-    public EmployeeUpdateCountryDto updateCountryById(Integer id, String country) {
+    public List<Employee> findAllByIsDeleted(Boolean isDeleted) {
+        return sqlRepository.findAllByIsDeleted(isDeleted);
+    }
+
+    @Override
+    public Employee updateNameById(Integer id, String name) {
+        Employee employee = repository.findById(id)
+                .orElseThrow(ResourceWasDeletedException::new);
+        employee.setName(name);
+        repository.save(employee);
+        return employee;
+    }
+
+    @Override
+    public Employee updateCountryById(Integer id, String country) {
         Employee employee = repository.findById(id)
                 .orElseThrow(ResourceWasDeletedException::new);
         employee.setCountry(country);
@@ -130,7 +129,7 @@ public class ServiceBean implements Service {
     }
 
     @Override
-    public EmployeeUpdateEmailDto updateEmailById(Integer id, String email) {
+    public Employee updateEmailById(Integer id, String email) {
         Employee employee = repository.findById(id)
                 .orElseThrow(ResourceWasDeletedException::new);
         employee.setEmail(email);
@@ -139,7 +138,7 @@ public class ServiceBean implements Service {
     }
 
     @Override
-    public EmployeeUpdateAgeDto updateAgeById(Integer id, Integer age) {
+    public Employee updateAgeById(Integer id, Integer age) {
         Employee employee = repository.findById(id)
                 .orElseThrow(ResourceWasDeletedException::new);
         employee.setAge(age);

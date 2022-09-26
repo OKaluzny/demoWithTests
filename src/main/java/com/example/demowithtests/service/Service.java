@@ -9,35 +9,35 @@ import java.util.List;
 
 public interface Service {
 
-    EmployeeDto create(Employee employee);
+    Employee create(Employee employee);
 
-    List<EmployeeReadAllDto> getAll();
+    List<Employee> getAll();
 
-    EmployeeReadDto getById(Integer id);
+    Employee getById(Integer id);
 
-    EmployeeUpdateDto updateById(Integer id, Employee plane);
+    Employee updateById(Integer id, Employee plane);
 
     void removeById(Integer id);
 
     void removeAll();
 
-    List<EmployeeReadAllByNameDto> findUserByName(String name);
+    List<Employee> findUserByName(String name);
 
-    List<EmployeeReadAllByIsAdultDto> findAdultUser(Boolean isAdult);
+    List<Employee> findAdultUser(Boolean isAdult);
 
-    List<EmployeeReadAllByCountryDto> findEmployeeByCountry(String country);
+    List<Employee> findEmployeeByCountry(String country);
 
-    List<EmployeeReadAllByGmailDto> findEmployeeByEmail(String email);
+    List<Employee> findEmployeeByEmail(String email);
 
-    EmployeeUpdateIsDeletedDto hideEmployee(Integer id);
+    Employee hideEmployee(Integer id);
 
-    List<EmployeeReadAllByIsDeletedDto> findAllByIsDeleted(Boolean isDeleted);
+    List<Employee> findAllByIsDeleted(Boolean isDeleted);
 
-    EmployeeUpdateNameDto updateNameById(Integer id, String name);
+    Employee updateNameById(Integer id, String name);
 
-    EmployeeUpdateCountryDto updateCountryById(Integer id, String country);
-    EmployeeUpdateEmailDto updateEmailById(Integer id, String email);
-    EmployeeUpdateAgeDto updateAgeById(Integer id, Integer age);
+    Employee updateCountryById(Integer id, String country);
+    Employee updateEmailById(Integer id, String email);
+    Employee updateAgeById(Integer id, Integer age);
 
 
 }

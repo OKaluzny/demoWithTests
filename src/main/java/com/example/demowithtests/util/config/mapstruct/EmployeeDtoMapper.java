@@ -12,19 +12,34 @@ import java.util.List;
 @Mapper(componentModel = "spring")
 public interface EmployeeDtoMapper {
     EmployeeAdminDto createAdminEmployeeDto(Employee employee);
+    Employee employeeAdminDtoToEmployee(EmployeeAdminDto employeeAdminDto);
+
     EmployeeDto createEmployeeDto(Employee employee);
+    Employee employeeDtoToEmployee(EmployeeDto employeeDto);
     //EmployeeReadAdminDto readByIdAdminReadEmployeeDto (Employee employee);
     EmployeeReadDto readByIdEmployeeDto (Employee employee);
-    EmployeeReadAllDto getAllEmployeeDto (List<Employee> employeeList);
-    EmployeeReadAllByNameDto getAllByNameEmployeeDto (List<Employee> employeeList);
-    EmployeeReadAllByCountryDto getAllByCountryEmployeeDto (List<Employee> employeeList);
-    EmployeeReadAllByGmailDto getAllByGmailEmployeeDto (List<Employee> employeeList);
-    EmployeeReadAllByIsAdultDto getAllByIsAdultEmployeeDto (List<Employee> employeeList);
-    EmployeeReadAllByIsDeletedDto getAllByIsDeletedEmployeeDto (List<Employee> employeeList);
+
+    List<EmployeeReadAllDto> getAllEmployeeDto (List<Employee> employeeList);
+
+    List<EmployeeReadAllByNameDto> getAllByNameEmployeeDto (List<Employee> employeeList);
+
+    List<EmployeeReadAllByCountryDto> getAllByCountryEmployeeDto (List<Employee> employeeList);
+
+    List<EmployeeReadAllByGmailDto> getAllByGmailEmployeeDto (List<Employee> employeeList);
+
+    List<EmployeeReadAllByIsAdultDto> getAllByIsAdultEmployeeDto (List<Employee> employeeList);
+
+    List<EmployeeReadAllByIsDeletedDto> getAllByIsDeletedEmployeeDto (List<Employee> employeeList);
+
     EmployeeUpdateDto updateByIdEmployeeDto (Employee employee);
+
     EmployeeUpdateNameDto updateNameByIdEmployeeDto (Employee employee);
+
     EmployeeUpdateCountryDto updateCountryByIdEmployeeDto (Employee employee);
+
     EmployeeUpdateAgeDto updateAgeByIdEmployeeDto (Employee employee);
+
     EmployeeUpdateEmailDto updateEmailByIdEmployeeDto (Employee employee);
+
     EmployeeUpdateIsDeletedDto updateIsDeletedByIdEmployeeDto (Employee employee);
 }
