@@ -3,6 +3,10 @@ package com.example.demowithtests.web;
 import com.example.demowithtests.domain.Employee;
 import com.example.demowithtests.service.Service;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -74,5 +78,44 @@ public class ControllerBean {
     @ResponseStatus(HttpStatus.OK)
     public List<Employee> getUsersByCountry(@RequestParam(value = "country") String country) {
         return service.findEmployeesByCountry(country);
+    }
+
+    @GetMapping("/users/p")
+    @ResponseStatus(HttpStatus.OK)
+    public Page<Employee> getPage(@RequestParam(defaultValue = "0") int page,
+                                  @RequestParam(defaultValue = "5") int size) {
+        Pageable paging = PageRequest.of(page, size);
+        return service.getAllWithPagination(paging);
+    }
+
+    @GetMapping("/users/p/{name}")
+    @ResponseStatus(HttpStatus.OK)
+    public Page<Employee> findByName(@RequestParam(required = false) String name,
+                                     @RequestParam(defaultValue = "0") int page,
+                                     @RequestParam(defaultValue = "3") int size,
+                                     @RequestParam(defaultValue = "") List<String> sortList,
+                                     @RequestParam(defaultValue = "DESC") Sort.Direction sortOrder) {
+        return service.findByCountryContaining(name, page, size, sortList, sortOrder.toString());
+    }
+
+    @GetMapping("/users/p/phone_numbers")
+    @ResponseStatus(HttpStatus.OK)
+    public Page<Employee> findWithPhoneNumber(@RequestParam(defaultValue = "0") int page,
+                                              @RequestParam(defaultValue = "3") int size,
+                                              @RequestParam(defaultValue = "") List<String> sortList,
+                                              @RequestParam(defaultValue = "DESC") Sort.Direction sortOrder) {
+        return service.findUsersWithPhoneNumberPageable(page, size, sortList, sortOrder.toString());
+    }
+
+    @GetMapping("/users/p/{country}")
+    @ResponseStatus(HttpStatus.OK)
+    public Page<Employee> findByCountry(@RequestParam(required = false) String country,
+                                        @RequestParam(defaultValue = "0") int page,
+                                        @RequestParam(defaultValue = "3") int size,
+                                        @RequestParam(defaultValue = "") List<String> sortList,
+                                        @RequestParam(defaultValue = "DESC") Sort.Direction sortOrder) {
+        //Pageable paging = PageRequest.of(page, size);
+        //Pageable paging = PageRequest.of(page, size, Sort.by("name").ascending());
+        return service.findByCountryContaining(country, page, size, sortList, sortOrder.toString());
     }
 }

@@ -17,7 +17,7 @@ import java.util.List;
 @RestController
 @AllArgsConstructor
 @RequestMapping(value = "/api", produces = MediaType.APPLICATION_JSON_VALUE)
-public class ControllerBeanDto implements ControllerDto{
+public class ControllerBeanDto implements ControllerDto {
 
     private final Service service;
     private final EmployeeMapper mapper;

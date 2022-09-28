@@ -1,16 +1,17 @@
 package com.example.demowithtests.service;
 
 import com.example.demowithtests.domain.Employee;
-import com.example.demowithtests.dto.EmployeeCreateDto;
-import com.example.demowithtests.dto.EmployeeToReadDto;
-import com.example.demowithtests.dto.EmployeeUpdateDto;
 import com.example.demowithtests.repository.Repository;
-import com.example.demowithtests.util.config.mapstruct.EmployeeMapper;
 import com.example.demowithtests.util.exception.ResourceNotFoundException;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 
 import javax.persistence.EntityNotFoundException;
+import java.util.ArrayList;
 import java.util.List;
 
 @AllArgsConstructor
@@ -104,5 +105,51 @@ public class ServiceBean implements Service {
         employee.setPhoneNumber(phoneNumber);
         repository.save(employee);
         return employee;
+    }
+
+    @Override
+    public Page<Employee> getAllWithPagination(Pageable pageable) {
+        log.debug("getAllWithPagination() - start: pageable = {}", pageable);
+        Page<Employee> list = repository.findAll(pageable);
+        log.debug("getAllWithPagination() - end: list = {}", list);
+        return list;
+    }
+
+    @Override
+    public Page<Employee> findUsersWithPhoneNumberPageable(int page, int size,
+                                                           List<String> sortList, String sortOrder) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by(createSortOrder(sortList, sortOrder)));
+        return repository.findUsersWithPhoneNumberPageable(pageable);
+    }
+
+
+    @Override
+    public Page<Employee> getAllByNamePagination(String name, int page, int size,
+                                                 List<String> sortList, String sortOrder) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by(createSortOrder(sortList, sortOrder)));
+        return repository.findByName(name, pageable);
+    }
+
+    @Override
+    public Page<Employee> findByCountryContaining(String country, int page, int size,
+                                                  List<String> sortList, String sortOrder) {
+        // create Pageable object using the page, size and sort details
+        Pageable pageable = PageRequest.of(page, size, Sort.by(createSortOrder(sortList, sortOrder)));
+        // fetch the page object by additionally passing pageable with the filters
+        return repository.findByCountryContaining(country, pageable);
+    }
+
+    private List<Sort.Order> createSortOrder(List<String> sortList, String sortDirection) {
+        List<Sort.Order> sorts = new ArrayList<>();
+        Sort.Direction direction;
+        for (String sort : sortList) {
+            if (sortDirection != null) {
+                direction = Sort.Direction.fromString(sortDirection);
+            } else {
+                direction = Sort.Direction.DESC;
+            }
+            sorts.add(new Sort.Order(direction, sort));
+        }
+        return sorts;
     }
 }
