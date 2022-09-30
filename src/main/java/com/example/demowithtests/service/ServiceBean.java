@@ -152,4 +152,11 @@ public class ServiceBean implements Service {
         }
         return sorts;
     }
+
+    @Override
+    public Page<Employee> findEmployeesByGmail(int page, int size,
+                                               List<String> sortList, String sortOrder) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by(createSortOrder(sortList, sortOrder)));
+        return repository.findEmployeesByGmail(pageable);
+    }
 }

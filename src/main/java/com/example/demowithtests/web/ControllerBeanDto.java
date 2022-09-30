@@ -7,7 +7,11 @@ import com.example.demowithtests.dto.EmployeeToReadDto;
 import com.example.demowithtests.dto.EmployeeUpdateDto;
 import com.example.demowithtests.service.Service;
 import com.example.demowithtests.util.config.mapstruct.EmployeeMapper;
+//import com.example.demowithtests.util.config.mapstruct.PageMapper;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,6 +25,7 @@ public class ControllerBeanDto implements ControllerDto {
 
     private final Service service;
     private final EmployeeMapper mapper;
+    //private final PageMapper pageMapper;
 
     @Override
     @PostMapping("/users/create_dto")
@@ -66,5 +71,19 @@ public class ControllerBeanDto implements ControllerDto {
     @GetMapping("/users/tech")
     public List<EmployeeReadTechDto> getAllUsersTech() {
         return mapper.getTechDto(service.getAll());
+    }
+
+
+    @GetMapping("/users/p/gmail")
+    @ResponseStatus(HttpStatus.OK)
+    public Page<Employee> findEmployeeByGmail(@RequestParam(defaultValue = "0") int page,
+                                              @RequestParam(defaultValue = "3") int size,
+                                              @RequestParam(defaultValue = "") List<String> sortList,
+                                              @RequestParam(defaultValue = "DESC") Sort.Direction sortOrder) {
+
+        Page<Employee> employees = service.findEmployeesByGmail(page, size, sortList, sortOrder.toString());
+        //Page<EmployeeToReadDto> employeeToReadDtos = pageMapper.employeeGmail(employees);
+        //employees.stream().map(mapper::employeeToReadDto);
+        return employees;
     }
 }

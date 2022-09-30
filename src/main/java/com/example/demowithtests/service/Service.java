@@ -49,5 +49,16 @@ public interface Service {
     Page<Employee> findByCountryContaining(String country, int page, int size,
                                            List<String> sortList, String sortOrder);
 
+    /**
+     * > Find all employees with a given email address, and return them in a pageable format
+     *
+     * @param page The page number
+     * @param size The number of records to be returned in a page.
+     * @param sortList A list of fields to sort by.
+     * @param sortOrder The sort order, either "asc" or "desc".
+     * @return A Page<Employee> object.
+     */
+    Page<Employee> findEmployeesByGmail (int page, int size,
+                                         List<String> sortList, String sortOrder);
 
 }

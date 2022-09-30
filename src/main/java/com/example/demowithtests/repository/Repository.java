@@ -32,4 +32,7 @@ public interface Repository extends JpaRepository<Employee, Integer> {
 
     @Query(value = "SELECT * FROM users u WHERE u.phone_number IS NOT NULL AND is_deleted=false", nativeQuery = true)
     Page<Employee> findUsersWithPhoneNumberPageable(Pageable pageable);
+
+    @Query("select user.name, user.email from Employee user where user.email LIKE '%gmail.com' and user.isDeleted=false")
+    Page<Employee> findEmployeesByGmail(Pageable pageable);
 }
