@@ -163,6 +163,13 @@ public class ServiceBean implements Service {
         return employee;
     }
 
+    /**
+     * It takes a list of strings and a string and returns a list of Sort.Order objects
+     *
+     * @param sortList A list of strings that represent the fields to sort by.
+     * @param sortDirection The direction of the sort.
+     * @return A list of Sort.Order objects.
+     */
     private List<Sort.Order> createSortOrder(List<String> sortList, String sortDirection) {
         List<Sort.Order> sorts = new ArrayList<>();
         Sort.Direction direction;

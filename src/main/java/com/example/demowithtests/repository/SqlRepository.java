@@ -13,16 +13,16 @@ import java.util.List;
 //@Component
 public interface SqlRepository extends JpaRepository<Employee, Integer>{
 
-    //Получение юзеров по имени
     @Query(value = "SELECT * FROM users WHERE name = ?1", nativeQuery = true) //sql
+    // A method that is used to find a user by name.
     List<Employee> findUserByName(String name);
 
-    //Получение юзеров пользователей гугл почты
     @Query(value ="SELECT * FROM users WHERE email LIKE '%gmail.com'", nativeQuery = true) //sql
+    // Finding all the employees with the email ending in gmail.com
     List<Employee> findEmployeeByEmail(String email);
 
-    //Получение юзеров по полю isDeleted
     @Query(value = "SELECT * FROM users WHERE is_deleted = ?1", nativeQuery = true) //sql
+    // Finding all the employees with the isDeleted value of true.
     List<Employee> findAllByIsDeleted(Boolean isDeleted);
 
 }
