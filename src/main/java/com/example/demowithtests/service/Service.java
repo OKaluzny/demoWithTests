@@ -24,7 +24,23 @@ public interface Service {
      * @return A list of all the employees in the database.
      */
     List<Employee> getAll();
+    /**
+     * It returns a page of employees.
+     *
+     * @param page The page number to be returned.
+     * @param size The number of records per page.
+     * @param sortList The list of fields to sort by.
+     * @param sortOrder The sort order, either "asc" or "desc".
+     * @return A Page<Employee> object.
+     */
+    Page<Employee> findAllByPage(int page, int size, List<String> sortList, String sortOrder);
 
+    /**
+     * Get an employee by id.
+     *
+     * @param id The id of the employee to be retrieved.
+     * @return Employee
+     */
     Employee getById(Integer id);
 
     /**

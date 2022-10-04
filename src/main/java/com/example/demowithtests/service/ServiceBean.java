@@ -42,6 +42,12 @@ public class ServiceBean implements Service {
     }
 
     @Override
+    public Page<Employee> findAllByPage(int page, int size, List<String> sortList, String sortOrder) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by(createSortOrder(sortList, sortOrder)));
+        return jpqlRepository.findAllByPage(pageable);
+    }
+
+    @Override
     public Employee getById(Integer id) {
         Employee employee = repository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Employee not found with id = " + id));

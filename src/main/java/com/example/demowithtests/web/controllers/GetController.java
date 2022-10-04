@@ -33,32 +33,43 @@ public class GetController implements GetAllRequest,
     private final EmployeeDtoMapper mapper;
 
 
-    //Получение списка юзеров
     @Override
     @GetMapping("/users")
     @ResponseStatus(HttpStatus.OK)
+    // A method that returns a list of employees.
     public List<EmployeeReadAllDto> getAllEmployeeDto() {
         return mapper.getAllEmployeeDto(service.getAll());
     }
 
-    //Получения юзера по id
+    @GetMapping("/users/page")
+    @ResponseStatus(HttpStatus.OK)
+    // A method that returns a page of employees.
+    public Page<Employee> getAllEmployeeByPage(@RequestParam(defaultValue = "0") int page,
+                                               @RequestParam(defaultValue = "5") int size,
+                                               @RequestParam(defaultValue = "") List<String> sortList,
+                                               @RequestParam(defaultValue = "ASC") Sort.Direction sortOrder) {
+        return service.findAllByPage(page, size, sortList, sortOrder.toString());
+    }
+
     @Override
     @GetMapping("/users/{id}")
     @ResponseStatus(HttpStatus.OK)
+    // This method returns a user by id.
     public EmployeeReadDto getByIdEmployeeDto(@PathVariable Integer id) {
         return mapper.readByIdEmployeeDto(service.getById(id));
     }
 
-    //Получение юзеров по имени
     @Override
     @GetMapping(value ="users", params = {"name"})
     @ResponseStatus(HttpStatus.OK)
+    // This method returns a list of employees by name.
     public List<EmployeeReadAllByNameDto> getListByName(@RequestParam(value = "name") String name){
         return mapper.getAllByNameEmployeeDto(service.findUserByName(name));
     }
 
     @GetMapping(value ="/users/page", params = {"name"})
     @ResponseStatus(HttpStatus.OK)
+    // This is a method that returns a page of employees by name.
     public Page<Employee> findByNamePage(@RequestParam(required = false) String name,
                                          @RequestParam(defaultValue = "0") int page,
                                          @RequestParam(defaultValue = "3") int size,
@@ -67,16 +78,17 @@ public class GetController implements GetAllRequest,
         return service.findByName(name, page, size, sortList, sortOrder.toString());
     }
 
-    //Получение юзеров по стране
     @Override
     @GetMapping(value ="users", params = {"country"})
     @ResponseStatus(HttpStatus.OK)
+    // This is a method that returns a list of employees by country.
     public List<EmployeeReadAllByCountryDto> getEmployeeByCountry(@RequestParam(value = "country") String country){
         return mapper.getAllByCountryEmployeeDto(service.findEmployeeByCountry(country));
     }
 
     @GetMapping(value ="/users/page", params = {"country"})
     @ResponseStatus(HttpStatus.OK)
+    // This is a method that returns a page of employees by country.
     public Page<Employee> findByCountry(@RequestParam(required = false) String country,
                                          @RequestParam(defaultValue = "0") int page,
                                          @RequestParam(defaultValue = "3") int size,
@@ -85,26 +97,26 @@ public class GetController implements GetAllRequest,
         return service.findByName(country, page, size, sortList, sortOrder.toString());
     }
 
-    //Получение совершеннолетних юзеров
     @Override
     @GetMapping(value ="users", params = {"isAdult"})
     @ResponseStatus(HttpStatus.OK)
+    // This is a method that returns a list of employees by isAdult.
     public List<EmployeeReadAllByIsAdultDto> getAdultUsers(@RequestParam(value = "isAdult") Boolean isAdult) {
         return mapper.getAllByIsAdultEmployeeDto(service.findAdultUser(isAdult));
     }
 
-    //Получение юзеров пользователей гугл почты
     @Override
     @GetMapping(value ="users", params = {"email"})
     @ResponseStatus(HttpStatus.OK)
+    // This is a method that returns a list of employees by email.
     public List<EmployeeReadAllByGmailDto> getGmailUser(@RequestParam(value = "email") String email) {
         return mapper.getAllByGmailEmployeeDto(service.findEmployeeByEmail(email));
     }
 
-    //Получение юзеров по полю isDeleted
     @Override
     @GetMapping(value ="users", params = {"isdeleted"})
     @ResponseStatus(HttpStatus.OK)
+    // This is a method that returns a list of employees by isDeleted.
     public List<EmployeeReadAllByIsDeletedDto> getUserByIsDeletedValue(@RequestParam(value = "isdeleted") Boolean isDeleted) {
         return mapper.getAllByIsDeletedEmployeeDto(service.findAllByIsDeleted(isDeleted));
     }
