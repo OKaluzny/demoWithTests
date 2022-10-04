@@ -19,18 +19,18 @@ public class DeleteController implements DeleteByIdRequest, DeleteAllRequest {
 
     private final Service service;
 
-    //Удаление по id
     @Override
     @DeleteMapping("/users/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    // A method that removes an employee by id.
     public void removeEmployeeById(@PathVariable Integer id) {
         service.removeById(id);
     }
 
-    //Удаление всех юзеров
     @Override
     @DeleteMapping("/users")
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    // Removing all users.
     public void removeAllUsers() {
         service.removeAll();
     }
