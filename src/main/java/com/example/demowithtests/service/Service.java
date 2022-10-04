@@ -4,6 +4,7 @@ import com.example.demowithtests.domain.Employee;
 import com.example.demowithtests.dto.createDto.EmployeeDto;
 import com.example.demowithtests.dto.readDto.*;
 import com.example.demowithtests.dto.updateDto.*;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 
@@ -22,10 +23,12 @@ public interface Service {
     void removeAll();
 
     List<Employee> findUserByName(String name);
+    Page<Employee> findByName(String name, int page, int size, List<String> sortList, String sortOrder);
 
     List<Employee> findAdultUser(Boolean isAdult);
 
     List<Employee> findEmployeeByCountry(String country);
+    Page<Employee> findByCountry(String country, int page, int size, List<String> sortList, String sortOrder);
 
     List<Employee> findEmployeeByEmail(String email);
 
