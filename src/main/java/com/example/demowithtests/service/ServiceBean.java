@@ -12,8 +12,13 @@ import com.example.demowithtests.util.exeption.ResourceWasDeletedException;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.mapstruct.factory.Mappers;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 
 import javax.persistence.EntityNotFoundException;
+import java.util.ArrayList;
 import java.util.List;
 
 @AllArgsConstructor
@@ -82,6 +87,12 @@ public class ServiceBean implements Service {
     }
 
     @Override
+    public Page<Employee> findByName(String name, int page, int size, List<String> sortList, String sortOrder) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by(createSortOrder(sortList, sortOrder)));
+        return jpqlRepository.findByName(name,pageable);
+    }
+
+    @Override
     public List<Employee> findAdultUser(Boolean isAdult) {
         return jpqlRepository.findAdultUser(isAdult);
     }
@@ -89,6 +100,12 @@ public class ServiceBean implements Service {
     @Override
     public List<Employee> findEmployeeByCountry(String country) {
         return jpqlRepository.findEmployeeByCountry(country);
+    }
+
+    @Override
+    public Page<Employee> findByCountry(String country, int page, int size, List<String> sortList, String sortOrder) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by(createSortOrder(sortList, sortOrder)));
+        return jpqlRepository.findByCountry(country,pageable);
     }
 
     @Override
@@ -146,5 +163,17 @@ public class ServiceBean implements Service {
         return employee;
     }
 
-
+    private List<Sort.Order> createSortOrder(List<String> sortList, String sortDirection) {
+        List<Sort.Order> sorts = new ArrayList<>();
+        Sort.Direction direction;
+        for (String sort : sortList) {
+            if (sortDirection != null) {
+                direction = Sort.Direction.fromString(sortDirection);
+            } else {
+                direction = Sort.Direction.DESC;
+            }
+            sorts.add(new Sort.Order(direction, sort));
+        }
+        return sorts;
+    }
 }
