@@ -25,10 +25,10 @@ public class PostController implements PostRequest, PostAdminRequest {
     private final Service service;
     private final EmployeeDtoMapper mapper;
 
-    //Операция сохранения юзера в базу данных
     @Override
     @PostMapping("/users")
     @ResponseStatus(HttpStatus.CREATED)
+    // A method that is called when a POST request is made to the `/api/users` endpoint.
     public EmployeeDto saveEmployee(@RequestBody Employee employee) {
         return mapper.createEmployeeDto(service.create(employee));
     }
@@ -36,6 +36,7 @@ public class PostController implements PostRequest, PostAdminRequest {
     @Override
     @PostMapping("/users/admin")
     @ResponseStatus(HttpStatus.CREATED)
+    // A method that is called when a POST request is made to the `/api/users/admin` endpoint.
     public EmployeeAdminDto saveAdminEmployee(@RequestBody Employee employee) {
         return mapper.createAdminEmployeeDto(service.create(employee));
     }
