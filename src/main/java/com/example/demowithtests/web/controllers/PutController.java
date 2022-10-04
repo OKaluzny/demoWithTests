@@ -23,10 +23,10 @@ public class PutController implements PutRefreshRequest {
 
     private final EmployeeDtoMapper mapper;
 
-    //Обновление юзера
     @Override
     @PutMapping("/users/{id}")
     @ResponseStatus(HttpStatus.OK)
+    // A method that updates the employee.
     public EmployeeUpdateDto refreshEmployee(@PathVariable("id") Integer id, @RequestBody Employee employee) {
         return mapper.updateByIdEmployeeDto(service.updateById(id,employee));
     }
