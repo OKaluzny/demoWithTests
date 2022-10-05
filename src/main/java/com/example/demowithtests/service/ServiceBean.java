@@ -15,6 +15,7 @@ import org.springframework.data.domain.Sort;
 import javax.persistence.EntityNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @AllArgsConstructor
@@ -166,11 +167,33 @@ public class ServiceBean implements Service {
     }
 
     @Override
-    public List<String> getEmployeeCountry() {
+    public List<String> getEmployeeSortCountry() {
         var employeeList = jpqlRepository.findCountry();
         return employeeList.stream()
                 .filter(c->c.startsWith("U"))
                 .collect(Collectors.toList());
+    }
+
+//    @Override
+//    public Optional<String> getEmail() {
+//        var employeeList = jpqlRepository.findEmail();
+//        var emails = employeeList.stream()
+//                .collect(Collectors.toList());
+//        var opt = emails.stream()
+//                .filter(e->e.endsWith("com"))
+//                .toString()
+//                ;
+//        return Optional.of(opt);
+//    }
+
+    @Override
+    public Optional<String> getEmail() {
+        var employeeList = jpqlRepository.findEmail();
+        var emails = employeeList.stream()
+                .filter(e->e.endsWith("gmail.com"))
+                .findFirst()
+                .orElse("error?");
+        return Optional.of(emails);
     }
 
     /**
