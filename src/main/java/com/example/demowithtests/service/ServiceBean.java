@@ -1,17 +1,12 @@
 package com.example.demowithtests.service;
 
 import com.example.demowithtests.domain.Employee;
-import com.example.demowithtests.dto.createDto.EmployeeDto;
-import com.example.demowithtests.dto.readDto.*;
-import com.example.demowithtests.dto.updateDto.*;
 import com.example.demowithtests.repository.JpqlRepository;
 import com.example.demowithtests.repository.Repository;
 import com.example.demowithtests.repository.SqlRepository;
-import com.example.demowithtests.util.config.mapstruct.EmployeeDtoMapper;
 import com.example.demowithtests.util.exeption.ResourceWasDeletedException;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.mapstruct.factory.Mappers;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -20,6 +15,7 @@ import org.springframework.data.domain.Sort;
 import javax.persistence.EntityNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @AllArgsConstructor
 @Slf4j
@@ -167,6 +163,14 @@ public class ServiceBean implements Service {
         employee.setAge(age);
         repository.save(employee);
         return employee;
+    }
+
+    @Override
+    public List<String> getEmployeeCountry() {
+        var employeeList = jpqlRepository.findCountry();
+        return employeeList.stream()
+                .filter(c->c.startsWith("U"))
+                .collect(Collectors.toList());
     }
 
     /**
