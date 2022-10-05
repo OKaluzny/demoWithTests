@@ -57,4 +57,13 @@ public interface JpqlRepository extends JpaRepository<Employee, Integer> {
     @Query("SELECT user.name, user.country, user.age, user.email FROM Employee user")
     // Returning a Page of Employee objects.
     Page<Employee> findAllByPage(Pageable pageable);
+
+    @Query("SELECT user.country FROM Employee user")
+    /**
+     * This function returns a page of Employee objects that are filtered by the country of the employee
+     *
+     * @param pageable This is the Pageable object that contains the page number, page size, and sort order.
+     * @return A list of countries
+     */
+    List<String> findCountry ();
 }
