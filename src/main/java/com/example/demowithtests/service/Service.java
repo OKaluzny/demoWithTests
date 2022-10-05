@@ -4,6 +4,7 @@ import com.example.demowithtests.domain.Employee;
 import org.springframework.data.domain.Page;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface Service {
 
@@ -170,10 +171,15 @@ public interface Service {
     Employee updateAgeById(Integer id, Integer age);
 
     /**
-     * Returns a list of employees in the country, or an empty list if there are no employees in the country.
+     * Get a list of employee names sorted by country.
      *
-     * @return Optional<List>
+     * @return A list of countries.
      */
-    List<String> getEmployeeCountry();
-
+    List<String> getEmployeeSortCountry();
+    /**
+     * Returns a list of emails, or an empty list if there are no emails.
+     *
+     * @return Optional<String>
+     */
+    Optional<String> getEmail();
 }
