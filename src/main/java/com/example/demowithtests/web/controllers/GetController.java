@@ -120,4 +120,11 @@ public class GetController implements GetAllRequest,
     public List<EmployeeReadAllByIsDeletedDto> getUserByIsDeletedValue(@RequestParam(value = "isdeleted") Boolean isDeleted) {
         return mapper.getAllByIsDeletedEmployeeDto(service.findAllByIsDeleted(isDeleted));
     }
+
+    @GetMapping(value ="users/countries")
+    @ResponseStatus(HttpStatus.OK)
+    // This is a method that returns a list of employees by isDeleted.
+    public List<String> getEmployeeCountry() {
+        return service.getEmployeeSortCountry();
+    }
 }
