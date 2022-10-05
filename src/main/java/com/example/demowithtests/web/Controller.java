@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @AllArgsConstructor
@@ -117,5 +118,21 @@ public class Controller {
         return employeeService.findByCountryContaining(country, page, size, sortList, sortOrder.toString());
     }
 
+    @GetMapping("/users/c")
+    @ResponseStatus(HttpStatus.OK)
+    public List<String> getAllUsersC() {
+        return employeeService.getAllEmployeeCountry();
+    }
 
+    @GetMapping("/users/s")
+    @ResponseStatus(HttpStatus.OK)
+    public List<String> getAllUsersSort() {
+        return employeeService.getSortCountry();
+    }
+
+    @GetMapping("/users/emails")
+    @ResponseStatus(HttpStatus.OK)
+    public Optional<String> getAllUsersSo() {
+        return employeeService.findEmails();
+    }
 }

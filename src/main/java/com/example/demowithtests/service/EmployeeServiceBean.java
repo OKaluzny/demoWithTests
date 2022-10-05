@@ -14,7 +14,10 @@ import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @AllArgsConstructor
 @Slf4j
@@ -105,5 +108,46 @@ public class EmployeeServiceBean implements EmployeeService {
             sorts.add(new Sort.Order(direction, sort));
         }
         return sorts;
+    }
+
+    @Override
+    public List<String> getAllEmployeeCountry() {
+        log.info("getAllEmployeeCountry() - start:");
+        List<Employee> employeeList = employeeRepository.findAll();
+        List<String> countries = employeeList.stream()
+                .map(country -> country.getCountry())
+                .collect(Collectors.toList());
+        /*List<String> countries = employeeList.stream()
+                .map(Employee::getCountry)
+                //.sorted(Comparator.naturalOrder())
+                .collect(Collectors.toList());*/
+
+        log.info("getAllEmployeeCountry() - end: countries = {}", countries);
+        return countries;
+    }
+
+    @Override
+    public List<String> getSortCountry() {
+        List<Employee> employeeList = employeeRepository.findAll();
+        return employeeList.stream()
+                .map(Employee::getCountry)
+                .filter(c -> c.startsWith("U"))
+                .sorted(Comparator.naturalOrder())
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public Optional<String> findEmails() {
+        var employeeList = employeeRepository.findAll();
+
+        var emails = employeeList.stream()
+                .map(Employee::getEmail)
+                .collect(Collectors.toList());
+
+        var opt = emails.stream()
+                .filter(s -> s.endsWith(".com"))
+                .findFirst()
+                .orElse("error?");
+        return Optional.ofNullable(opt);
     }
 }
