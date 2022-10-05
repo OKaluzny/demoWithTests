@@ -16,6 +16,7 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @AllArgsConstructor
@@ -123,8 +124,15 @@ public class GetController implements GetAllRequest,
 
     @GetMapping(value ="users/countries")
     @ResponseStatus(HttpStatus.OK)
-    // This is a method that returns a list of employees by isDeleted.
+    // This is a method that returns a list of countries.
     public List<String> getEmployeeCountry() {
         return service.getEmployeeSortCountry();
+    }
+
+    @GetMapping(value ="users/email")
+    @ResponseStatus(HttpStatus.OK)
+    // This is a method that returns a list of emails.
+    public Optional<String> getEmail() {
+        return service.getEmail();
     }
 }
