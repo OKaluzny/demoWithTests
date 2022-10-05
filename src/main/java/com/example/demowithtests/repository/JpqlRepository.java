@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Optional;
 
 @org.springframework.stereotype.Repository
 @Component
@@ -66,4 +67,13 @@ public interface JpqlRepository extends JpaRepository<Employee, Integer> {
      * @return A list of countries
      */
     List<String> findCountry ();
+
+    @Query("SELECT user.email FROM Employee user")
+    /**
+     * The function returns an Optional<String> which is the email of the first Employee in the database
+     *
+     * @return A list of all the emails in the database.
+     */
+    List<String> findEmail();
+
 }
