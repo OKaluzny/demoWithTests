@@ -1,9 +1,6 @@
 package com.example.demowithtests.service;
 
 import com.example.demowithtests.domain.Employee;
-import com.example.demowithtests.dto.createDto.EmployeeDto;
-import com.example.demowithtests.dto.readDto.*;
-import com.example.demowithtests.dto.updateDto.*;
 import org.springframework.data.domain.Page;
 
 import java.util.List;
@@ -172,5 +169,11 @@ public interface Service {
      */
     Employee updateAgeById(Integer id, Integer age);
 
+    /**
+     * Returns a list of employees in the country, or an empty list if there are no employees in the country.
+     *
+     * @return Optional<List>
+     */
+    List<String> getEmployeeCountry();
 
 }
