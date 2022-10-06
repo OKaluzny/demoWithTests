@@ -14,6 +14,7 @@ import org.springframework.data.domain.Sort;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -168,32 +169,41 @@ public class ServiceBean implements Service {
 
     @Override
     public List<String> getEmployeeSortCountry() {
-        var employeeList = jpqlRepository.findCountry();
-        return employeeList.stream()
+        var employeeCountryList = jpqlRepository.findCountry();
+        return employeeCountryList.stream()
                 .filter(c->c.startsWith("U"))
                 .collect(Collectors.toList());
     }
 
-//    @Override
-//    public Optional<String> getEmail() {
-//        var employeeList = jpqlRepository.findEmail();
-//        var emails = employeeList.stream()
-//                .collect(Collectors.toList());
-//        var opt = emails.stream()
-//                .filter(e->e.endsWith("com"))
-//                .toString()
-//                ;
-//        return Optional.of(opt);
-//    }
-
     @Override
     public Optional<String> getEmail() {
-        var employeeList = jpqlRepository.findEmail();
-        var emails = employeeList.stream()
+        var employeeEmailList = jpqlRepository.findEmail();
+        var emails = employeeEmailList.stream()
                 .filter(e->e.endsWith("gmail.com"))
                 .findFirst()
                 .orElse("error?");
         return Optional.of(emails);
+    }
+
+    @Override
+    public List<Integer> getAge() {
+        var employeeAgeList = jpqlRepository.findAge();
+        var age = employeeAgeList.stream()
+                .filter(a->a >= 21)
+                .sorted(Comparator.naturalOrder())
+                .collect(Collectors.toList());
+        return age;
+
+    }
+
+    @Override
+    public Optional<Employee> getEmployeeByAgeAndByEmail() {
+        var employeeList = sqlRepository.findAll();
+        var ageAndEmails = employeeList.stream()
+                .filter(e->e.getEmail().endsWith("gmail.com") && e.getAge()>=21)
+                .findAny()
+                .orElse(Employee.builder().build());
+        return Optional.of(ageAndEmails);
     }
 
     /**
