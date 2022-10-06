@@ -142,6 +142,7 @@ public class ServiceBean implements Service {
         return Optional.of(opt);
     }
 
+    @Override
     public Set<String> findAllCountries() {
         return repository.findAll().stream()
                 .map(Employee::getCountry)
