@@ -7,6 +7,8 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.Instant;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 public class EmployeeReadDto {
 
@@ -20,6 +22,8 @@ public class EmployeeReadDto {
     @Email
     @NotNull
     public String email;
+
+    public Set<AddressDto> addresses = new HashSet<>();
 
     //todo: dfhgjkdfhg Jira - 5544
     public Date date = Date.from(Instant.now());

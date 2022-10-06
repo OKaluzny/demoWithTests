@@ -13,8 +13,8 @@ spring:
     show-sql: true
     database: postgresql
     database-platform: org.hibernate.dialect.PostgreSQLDialect
-    open-in-view: false
-    generate-ddl: true
+    #open-in-view: false
+    #generate-ddl: true
 # Logger configuration
 logging:
   pattern:

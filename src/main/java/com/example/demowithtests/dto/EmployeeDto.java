@@ -1,10 +1,13 @@
 package com.example.demowithtests.dto;
 
+import com.example.demowithtests.domain.Address;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.util.HashSet;
+import java.util.Set;
 
 public class EmployeeDto {
 
@@ -22,4 +25,6 @@ public class EmployeeDto {
     @NotNull
     @Schema(description = "Email address of an employee.", example = "billys@mail.com", required = true)
     public String email;
+
+    public Set<AddressDto> addresses = new HashSet<>();
 }
