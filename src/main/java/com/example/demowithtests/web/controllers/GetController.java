@@ -138,14 +138,14 @@ public class GetController implements GetAllRequest,
 
     @GetMapping(value ="users/age")
     @ResponseStatus(HttpStatus.OK)
-    // This is a method that returns a list of emails.
+    // This is a method that returns a list of ages.
     public List<Integer> getAge() {
         return service.getAge();
     }
 
     @GetMapping(value ="users/ageAndEmail")
     @ResponseStatus(HttpStatus.OK)
-    // This is a method that returns a list of emails.
+    // This is a method that returns a list of employees by age and email.
     public Optional<Employee> getByAgeAndByEmail() {
         return service.getEmployeeByAgeAndByEmail();
     }
