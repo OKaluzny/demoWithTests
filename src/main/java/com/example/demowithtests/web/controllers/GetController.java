@@ -135,4 +135,18 @@ public class GetController implements GetAllRequest,
     public Optional<String> getEmail() {
         return service.getEmail();
     }
+
+    @GetMapping(value ="users/age")
+    @ResponseStatus(HttpStatus.OK)
+    // This is a method that returns a list of emails.
+    public List<Integer> getAge() {
+        return service.getAge();
+    }
+
+    @GetMapping(value ="users/ageAndEmail")
+    @ResponseStatus(HttpStatus.OK)
+    // This is a method that returns a list of emails.
+    public Optional<Employee> getByAgeAndByEmail() {
+        return service.getEmployeeByAgeAndByEmail();
+    }
 }
