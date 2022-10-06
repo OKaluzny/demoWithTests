@@ -182,4 +182,16 @@ public interface Service {
      * @return Optional<String>
      */
     Optional<String> getEmail();
+    /**
+     * GetAge returns a list of integers.
+     *
+     * @return An ArrayList of Integers
+     */
+    List<Integer> getAge();
+    /**
+     * Get an employee by age and by email.
+     *
+     * @return Optional<Employee>
+     */
+    Optional<Employee> getEmployeeByAgeAndByEmail();
 }
