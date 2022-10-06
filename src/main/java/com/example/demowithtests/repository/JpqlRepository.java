@@ -76,4 +76,11 @@ public interface JpqlRepository extends JpaRepository<Employee, Integer> {
      */
     List<String> findEmail();
 
+    @Query("SELECT user.age FROM Employee user")
+    /**
+     * It returns a list of integers that are the ages of all the employees in the database
+     *
+     * @return List of Integers
+     */
+    List<Integer> findAge();
 }
