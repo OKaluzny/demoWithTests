@@ -26,6 +26,6 @@ public class Employee {
     private String email;
 
     private Boolean isUpdated;
-    private Integer phoneNumber;
+    private Long phoneNumber;
     private Boolean isDeleted = Boolean.FALSE;
 }

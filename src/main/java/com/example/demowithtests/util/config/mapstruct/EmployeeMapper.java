@@ -8,6 +8,7 @@ import com.example.demowithtests.dto.EmployeeUpdateDto;
 import org.mapstruct.Mapper;
 
 import java.util.List;
+import java.util.Optional;
 
 @Mapper(componentModel = "spring")
 public interface EmployeeMapper {
@@ -16,18 +17,18 @@ public interface EmployeeMapper {
 
     List<EmployeeToReadDto> toDtoList(List<Employee> employeeList);
 
-    EmployeeCreateDto createDto (Employee employee);
+    EmployeeCreateDto createDto(Employee employee);
 
-    Employee createEmployeeFromDto (EmployeeCreateDto employeeCreateDto);
+    Employee createEmployeeFromDto(EmployeeCreateDto employeeCreateDto);
 
-    EmployeeUpdateDto updatePhoneNumberDto (Employee employee);
+    EmployeeUpdateDto updatePhoneNumberDto(Employee employee);
 
-    List<EmployeeReadTechDto> getTechDto (List<Employee> employee);
+    List<EmployeeReadTechDto> getTechDto(List<Employee> employee);
 
-    List<EmployeeToReadDto> readByCountry (List<Employee> employeeList);
+    List<EmployeeToReadDto> readByCountry(List<Employee> employeeList);
 
     EmployeeUpdateDto updateEmployeeDto(Employee employee);
 
-    Employee updateEmployeeFromDto (EmployeeUpdateDto employeeUpdateDto);
+    Employee updateEmployeeFromDto(EmployeeUpdateDto employeeUpdateDto);
 
 }

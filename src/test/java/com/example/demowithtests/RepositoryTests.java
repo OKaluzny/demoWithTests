@@ -97,7 +97,7 @@ public class RepositoryTests {
     @Test
     @Order(6)
     public void getListOfEmployeeWithPhoneNumberTest() {
-        Integer phoneNumber = 12345678;
+        Long phoneNumber = 12345678L;
         Employee employee = new Employee();
         employee.setPhoneNumber(phoneNumber);
 

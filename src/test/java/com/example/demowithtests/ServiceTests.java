@@ -2,7 +2,7 @@ package com.example.demowithtests;
 
 import com.example.demowithtests.domain.Employee;
 import com.example.demowithtests.repository.Repository;
-import com.example.demowithtests.service.ServiceBean;
+import com.example.demowithtests.service.Impl.ServiceBean;
 import com.example.demowithtests.util.exception.ResourceNotFoundException;
 import org.junit.Test;
 import org.junit.jupiter.api.DisplayName;
@@ -91,7 +91,7 @@ public class ServiceTests {
     @Test
     @DisplayName("List of Employee with field 'phone number' should be returned")
     public void IfPhoneNumberExists_shouldReturnListEmployee() {
-        Integer phoneNumber = 12345678;
+        Long phoneNumber = 12345678L;
         Employee created = new Employee();
         created.setPhoneNumber(phoneNumber);
 
@@ -165,7 +165,7 @@ public class ServiceTests {
     @DisplayName("Update phone number of employee with certain id")
     public void update_phoneNumberOfEmployeeById_returnEmployee() {
         Integer id = 20;
-        Integer phoneNumber = 12345678;
+        Long phoneNumber = 12345678L;
         Employee employee = new Employee();
         employee.setId(id);
 

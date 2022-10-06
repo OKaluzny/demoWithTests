@@ -14,6 +14,6 @@ public class EmployeeToReadDto {
     private String name;
     private String country;
     private String email;
-    private Integer phoneNumber;
+    private Long phoneNumber;
     private Instant time = Instant.now();
 }

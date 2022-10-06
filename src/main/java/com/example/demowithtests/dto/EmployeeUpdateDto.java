@@ -27,5 +27,5 @@ public class EmployeeUpdateDto {
     private String email;
 
     @Schema(description = "Phone number of the employee", example = "12345", required = true)
-    private Integer phoneNumber;
+    private Long phoneNumber;
 }
