@@ -1,18 +1,18 @@
-package com.example.demowithtests.service;
+package com.example.demowithtests.service.Impl;
 
 import com.example.demowithtests.domain.Employee;
 import com.example.demowithtests.repository.Repository;
+import com.example.demowithtests.service.Service;
 import com.example.demowithtests.util.exception.ResourceNotFoundException;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 
 import javax.persistence.EntityNotFoundException;
-import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @AllArgsConstructor
 @Slf4j
@@ -71,7 +71,6 @@ public class ServiceBean implements Service {
     @Override
     public void removeAll() {
         repository.deleteAll();
-
     }
 
     @Override
@@ -100,7 +99,7 @@ public class ServiceBean implements Service {
     }
 
     @Override
-    public Employee updatePhoneById(Integer id, Integer phoneNumber) {
+    public Employee updatePhoneById(Integer id, Long phoneNumber) {
         Employee employee = repository.findById(id).orElseThrow();
         employee.setPhoneNumber(phoneNumber);
         repository.save(employee);
@@ -108,55 +107,44 @@ public class ServiceBean implements Service {
     }
 
     @Override
-    public Page<Employee> getAllWithPagination(Pageable pageable) {
-        log.debug("getAllWithPagination() - start: pageable = {}", pageable);
-        Page<Employee> list = repository.findAll(pageable);
-        log.debug("getAllWithPagination() - end: list = {}", list);
-        return list;
+    public List<Employee> findRecordsWhereEmailNullStreamApi() {
+        return repository.findRecordsWhereEmailNull().stream()
+                .map(element -> {
+                    element.setEmail(element.getName().substring(0, 1).toLowerCase()
+                            + 31 * element.getId() + "@itorg.com");
+                    return repository.save(element);
+                })
+                .sorted()
+                .collect(Collectors.toList());
     }
 
     @Override
-    public Page<Employee> findUsersWithPhoneNumberPageable(int page, int size,
-                                                           List<String> sortList, String sortOrder) {
-        Pageable pageable = PageRequest.of(page, size, Sort.by(createSortOrder(sortList, sortOrder)));
-        return repository.findUsersWithPhoneNumberPageable(pageable);
-    }
-
-
-    @Override
-    public Page<Employee> getAllByNamePagination(String name, int page, int size,
-                                                 List<String> sortList, String sortOrder) {
-        Pageable pageable = PageRequest.of(page, size, Sort.by(createSortOrder(sortList, sortOrder)));
-        return repository.findByName(name, pageable);
+    public List<Employee> findUsersWithCountryStreamApi(String country) {
+        return repository.findEmployeesByCountry(country).stream()
+                .filter(employee -> employee.getName().length() > 4)
+                .sorted(Comparator.comparing(Employee::getName))
+                .collect(Collectors.toList());
     }
 
     @Override
-    public Page<Employee> findByCountryContaining(String country, int page, int size,
-                                                  List<String> sortList, String sortOrder) {
-        // create Pageable object using the page, size and sort details
-        Pageable pageable = PageRequest.of(page, size, Sort.by(createSortOrder(sortList, sortOrder)));
-        // fetch the page object by additionally passing pageable with the filters
-        return repository.findByCountryContaining(country, pageable);
+    public Optional<String> findUsersByMailStreamApi() {
+        var listEmployee = repository.findAll();
+
+        var emails = listEmployee.stream()
+                .map(Employee::getEmail)
+                .collect(Collectors.toList());
+
+        var opt = emails.stream()
+                .filter(element -> element.endsWith("@mail.com"))
+                .findFirst()
+                .orElse("some error");
+
+        return Optional.of(opt);
     }
 
-    private List<Sort.Order> createSortOrder(List<String> sortList, String sortDirection) {
-        List<Sort.Order> sorts = new ArrayList<>();
-        Sort.Direction direction;
-        for (String sort : sortList) {
-            if (sortDirection != null) {
-                direction = Sort.Direction.fromString(sortDirection);
-            } else {
-                direction = Sort.Direction.DESC;
-            }
-            sorts.add(new Sort.Order(direction, sort));
-        }
-        return sorts;
-    }
-
-    @Override
-    public Page<Employee> findEmployeesByGmail(int page, int size,
-                                               List<String> sortList, String sortOrder) {
-        Pageable pageable = PageRequest.of(page, size, Sort.by(createSortOrder(sortList, sortOrder)));
-        return repository.findEmployeesByGmail(pageable);
+    public Set<String> findAllCountries() {
+        return repository.findAll().stream()
+                .map(Employee::getCountry)
+                .collect(Collectors.toSet());
     }
 }

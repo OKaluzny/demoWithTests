@@ -7,16 +7,15 @@ import com.example.demowithtests.dto.EmployeeToReadDto;
 import com.example.demowithtests.dto.EmployeeUpdateDto;
 import com.example.demowithtests.service.Service;
 import com.example.demowithtests.util.config.mapstruct.EmployeeMapper;
-//import com.example.demowithtests.util.config.mapstruct.PageMapper;
 import lombok.AllArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 
 @RestController
 @AllArgsConstructor
@@ -25,7 +24,6 @@ public class ControllerBeanDto implements ControllerDto {
 
     private final Service service;
     private final EmployeeMapper mapper;
-    //private final PageMapper pageMapper;
 
     @Override
     @PostMapping("/users/create_dto")
@@ -63,7 +61,7 @@ public class ControllerBeanDto implements ControllerDto {
     @Override
     @PatchMapping("/users/{id}/phone_number_dto")
     public EmployeeUpdateDto refreshDtoPhoneNumber(@PathVariable("id") Integer id,
-                                                   @RequestParam(value = "phoneNumber") Integer phoneNumber) {
+                                                   @RequestParam(value = "phoneNumber") Long phoneNumber) {
         return mapper.updatePhoneNumberDto(service.updatePhoneById(id, phoneNumber));
     }
 
@@ -73,17 +71,27 @@ public class ControllerBeanDto implements ControllerDto {
         return mapper.getTechDto(service.getAll());
     }
 
-
-    @GetMapping("/users/p/gmail")
+    @GetMapping("/users/emails/stream_api")
     @ResponseStatus(HttpStatus.OK)
-    public Page<Employee> findEmployeeByGmail(@RequestParam(defaultValue = "0") int page,
-                                              @RequestParam(defaultValue = "3") int size,
-                                              @RequestParam(defaultValue = "") List<String> sortList,
-                                              @RequestParam(defaultValue = "DESC") Sort.Direction sortOrder) {
+    public List<EmployeeToReadDto> findRecordsWhereEmailNullStreamApi() {
+        return mapper.toDtoList(service.findRecordsWhereEmailNullStreamApi());
+    }
 
-        Page<Employee> employees = service.findEmployeesByGmail(page, size, sortList, sortOrder.toString());
-        //Page<EmployeeToReadDto> employeeToReadDtos = pageMapper.employeeGmail(employees);
-        //employees.stream().map(mapper::employeeToReadDto);
-        return employees;
+    @GetMapping("/users/{country}/stream_api")
+    @ResponseStatus(HttpStatus.OK)
+    public List<EmployeeToReadDto> findByCountryStreamApi(@PathVariable String country) {
+        return mapper.toDtoList(service.findUsersWithCountryStreamApi(country));
+    }
+
+    @GetMapping("/users/phone_number/stream_api")
+    @ResponseStatus(HttpStatus.OK)
+    public Optional<String> findUsersByMailStreamApi() {
+        return service.findUsersByMailStreamApi();
+    }
+
+    @GetMapping("/users/list_countries")
+    @ResponseStatus(HttpStatus.OK)
+    public Set<String> findAllCountries(){
+        return service.findAllCountries();
     }
 }
