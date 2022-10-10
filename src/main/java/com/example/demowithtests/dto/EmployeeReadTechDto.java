@@ -9,7 +9,7 @@ import lombok.*;
 @ToString
 public class EmployeeReadTechDto {
 
-    private Integer id;
-    private Boolean isDeleted;
-    private Boolean isUpdated;
+    public Integer id;
+    public Boolean isDeleted;
+    public Boolean isUpdated;
 }

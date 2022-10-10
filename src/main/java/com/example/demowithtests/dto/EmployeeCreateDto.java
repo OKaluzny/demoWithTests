@@ -6,6 +6,8 @@ import lombok.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.util.HashSet;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -17,16 +19,20 @@ public class EmployeeCreateDto {
     @NotNull(message = "Name may not be null")
     @Size(min = 2, max = 32, message = "Name must be between 2 and 32 characters long")
     @Schema(description = "Name of an employee.", example = "Billy", required = true)
-    private String name;
+    public String name;
 
     @Schema(description = "Name of the country.", example = "England", required = true)
-    private String country;
+    public String country;
 
     @Email
     @Schema(description = "Email address of an employee.", example = "billys@mail.com", required = true)
-    private String email;
+    public String email;
 
     @Schema(description = "Phone number of the employee", example = "12345", required = true)
-    private Long phoneNumber;
+    public Long phoneNumber;
+
+    public Set<AddressDto> addresses = new HashSet<>();
+
+    public SalaryDto salary;
 
 }

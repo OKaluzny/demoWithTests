@@ -3,6 +3,8 @@ package com.example.demowithtests.dto;
 import lombok.*;
 
 import java.time.Instant;
+import java.util.HashSet;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -11,9 +13,14 @@ import java.time.Instant;
 @ToString
 public class EmployeeToReadDto {
 
-    private String name;
-    private String country;
-    private String email;
-    private Long phoneNumber;
-    private Instant time = Instant.now();
+    public String name;
+    public String country;
+    public String email;
+    public Long phoneNumber;
+
+    public Set<AddressDto> addresses = new HashSet<>();
+
+    public SalaryDto salary;
+
+    public Instant time = Instant.now();
 }
