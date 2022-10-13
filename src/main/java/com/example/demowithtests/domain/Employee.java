@@ -25,6 +25,9 @@ public class Employee {
     @JoinColumn(name = "employee_id")
     private Set<Address> addresses = new HashSet<>();
 
+    @Enumerated(EnumType.STRING)
+    private Gender gender;
+
     public Integer getId() {
         return id;
     }
@@ -65,5 +68,11 @@ public class Employee {
         this.email = email;
     }
 
+    public Gender getGender() {
+        return gender;
+    }
 
+    public void setGender(Gender gender) {
+        this.gender = gender;
+    }
 }

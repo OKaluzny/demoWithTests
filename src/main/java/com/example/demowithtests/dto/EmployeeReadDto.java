@@ -1,5 +1,6 @@
 package com.example.demowithtests.dto;
 
+import com.example.demowithtests.domain.Gender;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 import javax.validation.constraints.Email;
@@ -27,4 +28,6 @@ public class EmployeeReadDto {
 
     //todo: dfhgjkdfhg Jira - 5544
     public Date date = Date.from(Instant.now());
+
+    public Gender gender;
 }

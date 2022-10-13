@@ -1,6 +1,7 @@
 package com.example.demowithtests.dto;
 
 import com.example.demowithtests.domain.Address;
+import com.example.demowithtests.domain.Gender;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 import javax.validation.constraints.Email;
@@ -27,4 +28,6 @@ public class EmployeeDto {
     public String email;
 
     public Set<AddressDto> addresses = new HashSet<>();
+
+    public Gender gender;
 }
