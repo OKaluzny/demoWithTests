@@ -35,6 +35,9 @@ public class Employee {
     @JoinColumn(name = "employee_id")
     private Salary salary;
 
+    @Enumerated(EnumType.STRING)
+    private Gender gender;
+
     private Boolean isUpdated;
     private Long phoneNumber;
     private Boolean isDeleted = Boolean.FALSE;

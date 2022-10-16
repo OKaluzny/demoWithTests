@@ -17,6 +17,6 @@ public class OpenApiConfig {
                 .info(new Info()
                         .title("Employee CRUD API")
                         .description(" Spring Boot RESTful service using springdoc-openapi and OpenAPI 3.")
-                        .version("v0.0.1"));
+                        .version("v0.0.V1__init.sql"));
     }
 }
