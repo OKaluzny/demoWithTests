@@ -1,5 +1,10 @@
 # Spring Boot configuration
 spring:
+  #application:
+   # name: service
+  #main:
+   # allow-bean-definition-overriding: true
+   # lazy-initialization: true
   # Database
   datasource:
     driver-class-name: org.postgresql.Driver
@@ -17,7 +22,7 @@ spring:
     #generate-ddl: true
   flyway:
     #    locations: filesystem:.\src\main\resources\db\migration
-    enabled: true
+    enabled: false
     #    clean-disabled: true
     baseline-on-migrate: true
 #  security:
@@ -33,7 +38,7 @@ logging:
     org.hibernate: debug
 # Server configuration
 server:
-  port: 8087 #set your port
+  port: 8088 #set your port
 # Swagger configuration
 springdoc:
   swagger-ui:

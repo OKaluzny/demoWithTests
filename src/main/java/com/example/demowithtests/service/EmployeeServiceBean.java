@@ -4,29 +4,40 @@ import com.example.demowithtests.domain.Employee;
 import com.example.demowithtests.repository.EmployeeRepository;
 import com.example.demowithtests.util.exception.ResourceNotFoundException;
 import com.example.demowithtests.util.exception.ResourceWasDeletedException;
-import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
 import javax.persistence.EntityNotFoundException;
+import javax.persistence.PersistenceContext;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-@AllArgsConstructor
+//@AllArgsConstructor
 @Slf4j
 @Service
 public class EmployeeServiceBean implements EmployeeService {
 
     private final EmployeeRepository employeeRepository;
 
+    @PersistenceContext
+    private EntityManager entityManager;
+
+    public EmployeeServiceBean(EmployeeRepository employeeRepository) {
+        this.employeeRepository = employeeRepository;
+    }
+
     @Override
+    //@Transactional(propagation = Propagation.MANDATORY)
     public Employee create(Employee employee) {
         return employeeRepository.save(employee);
     }
@@ -48,8 +59,8 @@ public class EmployeeServiceBean implements EmployeeService {
     public Employee getById(Integer id) {
         var employee = employeeRepository.findById(id)
                 // .orElseThrow(() -> new EntityNotFoundException("Employee not found with id = " + id));
-                .orElseThrow(ResourceNotFoundException::new);
-         /*if (employee.getIsDeleted()) {
+               .orElseThrow(ResourceNotFoundException::new);
+        /* if (employee.getIsDeleted()) {
             throw new EntityNotFoundException("Employee was deleted with id = " + id);
         }*/
         return employee;
@@ -70,13 +81,47 @@ public class EmployeeServiceBean implements EmployeeService {
     @Override
     public void removeById(Integer id) {
         //repository.deleteById(id);
-        Employee employee = employeeRepository.findById(id)
+        var employee = employeeRepository.findById(id)
                 // .orElseThrow(() -> new EntityNotFoundException("Employee not found with id = " + id));
                 .orElseThrow(ResourceWasDeletedException::new);
         //employee.setIsDeleted(true);
         employeeRepository.delete(employee);
         //repository.save(employee);
     }
+
+
+
+
+
+
+
+   /* public boolean isValid(Employee employee) {
+        String regex = "^[0-9]{10}$";
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(employee.getPhone());
+        boolean isFound = matcher.find();
+        if (isFound) {
+            System.out.println("Number is valid");
+            return true;
+        } else {
+            System.out.println("Number is invalid");
+            return false;
+        }
+    }*/
+
+    /*public boolean isVodafone(Employee employee) {
+        String regex = "^[0][9][5]{1}[0-9]{7}$";
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(employee.getPhone());
+        boolean isFound = matcher.find();
+        if (isFound) {
+            System.out.println("Number is Vodafone");
+            return true;
+        } else {
+            System.out.println("Number is not Vodafone");
+            return false;
+        }
+    }*/
 
     @Override
     public void removeAll() {
@@ -149,5 +194,10 @@ public class EmployeeServiceBean implements EmployeeService {
                 .findFirst()
                 .orElse("error?");
         return Optional.ofNullable(opt);
+    }
+
+    @Override
+    public List<Employee> filterByCountry(String country) {
+        return employeeRepository.findByCountry(country);
     }
 }

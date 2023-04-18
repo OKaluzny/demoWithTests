@@ -26,7 +26,11 @@ public class RepositoryTests {
     @Rollback(value = false)
     public void saveEmployeeTest() {
 
-        Employee employee = Employee.builder().name("Mark").country("England").build();
+        Employee employee = Employee
+                .builder()
+                .name("Mark")
+                .country("England")
+                .build();
 
         employeeRepository.save(employee);
 

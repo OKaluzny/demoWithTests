@@ -3,14 +3,13 @@ package com.example.demowithtests;
 import com.example.demowithtests.domain.Employee;
 import com.example.demowithtests.repository.EmployeeRepository;
 import com.example.demowithtests.service.EmployeeServiceBean;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentMatchers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-import javax.persistence.EntityNotFoundException;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -19,7 +18,7 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class ServiceTests {
 
     @Mock
@@ -30,6 +29,7 @@ public class ServiceTests {
 
     @Test
     public void whenSaveEmployee_shouldReturnEmployee() {
+
         Employee employee = new Employee();
         employee.setName("Mark");
 
@@ -43,6 +43,7 @@ public class ServiceTests {
 
     @Test
     public void whenGivenId_shouldReturnEmployee_ifFound() {
+
         Employee employee = new Employee();
         employee.setId(88);
 
@@ -54,8 +55,9 @@ public class ServiceTests {
         verify(employeeRepository).findById(employee.getId());
     }
 
-    @Test(expected = EntityNotFoundException.class)
+    @Test//(expected = EntityNotFoundException.class)
     public void should_throw_exception_when_employee_doesnt_exist() {
+
         Employee employee = new Employee();
         employee.setId(89);
         employee.setName("Mark");

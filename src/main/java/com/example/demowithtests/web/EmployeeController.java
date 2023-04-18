@@ -28,7 +28,7 @@ import java.util.Optional;
 @RequestMapping(value = "/api", produces = MediaType.APPLICATION_JSON_VALUE)
 @Slf4j
 @Tag(name = "Employee", description = "Employee API")
-public class Controller {
+public class EmployeeController {
 
     private final EmployeeService employeeService;
     private final EmployeeConverter converter;
@@ -48,6 +48,13 @@ public class Controller {
         var dto = converter.toDto(employeeService.create(employee));
 
         return dto;
+    }
+    @PostMapping("/usersS")
+    @ResponseStatus(HttpStatus.CREATED)
+    public void saveEmployee1(@RequestBody @Valid Employee employee) {
+
+        employeeService.create(employee);
+
     }
 
     //Получение списка юзеров
@@ -76,11 +83,11 @@ public class Controller {
             @ApiResponse(responseCode = "404", description = "NOT FOUND. Specified employee request not found."),
             @ApiResponse(responseCode = "409", description = "Employee already exists")})
     public EmployeeReadDto getEmployeeById(@PathVariable Integer id) {
-        log.debug("getEmployeeById() Controller - start: id = {}", id);
+        log.debug("getEmployeeById() EmployeeController - start: id = {}", id);
         var employee = employeeService.getById(id);
-        log.debug("getById() Controller - to dto start: id = {}", id);
+        log.debug("getById() EmployeeController - to dto start: id = {}", id);
         var dto = converter.toReadDto(employee);
-        log.debug("getEmployeeById() Controller - end: name = {}", dto.name);
+        log.debug("getEmployeeById() EmployeeController - end: name = {}", dto.name);
         return dto;
     }
 
@@ -134,5 +141,11 @@ public class Controller {
     @ResponseStatus(HttpStatus.OK)
     public Optional<String> getAllUsersSo() {
         return employeeService.findEmails();
+    }
+
+    @GetMapping("/users/countryBy")
+    @ResponseStatus(HttpStatus.OK)
+    public List<Employee> getByCountry(@RequestParam(required = true) String country) {
+        return employeeService.filterByCountry(country);
     }
 }
