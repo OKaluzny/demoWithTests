@@ -3,10 +3,7 @@ package com.example.demowithtests;
 import com.example.demowithtests.domain.Employee;
 import com.example.demowithtests.repository.EmployeeRepository;
 import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.MethodOrderer;
-import org.junit.jupiter.api.Order;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestMethodOrder;
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.annotation.Rollback;
@@ -16,6 +13,7 @@ import java.util.Optional;
 
 @DataJpaTest
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+@DisplayName("Employee Repository Tests")
 public class RepositoryTests {
 
     @Autowired
@@ -24,10 +22,10 @@ public class RepositoryTests {
     @Test
     @Order(1)
     @Rollback(value = false)
+    @DisplayName("save employee test")
     public void saveEmployeeTest() {
 
-        Employee employee = Employee
-                .builder()
+        Employee employee = Employee.builder()
                 .name("Mark")
                 .country("England")
                 .build();
@@ -36,16 +34,18 @@ public class RepositoryTests {
 
         Assertions.assertThat(employee.getId()).isGreaterThan(0);
         Assertions.assertThat(employee.getId()).isEqualTo(1);
+        Assertions.assertThat(employee.getName()).isEqualTo("Mark");
     }
 
     @Test
     @Order(2)
+    @DisplayName("get employee by id test")
     public void getEmployeeTest() {
 
         Employee employee = employeeRepository.findById(1).orElseThrow();
 
         Assertions.assertThat(employee.getId()).isEqualTo(1);
-
+        Assertions.assertThat(employee.getName()).isEqualTo("Mark");
     }
 
     @Test

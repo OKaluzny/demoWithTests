@@ -11,6 +11,8 @@ public interface EmployeeService {
 
     Employee create(Employee employee);
 
+    Employee createEM(Employee employee);
+
     List<Employee> getAll();
 
     Page<Employee> getAllWithPagination(Pageable pageable);

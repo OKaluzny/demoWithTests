@@ -4,6 +4,7 @@ import com.example.demowithtests.domain.Employee;
 import com.example.demowithtests.repository.EmployeeRepository;
 import com.example.demowithtests.util.exception.ResourceNotFoundException;
 import com.example.demowithtests.util.exception.ResourceWasDeletedException;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -22,7 +23,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-//@AllArgsConstructor
+@RequiredArgsConstructor
 @Slf4j
 @Service
 public class EmployeeServiceBean implements EmployeeService {
@@ -32,14 +33,15 @@ public class EmployeeServiceBean implements EmployeeService {
     @PersistenceContext
     private EntityManager entityManager;
 
-    public EmployeeServiceBean(EmployeeRepository employeeRepository) {
-        this.employeeRepository = employeeRepository;
+    @Override
+    @Transactional(propagation = Propagation.MANDATORY)
+    public Employee create(Employee employee) {
+        return employeeRepository.save(employee);
     }
 
     @Override
-    //@Transactional(propagation = Propagation.MANDATORY)
-    public Employee create(Employee employee) {
-        return employeeRepository.save(employee);
+    public Employee createEM(Employee employee) {
+        return entityManager.merge(employee);
     }
 
     @Override
@@ -59,7 +61,7 @@ public class EmployeeServiceBean implements EmployeeService {
     public Employee getById(Integer id) {
         var employee = employeeRepository.findById(id)
                 // .orElseThrow(() -> new EntityNotFoundException("Employee not found with id = " + id));
-               .orElseThrow(ResourceNotFoundException::new);
+                .orElseThrow(ResourceNotFoundException::new);
         /* if (employee.getIsDeleted()) {
             throw new EntityNotFoundException("Employee was deleted with id = " + id);
         }*/

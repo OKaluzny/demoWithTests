@@ -2,7 +2,7 @@ package com.example.demowithtests;
 
 import com.example.demowithtests.domain.Employee;
 import com.example.demowithtests.repository.EmployeeRepository;
-import com.example.demowithtests.service.EmployeeServiceBean;
+import com.example.demowithtests.service.EmployeeService;
 import com.example.demowithtests.web.EmployeeController;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -10,6 +10,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -36,6 +37,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(SpringExtension.class)
+@ExtendWith(MockitoExtension.class)
 @WebMvcTest(controllers = EmployeeController.class)
 @DisplayName("Employee Controller Tests")
 public class ControllerTests {
@@ -47,7 +49,7 @@ public class ControllerTests {
     EmployeeRepository employeeRepository;
 
     @MockBean
-    EmployeeServiceBean employeeServiceBean;
+    EmployeeService employeeService;
 
     @MockBean
     EmployeeController employeeController;
@@ -75,7 +77,7 @@ public class ControllerTests {
                 .name("John")
                 .build();
 
-        Mockito.when(employeeServiceBean.create(employee)).thenReturn(employee);
+        Mockito.when(employeeService.create(employee)).thenReturn(employee);
 
         MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders
                 .post("/api/users")
@@ -87,7 +89,7 @@ public class ControllerTests {
                 .perform(mockRequest)
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$", notNullValue()))
-                .andExpect(jsonPath("$.firstName", is("John")));
+                .andExpect(jsonPath("$.name", is("John")));
     }
 
     @Test
@@ -95,7 +97,7 @@ public class ControllerTests {
     public void testSave() throws Exception {
         // Set up our mocked service
         Employee employeeToBeReturn = Employee.builder().name("Mark").country("France").build();
-        doReturn(employeeToBeReturn).when(employeeRepository).save(any());
+        doReturn(employeeToBeReturn).when(employeeService).create(any());
         // Execute the POST request
         this.mockMvc
                 .perform(post("/api/usersS")
@@ -108,9 +110,8 @@ public class ControllerTests {
                 // Validate the response code and content type
                 .andExpect(status().isCreated());
 
-        // verify(this.employeeRepository, times(1)).save(any(Employee.class));
-        verifyNoMoreInteractions(this.employeeRepository);
-
+        verify(employeeService).create(spy(Employee.class));
+        verifyNoMoreInteractions(this.employeeService);
     }
 
     @Test
@@ -148,7 +149,7 @@ public class ControllerTests {
 
         this.mockMvc
                 .perform(MockMvcRequestBuilders
-                        .get("/users")
+                        .get("/api/users")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(1)))
