@@ -45,5 +45,11 @@ springdoc:
     path: /swagger-ui.html # swagger-ui custom path
   api-docs:
     path: /v3/api-docs.yaml
+management:
+  endpoints:
+    enabled-by-default: false
+  endpoint:
+    health:
+      enabled: true
 
 

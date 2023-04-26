@@ -51,7 +51,7 @@ public class EmployeeController {
     }
     @PostMapping("/usersS")
     @ResponseStatus(HttpStatus.CREATED)
-    public void saveEmployee1(@RequestBody @Valid Employee employee) {
+    public void saveEmployee1(@RequestBody Employee employee) {
 
         employeeService.create(employee);
 

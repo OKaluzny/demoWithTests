@@ -1,6 +1,8 @@
 package com.example.demowithtests;
 
+import com.example.demowithtests.domain.Address;
 import com.example.demowithtests.domain.Employee;
+import com.example.demowithtests.domain.Gender;
 import com.example.demowithtests.repository.EmployeeRepository;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.*;
@@ -8,8 +10,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.annotation.Rollback;
 
-import java.util.List;
+import java.util.HashSet;
 import java.util.Optional;
+import java.util.Set;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
@@ -22,12 +27,18 @@ public class RepositoryTests {
     @Test
     @Order(1)
     @Rollback(value = false)
-    @DisplayName("save employee test")
+    @DisplayName("Save employee test")
     public void saveEmployeeTest() {
 
-        Employee employee = Employee.builder()
+        var employee = Employee.builder()
                 .name("Mark")
                 .country("England")
+                .addresses(new HashSet<>(Set.of(
+                        Address
+                                .builder()
+                                .country("UK")
+                                .build())))
+                .gender(Gender.M)
                 .build();
 
         employeeRepository.save(employee);
@@ -39,10 +50,10 @@ public class RepositoryTests {
 
     @Test
     @Order(2)
-    @DisplayName("get employee by id test")
+    @DisplayName("Get employee by id test")
     public void getEmployeeTest() {
 
-        Employee employee = employeeRepository.findById(1).orElseThrow();
+        var employee = employeeRepository.findById(1).orElseThrow();
 
         Assertions.assertThat(employee.getId()).isEqualTo(1);
         Assertions.assertThat(employee.getName()).isEqualTo("Mark");
@@ -50,9 +61,10 @@ public class RepositoryTests {
 
     @Test
     @Order(3)
+    @DisplayName("Get employees test")
     public void getListOfEmployeeTest() {
 
-        List<Employee> employeesList = employeeRepository.findAll();
+        var employeesList = employeeRepository.findAll();
 
         Assertions.assertThat(employeesList.size()).isGreaterThan(0);
 
@@ -61,12 +73,13 @@ public class RepositoryTests {
     @Test
     @Order(4)
     @Rollback(value = false)
+    @DisplayName("Update employee test")
     public void updateEmployeeTest() {
 
-        Employee employee = employeeRepository.findById(1).get();
+        var employee = employeeRepository.findById(1).orElseThrow();
 
         employee.setName("Martin");
-        Employee employeeUpdated = employeeRepository.save(employee);
+        var employeeUpdated = employeeRepository.save(employee);
 
         Assertions.assertThat(employeeUpdated.getName()).isEqualTo("Martin");
 
@@ -74,24 +87,33 @@ public class RepositoryTests {
 
     @Test
     @Order(5)
+    @DisplayName("Find employee by gender test")
+    public void findByGenderTest() {
+
+        var employees = employeeRepository.findByGender(Gender.M.toString(), "UK");
+
+        assertThat(employees.get(0).getGender()).isEqualTo(Gender.M);
+    }
+
+    @Test
+    @Order(6)
     @Rollback(value = false)
+    @DisplayName("Delete employee test")
     public void deleteEmployeeTest() {
 
-        Employee employee = employeeRepository.findById(1).get();
+        var employee = employeeRepository.findById(1).orElseThrow();
 
         employeeRepository.delete(employee);
 
-        //repository.deleteById(1L);
+        Employee employeeNull = null;
 
-        Employee employee1 = null;
+        var optionalEmployee = Optional.ofNullable(employeeRepository.findByName("Martin"));
 
-        Optional<Employee> optionalAuthor = Optional.ofNullable(employeeRepository.findByName("Martin"));
-
-        if (optionalAuthor.isPresent()) {
-            employee1 = optionalAuthor.get();
+        if (optionalEmployee.isPresent()) {
+            employeeNull = optionalEmployee.orElseThrow();
         }
 
-        Assertions.assertThat(employee1).isNull();
+        Assertions.assertThat(employeeNull).isNull();
     }
 
 }
