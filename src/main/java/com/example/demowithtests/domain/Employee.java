@@ -1,8 +1,6 @@
 package com.example.demowithtests.domain;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 
@@ -10,18 +8,20 @@ import javax.persistence.*;
 @Table(name = "users")
 @AllArgsConstructor
 @NoArgsConstructor
+@Setter
+@Getter
 @Builder
 public class Employee {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-
+    private boolean deleted;
     private String name;
     private String country;
     private String email;
 
-    public Integer getId() {
+   /* public Integer getId() {
         return id;
     }
 
@@ -52,5 +52,5 @@ public class Employee {
     public void setEmail(String email) {
         this.email = email;
     }
-
+*/
 }

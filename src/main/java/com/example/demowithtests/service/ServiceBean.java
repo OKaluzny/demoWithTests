@@ -24,17 +24,19 @@ public class ServiceBean implements Service {
 
     @Override
     public List<Employee> getAll() {
-        return repository.findAll();
+
+
+        return repository.findByDeleted(false);
     }
 
     @Override
     public Employee getById(Integer id) {
         Employee employee = repository.findById(id)
-               // .orElseThrow(() -> new EntityNotFoundException("Employee not found with id = " + id));
-                .orElseThrow(ResourceNotFoundException::new);
-         /*if (employee.getIsDeleted()) {
+               .orElseThrow(() -> new EntityNotFoundException("Employee not found with id = " + id));
+                //.orElseThrow(ResourceNotFoundException::new);
+        if (employee.isDeleted()) {
             throw new EntityNotFoundException("Employee was deleted with id = " + id);
-        }*/
+       }
         return employee;
     }
 
@@ -45,6 +47,7 @@ public class ServiceBean implements Service {
                     entity.setName(employee.getName());
                     entity.setEmail(employee.getEmail());
                     entity.setCountry(employee.getCountry());
+                    entity.setDeleted(employee.isDeleted());
                     return repository.save(entity);
                 })
                 .orElseThrow(() -> new EntityNotFoundException("Employee not found with id = " + id));
@@ -54,16 +57,21 @@ public class ServiceBean implements Service {
     public void removeById(Integer id) {
         //repository.deleteById(id);
         Employee employee = repository.findById(id)
-               // .orElseThrow(() -> new EntityNotFoundException("Employee not found with id = " + id));
-                .orElseThrow(ResourceWasDeletedException::new);
-        //employee.setIsDeleted(true);
-        repository.delete(employee);
-        //repository.save(employee);
+               .orElseThrow(() -> new EntityNotFoundException("Employee not found with id = " + id));
+               // .orElseThrow(ResourceWasDeletedException::new);
+        employee.setDeleted(true);
+        //repository.delete(employee);
+        repository.save(employee);
     }
 
     @Override
     public void removeAll() {
-        repository.deleteAll();
+        List<Employee> employees = repository.findAll();
+        for (Employee employee : employees) {
+            employee.setDeleted(true);
+        }
+
+        repository.saveAll(employees);
 
     }
 }
