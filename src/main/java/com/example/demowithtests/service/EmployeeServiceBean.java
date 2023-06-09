@@ -58,7 +58,8 @@ public class EmployeeServiceBean implements EmployeeService {
     @Override
     public Employee getById(Integer id) {
         idValidation(id);
-        return getCheckedEmployee(employeeRepository.findById(id));
+        Optional<Employee> employeeOpt = findEmployee(employeeRepository.findById(id));
+        return getNotDeletedEmployee(employeeOpt);
     }
 
     @Override
@@ -78,17 +79,25 @@ public class EmployeeServiceBean implements EmployeeService {
     }
 
     /**
-     * Метод проверяет наличие в БД Employee. Если он найден, то проверяет не ли он удален ранее
+     * Проверяет наличие в БД Employee
+     *
+     * @param employeeOptional, полученный из БД
+     * @return Optional<Employee>
+     * @throws ResourceNotFoundException, если записи нет в БД
+     */
+    private Optional<Employee> findEmployee(Optional<Employee> employeeOptional) throws ResourceNotFoundException {
+        return Optional.of(employeeOptional.orElseThrow(ResourceNotFoundException::new));
+    }
+
+    /**
+     * Проверяет, что переданный Employee не удален
      *
      * @param employeeOptional, полученный из БД
      * @return Employee
-     * @throws ResourceNotFoundException, если записи нет в БД
      * @throws EmployeeNotFoundException, если запись была ранее помечена is_deleted
      */
-    private Employee getCheckedEmployee(Optional<Employee> employeeOptional)
-            throws ResourceNotFoundException, EmployeeNotFoundException {
-        return Optional.of(employeeOptional.orElseThrow(ResourceNotFoundException::new))
-                .filter(emp -> !emp.isDeleted()).orElseThrow(EmployeeNotFoundException::new);
+    private Employee getNotDeletedEmployee(Optional<Employee> employeeOptional) throws EmployeeNotFoundException {
+        return employeeOptional.filter(emp -> !emp.isDeleted()).orElseThrow(EmployeeNotFoundException::new);
     }
 
     private void idValidation(Integer id) {
