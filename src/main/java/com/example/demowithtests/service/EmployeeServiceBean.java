@@ -2,8 +2,9 @@ package com.example.demowithtests.service;
 
 import com.example.demowithtests.domain.Employee;
 import com.example.demowithtests.repository.EmployeeRepository;
+import com.example.demowithtests.util.exception.InputParameterException;
 import com.example.demowithtests.util.exception.ResourceNotFoundException;
-import com.example.demowithtests.util.exception.ResourceWasDeletedException;
+import com.example.demowithtests.util.exception.EmployeeNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -11,11 +12,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
-import javax.persistence.EntityNotFoundException;
 import javax.persistence.PersistenceContext;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -59,42 +57,40 @@ public class EmployeeServiceBean implements EmployeeService {
 
     @Override
     public Employee getById(Integer id) {
-        var employee = employeeRepository.findById(id)
-                // .orElseThrow(() -> new EntityNotFoundException("Employee not found with id = " + id));
-                .orElseThrow(ResourceNotFoundException::new);
-        /* if (employee.getIsDeleted()) {
-            throw new EntityNotFoundException("Employee was deleted with id = " + id);
-        }*/
-        return employee;
+        idValidation(id);
+        return getCheckedEmployee(employeeRepository.findById(id));
     }
 
     @Override
     public Employee updateById(Integer id, Employee employee) {
-        return employeeRepository.findById(id)
-                .map(entity -> {
-                    entity.setName(employee.getName());
-                    entity.setEmail(employee.getEmail());
-                    entity.setCountry(employee.getCountry());
-                    return employeeRepository.save(entity);
-                })
-                .orElseThrow(() -> new EntityNotFoundException("Employee not found with id = " + id));
+        Employee empById = getById(id);
+        empById.setName(employee.getName());
+        empById.setEmail(employee.getEmail());
+        empById.setCountry(employee.getCountry());
+        return employeeRepository.save(empById);
     }
 
     @Override
     public void removeById(Integer id) {
-        //repository.deleteById(id);
-        var employee = employeeRepository.findById(id)
-                // .orElseThrow(() -> new EntityNotFoundException("Employee not found with id = " + id));
-                .orElseThrow(ResourceWasDeletedException::new);
-        //employee.setIsDeleted(true);
-        employeeRepository.delete(employee);
-        //repository.save(employee);
+        Employee employee = getById(id);
+        employee.setDeleted(true);
+        employeeRepository.save(employee);
     }
 
+    /**
+     * Метод проверяет наличие в БД Employee. Если он найден, то проверяет не ли он удален ранее
+     * @return Employee
+     */
+    private Employee getCheckedEmployee(Optional<Employee> employeeOptional) {
+        return Optional.of(employeeOptional.orElseThrow(ResourceNotFoundException::new))
+                .filter(emp -> !emp.isDeleted()).orElseThrow(EmployeeNotFoundException::new);
+    }
 
-
-
-
+    private void idValidation(Integer id) {
+        if (id <= 0) {
+            throw new InputParameterException();
+        }
+    }
 
 
    /* public boolean isValid(Employee employee) {
