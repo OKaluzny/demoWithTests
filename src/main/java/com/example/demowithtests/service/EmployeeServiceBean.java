@@ -2,9 +2,9 @@ package com.example.demowithtests.service;
 
 import com.example.demowithtests.domain.Employee;
 import com.example.demowithtests.repository.EmployeeRepository;
+import com.example.demowithtests.util.exception.EmployeeNotFoundException;
 import com.example.demowithtests.util.exception.InputParameterException;
 import com.example.demowithtests.util.exception.ResourceNotFoundException;
-import com.example.demowithtests.util.exception.EmployeeNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -32,7 +32,7 @@ public class EmployeeServiceBean implements EmployeeService {
     private EntityManager entityManager;
 
     @Override
-   // @Transactional(propagation = Propagation.MANDATORY)
+    // @Transactional(propagation = Propagation.MANDATORY)
     public Employee create(Employee employee) {
         return employeeRepository.save(employee);
     }
@@ -79,9 +79,14 @@ public class EmployeeServiceBean implements EmployeeService {
 
     /**
      * Метод проверяет наличие в БД Employee. Если он найден, то проверяет не ли он удален ранее
+     *
+     * @param employeeOptional, полученный из БД
      * @return Employee
+     * @throws ResourceNotFoundException, если записи нет в БД
+     * @throws EmployeeNotFoundException, если запись была ранее помечена is_deleted
      */
-    private Employee getCheckedEmployee(Optional<Employee> employeeOptional) {
+    private Employee getCheckedEmployee(Optional<Employee> employeeOptional)
+            throws ResourceNotFoundException, EmployeeNotFoundException {
         return Optional.of(employeeOptional.orElseThrow(ResourceNotFoundException::new))
                 .filter(emp -> !emp.isDeleted()).orElseThrow(EmployeeNotFoundException::new);
     }
