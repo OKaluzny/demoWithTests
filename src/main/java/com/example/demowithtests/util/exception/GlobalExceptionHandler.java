@@ -1,42 +1,41 @@
 package com.example.demowithtests.util.exception;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 
-import java.util.Date;
+import static com.example.demowithtests.util.exception.ErrorDetails.getResponseEntity;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(ResourceNotFoundException.class)
-    public ResponseEntity<?> resourceNotFoundException(ResourceNotFoundException ex, WebRequest request) {
-       /* ErrorDetails errorDetails = new ErrorDetails(new Date(), ex.getMessage(), request.getDescription(false));*/
-        ErrorDetails errorDetails =
-                new ErrorDetails(new Date(),
-                        "Employee not found with id =" + request.getDescription(true),//getParameter("id"),
-                        request.getDescription(false));
-        return new ResponseEntity<>(errorDetails, HttpStatus.NOT_FOUND);
+    public ResponseEntity<ErrorDetails> resourceNotFoundException(WebRequest request) {
+        String requestIdParam = request.getParameter("id");
+        String requestDescription = request.getDescription(false);
+        String requestId = requestIdParam != null
+                ? requestIdParam
+                : requestDescription.substring(requestDescription.lastIndexOf('/') +1);
+        String message = "Employee not found with id = " + requestId;
+        return getResponseEntity(message, request, HttpStatus.NOT_FOUND);
     }
 
-    @ExceptionHandler(ResourceWasDeletedException.class)
-    protected ResponseEntity<MyGlobalExceptionHandler> handleDeleteException() {
-        return new ResponseEntity<>(new MyGlobalExceptionHandler("This user was deleted"), HttpStatus.NOT_FOUND);
-    }
+//    @ExceptionHandler(ResourceWasDeletedException.class)
+//    protected ResponseEntity<MyGlobalExceptionHandler> handleDeleteException() {
+//        return new ResponseEntity<>(new MyGlobalExceptionHandler("This user was deleted"), HttpStatus.NOT_FOUND);
+//    }
 
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<?> globleExcpetionHandler(Exception ex, WebRequest request) {
-        ErrorDetails errorDetails = new ErrorDetails(new Date(), ex.getMessage(), request.getDescription(false));
-        return new ResponseEntity<>(errorDetails, HttpStatus.INTERNAL_SERVER_ERROR);
-    }
+//    @ExceptionHandler(Exception.class)
+//    public ResponseEntity<?> globleExcpetionHandler(Exception ex, WebRequest request) {
+//        ErrorDetails errorDetails = new ErrorDetails(new Date(), ex.getMessage(), request.getDescription(false));
+//        return new ResponseEntity<>(errorDetails, HttpStatus.INTERNAL_SERVER_ERROR);
+//    }
 
-    @Data
-    @AllArgsConstructor
-    private static class MyGlobalExceptionHandler {
-        private String message;
-    }
+//    @Data
+//    @AllArgsConstructor
+//    private static class MyGlobalExceptionHandler {
+//        private String message;
+//    }
 }
