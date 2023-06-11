@@ -211,17 +211,17 @@ public class EmployeeServiceBean implements EmployeeService {
 
     @Override
     public List<Employee> filterByCountry(String country) throws EmployeeNotFoundException {
-        return checkEmployeeListIsEmpty(employeeRepository.findByCountry(country));
+        return checkListIsEmpty(employeeRepository.findByCountry(country));
     }
 
     @Override
     public List<Employee> filterNullEmails() throws EmployeeNotFoundException {
-        return checkEmployeeListIsEmpty(employeeRepository.findAllByEmailNull());
+        return checkListIsEmpty(employeeRepository.findAllByEmailNull());
     }
 
     @Override
     public List<Employee> filterLowerCaseCountries() throws EmployeeNotFoundException {
-        return checkEmployeeListIsEmpty(employeeRepository.findAllLowerCaseCountries());
+        return checkListIsEmpty(employeeRepository.findAllLowerCaseCountries());
     }
 
     @Override
