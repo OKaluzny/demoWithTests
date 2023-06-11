@@ -5,10 +5,11 @@ import java.util.List;
 
 public interface EntityCheckingService<T> {
 
-    default List<T> checkEmployeeListIsEmpty(List<T> employeeList) {
+    default List<T> checkListIsEmpty(List<T> employeeList) {
         if (employeeList.isEmpty()) {
             throw new EntityNotFoundException();
         }
         return employeeList;
     }
 }
+
