@@ -4,7 +4,6 @@ import com.example.demowithtests.domain.Employee;
 import com.example.demowithtests.repository.EmployeeRepository;
 import com.example.demowithtests.util.exception.EmployeeNotFoundException;
 import com.example.demowithtests.util.exception.InputParameterException;
-import com.example.demowithtests.util.exception.LowerCaseCountriesNotFoundException;
 import com.example.demowithtests.util.exception.ResourceNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -13,7 +12,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -212,21 +210,17 @@ public class EmployeeServiceBean implements EmployeeService {
 
     @Override
     public List<Employee> filterByCountry(String country) {
-        return employeeRepository.findByCountry(country);
+        return checkEmployeeListIsEmpty(employeeRepository.findByCountry(country));
     }
 
     @Override
-    public List<Employee> filterNullEmails() {
-        return employeeRepository.findAllByEmailNull();
+    public List<Employee> filterNullEmails() throws EmployeeNotFoundException {
+        return checkEmployeeListIsEmpty(employeeRepository.findAllByEmailNull());
     }
 
     @Override
-    public List<Employee> filterLowerCaseCountries() throws LowerCaseCountriesNotFoundException {
-        List<Employee> lowerCaseCountries = employeeRepository.findAllLowerCaseCountries();
-        if (lowerCaseCountries.isEmpty()) {
-            throw new LowerCaseCountriesNotFoundException();
-        }
-        return lowerCaseCountries;
+    public List<Employee> filterLowerCaseCountries() throws EmployeeNotFoundException {
+        return checkEmployeeListIsEmpty(employeeRepository.findAllLowerCaseCountries());
     }
 
     @Override

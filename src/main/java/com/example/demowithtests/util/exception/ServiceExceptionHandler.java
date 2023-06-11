@@ -6,6 +6,8 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 
+import javax.persistence.EntityNotFoundException;
+
 import static com.example.demowithtests.util.exception.ErrorDetails.getResponseEntity;
 
 @ControllerAdvice
@@ -16,9 +18,9 @@ public class ServiceExceptionHandler {
         return getResponseEntity("This user was deleted", request, HttpStatus.NOT_FOUND);
     }
 
-    @ExceptionHandler(LowerCaseCountriesNotFoundException.class)
+    @ExceptionHandler(EntityNotFoundException.class)
     protected ResponseEntity<ErrorDetails> handleLowerCaseCountries(WebRequest request) {
-        return getResponseEntity("Lower case countries not found", request, HttpStatus.NOT_FOUND);
+        return getResponseEntity("No entities found", request, HttpStatus.NOT_FOUND);
     }
 
 }
