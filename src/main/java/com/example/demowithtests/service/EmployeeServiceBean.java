@@ -209,7 +209,7 @@ public class EmployeeServiceBean implements EmployeeService {
     }
 
     @Override
-    public List<Employee> filterByCountry(String country) {
+    public List<Employee> filterByCountry(String country) throws EmployeeNotFoundException {
         return checkEmployeeListIsEmpty(employeeRepository.findByCountry(country));
     }
 
