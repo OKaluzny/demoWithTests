@@ -43,7 +43,7 @@ public interface EmployeeRepository extends JpaRepository<Employee, Integer> {
     @Modifying
     @Transactional
     @Query(value = "update users " +
-            "set country = regexp_replace(country, \"left\"(country, 1), upper(\"left\"(country, 1))) " +
+            "set country = regexp_replace(country, left(country, 1), upper(left(country, 1))) " +
             "where country ~ '^[a-z]|^[а-я]'", nativeQuery = true)
     void updateLowerCaseCountriesToUpperCase();
 }
