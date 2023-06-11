@@ -27,6 +27,7 @@ import java.util.stream.Collectors;
 public class EmployeeServiceBean implements EmployeeService {
 
     private final EmployeeRepository employeeRepository;
+//    private final EntityCheckingService<Employee> entityCheckingService;
 
     @PersistenceContext
     private EntityManager entityManager;

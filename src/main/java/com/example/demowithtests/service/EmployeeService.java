@@ -8,7 +8,7 @@ import javax.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.Optional;
 
-public interface EmployeeService {
+public interface EmployeeService extends EntityCheckingService<Employee> {
 
     Employee create(Employee employee);
 
@@ -60,11 +60,4 @@ public interface EmployeeService {
     List<Employee> filterLowerCaseCountries();
 
     void updateLowerCaseCountriesToUpperCase();
-
-    default List<Employee> checkEmployeeListIsEmpty(List<Employee> employeeList) {
-        if (employeeList.isEmpty()) {
-            throw new EntityNotFoundException();
-        }
-        return employeeList;
-    }
 }
