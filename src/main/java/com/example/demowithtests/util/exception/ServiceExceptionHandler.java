@@ -16,4 +16,9 @@ public class ServiceExceptionHandler {
         return getResponseEntity("This user was deleted", request, HttpStatus.NOT_FOUND);
     }
 
+    @ExceptionHandler(LowerCaseCountriesNotFoundException.class)
+    protected ResponseEntity<ErrorDetails> handleLowerCaseCountries(WebRequest request) {
+        return getResponseEntity("Lower case countries not found", request, HttpStatus.NOT_FOUND);
+    }
+
 }
