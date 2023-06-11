@@ -148,4 +148,22 @@ public class EmployeeController {
     public List<Employee> getByCountry(@RequestParam(required = true) String country) {
         return employeeService.filterByCountry(country);
     }
+
+    @GetMapping("/employee/emails")
+    @ResponseStatus(HttpStatus.OK)
+    public List<Employee> getNullEmails() {
+        return employeeService.filterNullEmails();
+    }
+
+    @GetMapping("/employee/countries")
+    @ResponseStatus(HttpStatus.OK)
+    public List<Employee> getLowerCaseCountries() {
+        return employeeService.filterLowerCaseCountries();
+    }
+
+    @PatchMapping("/employee/countries")
+    @ResponseStatus(HttpStatus.OK)
+    public void updateLowerCaseCountriesToUpper() {
+        employeeService.updateLowerCaseCountriesToUpperCase();
+    }
 }

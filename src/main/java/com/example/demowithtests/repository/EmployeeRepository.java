@@ -4,8 +4,10 @@ import com.example.demowithtests.domain.Employee;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.validation.constraints.NotNull;
 import java.util.List;
@@ -33,4 +35,15 @@ public interface EmployeeRepository extends JpaRepository<Employee, Integer> {
 
     Page<Employee> findByCountryContaining(String country, Pageable pageable);
 
+    List<Employee> findAllByEmailNull();
+
+    @Query(value = "select * from users where country ~ '^[a-z]|^[а-я]'", nativeQuery = true)
+    List<Employee> findAllLowerCaseCountries();
+
+    @Modifying
+    @Transactional
+    @Query(value = "update users " +
+            "set country = regexp_replace(country, \"left\"(country, 1), upper(\"left\"(country, 1))) " +
+            "where country ~ '^[a-z]|^[а-я]'", nativeQuery = true)
+    void updateLowerCaseCountriesToUpperCase();
 }
