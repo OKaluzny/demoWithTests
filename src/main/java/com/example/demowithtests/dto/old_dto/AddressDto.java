@@ -1,4 +1,4 @@
-package com.example.demowithtests.dto;
+package com.example.demowithtests.dto.old_dto;
 
 import lombok.experimental.Accessors;
 
