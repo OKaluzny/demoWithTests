@@ -1,27 +1,36 @@
 package com.example.demowithtests.domain;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
-@Table(name = "users")
+@Table(name = "users_1")
 @AllArgsConstructor
 @NoArgsConstructor
-@Setter
-@Getter
 @Builder
 public class Employee {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    private boolean deleted;
     private String name;
-    private String country;
     private String email;
+    private String country;
+    private boolean deleted;
 
-   /* public Integer getId() {
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "employee_id")
+    private Set<Address> addresses = new HashSet<>();
+
+    @Enumerated(EnumType.STRING)
+    private Gender gender;
+
+    public Integer getId() {
         return id;
     }
 
@@ -45,6 +54,14 @@ public class Employee {
         this.country = country;
     }
 
+    public Set<Address> getAddresses() {
+        return addresses;
+    }
+
+    public void setAddresses(Set<Address> addresses) {
+        this.addresses = addresses;
+    }
+
     public String getEmail() {
         return email;
     }
@@ -52,5 +69,20 @@ public class Employee {
     public void setEmail(String email) {
         this.email = email;
     }
-*/
+
+    public Gender getGender() {
+        return gender;
+    }
+
+    public void setGender(Gender gender) {
+        this.gender = gender;
+    }
+
+    public boolean isDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
+    }
 }
