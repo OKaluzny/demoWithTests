@@ -1,6 +1,8 @@
 package com.example.demowithtests.dto;
 
 import com.example.demowithtests.domain.Gender;
+import com.example.demowithtests.util.annotations.dto.BlockedEmailDomains;
+import com.example.demowithtests.util.annotations.dto.CountryRightFormed;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 import javax.validation.constraints.Email;
@@ -20,10 +22,12 @@ public class EmployeeDto {
     public String name;
 
     @Schema(description = "Name of the country.", example = "England", required = true)
+    @CountryRightFormed
     public String country;
 
     @Email
     @NotNull
+    @BlockedEmailDomains(contains = {".com1", ".ru", ".su"})
     @Schema(description = "Email address of an employee.", example = "billys@mail.com", required = true)
     public String email;
 

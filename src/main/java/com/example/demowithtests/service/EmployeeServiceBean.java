@@ -2,6 +2,9 @@ package com.example.demowithtests.service;
 
 import com.example.demowithtests.domain.Employee;
 import com.example.demowithtests.repository.EmployeeRepository;
+import com.example.demowithtests.util.annotations.entity.ActivateCustomAnnotations;
+import com.example.demowithtests.util.annotations.entity.Name;
+import com.example.demowithtests.util.annotations.entity.ToLowerCase;
 import com.example.demowithtests.util.exception.ResourceNotFoundException;
 import com.example.demowithtests.util.exception.ResourceWasDeletedException;
 import lombok.extern.slf4j.Slf4j;
@@ -33,6 +36,7 @@ public class EmployeeServiceBean implements EmployeeService {
     }
 
     @Override
+    @ActivateCustomAnnotations({Name.class, ToLowerCase.class})
     // @Transactional(propagation = Propagation.MANDATORY)
     public Employee create(Employee employee) {
         return employeeRepository.save(employee);

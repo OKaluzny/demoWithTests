@@ -1,5 +1,7 @@
 package com.example.demowithtests.domain;
 
+import com.example.demowithtests.util.annotations.entity.Name;
+import com.example.demowithtests.util.annotations.entity.ToLowerCase;
 import lombok.*;
 
 import javax.persistence.*;
@@ -18,8 +20,10 @@ public final class Employee {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+    @Name
     private String name;
     private String country;
+    @ToLowerCase
     private String email;
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "employee_id")
