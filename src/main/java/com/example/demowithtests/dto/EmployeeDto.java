@@ -1,6 +1,5 @@
 package com.example.demowithtests.dto;
 
-import com.example.demowithtests.domain.Address;
 import com.example.demowithtests.domain.Gender;
 import io.swagger.v3.oas.annotations.media.Schema;
 

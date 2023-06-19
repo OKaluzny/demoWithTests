@@ -2,6 +2,7 @@ package com.example.demowithtests;
 
 import com.example.demowithtests.domain.Employee;
 import com.example.demowithtests.dto.EmployeeDto;
+import com.example.demowithtests.dto.EmployeeReadDto;
 import com.example.demowithtests.service.EmployeeService;
 import com.example.demowithtests.util.config.EmployeeConverter;
 import com.example.demowithtests.web.EmployeeController;
@@ -32,8 +33,8 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.*;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -60,25 +61,31 @@ public class ControllerTests {
     @DisplayName("POST /api/users")
     @WithMockUser(roles = "ADMIN")
     public void createPassTest() throws Exception {
+
         var response = new EmployeeDto();
         response.id = 1;
         response.name = "Mike";
         response.email = "mail@mail.com";
-        var employee = Employee.builder().id(1).name("Mike").email("mail@mail.com").build();
 
-        when(employeeConverter.toDto(any(Employee.class))).thenReturn(response);
+        var employee = Employee.builder()
+                .id(1)
+                .name("Mike")
+                .email("mail@mail.com").build();
+
         when(employeeConverter.fromDto(any(EmployeeDto.class))).thenReturn(employee);
+        when(employeeConverter.toDto(any(Employee.class))).thenReturn(response);
         when(service.create(any(Employee.class))).thenReturn(employee);
 
         MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders
                 .post("/api/users")
+                .with(csrf())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(mapper.writeValueAsString(employee));
 
         mockMvc.perform(mockRequest)
                 .andExpect(status().isCreated())
-               // .andExpect(jsonPath("$.id", is(1)));
-                       .andReturn();
+                .andExpect(jsonPath("$.id", is(1)))
+                .andExpect(jsonPath("$.name").value("Mike"));
 
         verify(service).create(any());
     }
@@ -87,10 +94,12 @@ public class ControllerTests {
     @DisplayName("Entity POST /api/users")
     @WithMockUser(roles = "ADMIN")
     public void testEntitySave() throws Exception {
+
         var employeeToBeReturn = Employee.builder()
                 .id(1)
                 .name("Mark")
                 .country("France").build();
+
         doReturn(employeeToBeReturn).when(service).create(any());
         when(this.service.create(any(Employee.class))).thenReturn(employeeToBeReturn);
         // Execute the POST request
@@ -101,7 +110,6 @@ public class ControllerTests {
         mockMvc
                 .perform(mockRequest)
                 .andExpect(status().isCreated())
-                //.andExpect(jsonPath("$.id", is(1)))
                 .andReturn().getResponse();
 
         verify(this.service, times(1)).create(any(Employee.class));
@@ -112,34 +120,39 @@ public class ControllerTests {
     @DisplayName("GET /api/users/{id}")
     @WithMockUser(roles = "USER")
     public void getPassByIdTest() throws Exception {
-        var response = new EmployeeDto();
+
+        var response = new EmployeeReadDto();
+        response.id = 1;
+        response.name = "Mike";
+
         var employee = Employee.builder()
                 .id(1)
                 .name("Mike")
                 .build();
 
-        when(employeeConverter.toDto(any(Employee.class))).thenReturn(response);
+        when(employeeConverter.toReadDto(any(Employee.class))).thenReturn(response);
         when(service.getById(1)).thenReturn(employee);
 
         MockHttpServletRequestBuilder mockRequest = get("/api/users/1");
 
         mockMvc.perform(mockRequest)
                 .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(1))
                 .andExpect(jsonPath("$.name", is("Mike")));
 
-        verify(service).getById(anyInt());
+        verify(service).getById(1);
     }
 
     @Test
     @DisplayName("PUT /api/users/{id}")
     @WithMockUser(roles = "ADMIN")
     public void updatePassByIdTest() throws Exception {
-        var response = new EmployeeDto();
-        response.id = 1;
+        //var response = new EmployeeDto();
+        //response.id = 1;
         var employee = Employee.builder().id(1).build();
 
-        when(employeeConverter.toDto(any(Employee.class))).thenReturn(response);
-        when(employeeConverter.fromDto(any(EmployeeDto.class))).thenReturn(employee);
+        //when(employeeConverter.toDto(any(Employee.class))).thenReturn(response);
+        //when(employeeConverter.fromDto(any(EmployeeDto.class))).thenReturn(employee);
         when(service.updateById(eq(1), any(Employee.class))).thenReturn(employee);
 
         MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders
@@ -178,6 +191,7 @@ public class ControllerTests {
         var employee1 = Employee.builder().id(1).name("John").country("US").build();
         var employee2 = Employee.builder().id(2).name("Jane").country("UK").build();
         var employee3 = Employee.builder().id(3).name("Bob").country("US").build();
+
         List<Employee> list = Arrays.asList(employee1, employee2, employee3);
         Page<Employee> employeesPage = new PageImpl<>(list);
         Pageable pageable = PageRequest.of(0, 5);

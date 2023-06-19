@@ -13,7 +13,6 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -33,7 +32,6 @@ public class EmployeeController {
     private final EmployeeService employeeService;
     private final EmployeeConverter converter;
 
-    //Операция сохранения юзера в базу данных
     @PostMapping("/users")
     @ResponseStatus(HttpStatus.CREATED)
     @Operation(summary = "This is endpoint to add a new employee.", description = "Create request to add a new employee.", tags = {"Employee"})
@@ -43,21 +41,20 @@ public class EmployeeController {
             @ApiResponse(responseCode = "404", description = "NOT FOUND. Specified employee request not found."),
             @ApiResponse(responseCode = "409", description = "Employee already exists")})
     public EmployeeDto saveEmployee(@RequestBody @Valid EmployeeDto requestForSave) {
-
-        var employee = converter.getMapperFacade().map(requestForSave, Employee.class);
+        log.debug("saveEmployee() - start: requestForSave = {}", requestForSave);
+        //var employee = converter.getMapperFacade().map(requestForSave, Employee.class);
+        var employee = converter.fromDto(requestForSave);
         var dto = converter.toDto(employeeService.create(employee));
-
+        log.debug("saveEmployee() - stop: dto = {}", dto);
         return dto;
     }
+
     @PostMapping("/usersS")
     @ResponseStatus(HttpStatus.CREATED)
     public void saveEmployee1(@RequestBody Employee employee) {
-
         employeeService.create(employee);
-
     }
 
-    //Получение списка юзеров
     @GetMapping("/users")
     @ResponseStatus(HttpStatus.OK)
     public List<Employee> getAllUsers() {
@@ -66,14 +63,15 @@ public class EmployeeController {
 
     @GetMapping("/users/p")
     @ResponseStatus(HttpStatus.OK)
-    public Page<Employee> getPage(@RequestParam(defaultValue = "0") int page,
-                                  @RequestParam(defaultValue = "5") int size
-    ) {
-        Pageable paging = PageRequest.of(page, size);
-        return employeeService.getAllWithPagination(paging);
+    public Page<Employee> getPage(
+            @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "5") int size) {
+        log.debug("getPage() - start: page= {}, size = {}", page, size);
+        var paging = PageRequest.of(page, size);
+        var content = employeeService.getAllWithPagination(paging);
+        log.debug("getPage() - end: content = {}", content);
+        return content;
     }
 
-    //Получения юзера по id
     @GetMapping("/users/{id}")
     @ResponseStatus(HttpStatus.OK)
     @Operation(summary = "This is endpoint returned a employee by his id.", description = "Create request to read a employee by id", tags = {"Employee"})
@@ -91,7 +89,6 @@ public class EmployeeController {
         return dto;
     }
 
-    //Обновление юзера
     @PutMapping("/users/{id}")
     @ResponseStatus(HttpStatus.OK)
     public Employee refreshEmployee(@PathVariable("id") Integer id, @RequestBody Employee employee) {
@@ -99,14 +96,12 @@ public class EmployeeController {
         return employeeService.updateById(id, employee);
     }
 
-    //Удаление по id
-    @PatchMapping("/users/{id}")
+    @DeleteMapping("/users/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void removeEmployeeById(@PathVariable Integer id) {
         employeeService.removeById(id);
     }
 
-    //Удаление всех юзеров
     @DeleteMapping("/users")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void removeAllUsers() {

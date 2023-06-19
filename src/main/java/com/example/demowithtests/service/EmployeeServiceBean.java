@@ -4,15 +4,12 @@ import com.example.demowithtests.domain.Employee;
 import com.example.demowithtests.repository.EmployeeRepository;
 import com.example.demowithtests.util.exception.ResourceNotFoundException;
 import com.example.demowithtests.util.exception.ResourceWasDeletedException;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityNotFoundException;
@@ -23,18 +20,20 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-@RequiredArgsConstructor
 @Slf4j
 @Service
 public class EmployeeServiceBean implements EmployeeService {
 
     private final EmployeeRepository employeeRepository;
-
     @PersistenceContext
     private EntityManager entityManager;
 
+    public EmployeeServiceBean(EmployeeRepository employeeRepository) {
+        this.employeeRepository = employeeRepository;
+    }
+
     @Override
-   // @Transactional(propagation = Propagation.MANDATORY)
+    // @Transactional(propagation = Propagation.MANDATORY)
     public Employee create(Employee employee) {
         return employeeRepository.save(employee);
     }
@@ -90,40 +89,6 @@ public class EmployeeServiceBean implements EmployeeService {
         employeeRepository.delete(employee);
         //repository.save(employee);
     }
-
-
-
-
-
-
-
-   /* public boolean isValid(Employee employee) {
-        String regex = "^[0-9]{10}$";
-        Pattern pattern = Pattern.compile(regex);
-        Matcher matcher = pattern.matcher(employee.getPhone());
-        boolean isFound = matcher.find();
-        if (isFound) {
-            System.out.println("Number is valid");
-            return true;
-        } else {
-            System.out.println("Number is invalid");
-            return false;
-        }
-    }*/
-
-    /*public boolean isVodafone(Employee employee) {
-        String regex = "^[0][9][5]{1}[0-9]{7}$";
-        Pattern pattern = Pattern.compile(regex);
-        Matcher matcher = pattern.matcher(employee.getPhone());
-        boolean isFound = matcher.find();
-        if (isFound) {
-            System.out.println("Number is Vodafone");
-            return true;
-        } else {
-            System.out.println("Number is not Vodafone");
-            return false;
-        }
-    }*/
 
     @Override
     public void removeAll() {
