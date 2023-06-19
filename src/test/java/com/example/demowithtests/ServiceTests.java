@@ -4,6 +4,7 @@ import com.example.demowithtests.domain.Employee;
 import com.example.demowithtests.domain.Gender;
 import com.example.demowithtests.repository.EmployeeRepository;
 import com.example.demowithtests.service.EmployeeServiceBean;
+import com.example.demowithtests.util.exception.EmployeeNotFoundException;
 import com.example.demowithtests.util.exception.ResourceNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -14,6 +15,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import javax.persistence.EntityNotFoundException;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -34,6 +37,7 @@ public class ServiceTests {
     private EmployeeServiceBean service;
 
     private Employee employee;
+    private List<Employee> employeeList;
 
     @BeforeEach
     void setUp() {
@@ -45,6 +49,22 @@ public class ServiceTests {
                 .email("test@mail.com")
                 .gender(Gender.M)
                 .build();
+
+        employeeList = List.of(
+                Employee.builder()
+                        .id(2)
+                        .name("isDeleted")
+                        .isDeleted(false)
+                        .build(),
+                Employee.builder()
+                        .name("NullEmail")
+                        .country("lowerCaseCountry")
+                        .isDeleted(false)
+                        .email(null)
+                        .addresses(null)
+                        .gender(null)
+                        .build()
+        );
     }
 
     @Test
@@ -100,9 +120,56 @@ public class ServiceTests {
     @Test
     @DisplayName("Delete employee test")
     public void deleteEmployeeTest() {
+        Employee employeeDeleted = employeeList.get(0);
 
-        when(employeeRepository.findById(employee.getId())).thenReturn(Optional.of(employee));
-        service.removeById(employee.getId());
-        verify(employeeRepository).delete(employee);
+        when(employeeRepository.findById(employeeDeleted.getId())).thenReturn(Optional.of(employeeDeleted));
+        when(employeeRepository.save(employeeDeleted)).thenReturn(employeeDeleted);
+
+        assertThat(service.getById(employeeDeleted.getId()).isDeleted()).isFalse();
+
+        service.removeById(employeeDeleted.getId());
+
+        assertThrows(EmployeeNotFoundException.class, () -> service.getById(employeeDeleted.getId()));
+
+        verify(employeeRepository).save(employeeDeleted);
+    }
+
+    @Test
+    @DisplayName("Filter employees with 'null' email test")
+    void filterNullEmailsTest() {
+
+        when(employeeRepository.findAllByEmailNull()).thenReturn(employeeList);
+        List<Employee> nullEmails = service.filterNullEmails();
+        assertThat(nullEmails).isNotEmpty();
+        assertThat(nullEmails.get(1).getEmail()).isNull();
+        assertThat(nullEmails.get(1).getName()).isEqualTo("NullEmail");
+        verify(employeeRepository).findAllByEmailNull();
+    }
+
+    @Test
+    @DisplayName("Filter employees with 'null' email exception test")
+    void filterNullEmailsThrowsTest() {
+
+        when(employeeRepository.findAllByEmailNull()).thenReturn(Collections.emptyList());
+        assertThrows(EntityNotFoundException.class, () -> service.filterNullEmails());
+    }
+
+    @Test
+    @DisplayName("Filter Employees with Lower Case Countries test")
+    void filterLowerCaseCountriesTest() {
+
+        when(employeeRepository.findAllLowerCaseCountries()).thenReturn(employeeList);
+        List<Employee> lowerCaseCountries = service.filterLowerCaseCountries();
+        assertThat(lowerCaseCountries).isNotEmpty();
+        assertThat(lowerCaseCountries.get(1).getCountry().charAt(0)).isLowerCase();
+        verify(employeeRepository).findAllLowerCaseCountries();
+    }
+
+    @Test
+    @DisplayName("Filter Employees with Lower Case Countries exception test")
+    void filterLowerCaseCountriesThrowsTest() {
+
+        when(employeeRepository.findAllLowerCaseCountries()).thenReturn(Collections.emptyList());
+        assertThrows(EntityNotFoundException.class, () -> service.filterLowerCaseCountries());
     }
 }
