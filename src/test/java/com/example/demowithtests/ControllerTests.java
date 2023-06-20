@@ -211,11 +211,9 @@ public class ControllerTests {
     @Test
     @DisplayName("GET /api/employee/emails")
     void getNullEmailsTest() throws Exception {
-        List<Employee> list = Collections.emptyList();
         List<EmployeeReadDto> listDto = List.of(EmployeeReadDto.builder().name("Name").email(null).build());
 
-        doReturn(listDto).when(employeeMapper).listToReadDto(list);
-        when(service.filterNullEmails()).thenReturn(list);
+        doReturn(listDto).when(employeeMapper).listToReadDto(anyList());
 
         mockMvc.perform(get("/api/employee/emails"))
                 .andExpect(status().isOk())
@@ -229,16 +227,14 @@ public class ControllerTests {
     @Test
     @DisplayName("GET /api/employee/countries")
     void getLowerCaseCountriesTest() throws Exception {
-        List<Employee> list = Collections.emptyList();
-        List<EmployeeReadDto> listDto = List.of(EmployeeReadDto.builder().name("Name").country("country").build());
+        List<EmployeeReadDto> listDto = List.of(EmployeeReadDto.builder().country("country").build());
 
-        doReturn(listDto).when(employeeMapper).listToReadDto(list);
-        when(service.filterLowerCaseCountries()).thenReturn(list);
+        doReturn(listDto).when(employeeMapper).listToReadDto(anyList());
 
         mockMvc.perform(get("/api/employee/countries"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$[0].name", is("Name")));
+                .andExpect(jsonPath("$[0].country", is("country")));
 
         verify(service).filterLowerCaseCountries();
     }
