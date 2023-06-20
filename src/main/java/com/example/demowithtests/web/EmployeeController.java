@@ -92,9 +92,9 @@ public class EmployeeController {
     //Обновление юзера
     @PutMapping("/users/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public EmployeeReadDtoRec refreshEmployee(@PathVariable("id") Integer id, @RequestBody @Valid EmployeeUpdateDtoRec employee) {
+    public EmployeeDtoRec refreshEmployee(@PathVariable("id") Integer id, @RequestBody @Valid EmployeeUpdateDtoRec employee) {
         Employee updateDtoToEntity = employeeMapper.updateDtoToEntity(employee);
-        return employeeMapper.toReadDto(employeeService.updateById(id, updateDtoToEntity));
+        return employeeMapper.toDto(employeeService.updateById(id, updateDtoToEntity));
     }
 
     //Удаление по id
