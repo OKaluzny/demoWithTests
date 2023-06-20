@@ -2,6 +2,7 @@ package com.example.demowithtests.dto;
 
 import com.example.demowithtests.domain.Gender;
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.Builder;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
@@ -10,6 +11,7 @@ import java.time.Instant;
 import java.util.Date;
 import java.util.Set;
 
+@Builder
 public record EmployeeReadDtoRec(
         @NotNull(message = "Name may not be null")
         @Size(min = 2, max = 32, message = "Name must be between 2 and 32 characters long")
