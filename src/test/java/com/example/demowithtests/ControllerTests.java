@@ -1,9 +1,11 @@
 package com.example.demowithtests;
 
 import com.example.demowithtests.domain.Employee;
-import com.example.demowithtests.dto.old_dto.EmployeeDto;
+import com.example.demowithtests.dto.employee.EmployeeDto;
+import com.example.demowithtests.dto.employee.EmployeeReadDto;
+import com.example.demowithtests.dto.employee.EmployeeUpdateDto;
 import com.example.demowithtests.service.EmployeeService;
-import com.example.demowithtests.util.config.EmployeeConverter;
+import com.example.demowithtests.util.mapper.EmployeeMapper;
 import com.example.demowithtests.web.EmployeeController;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
@@ -26,6 +28,7 @@ import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilde
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import static org.hamcrest.CoreMatchers.is;
@@ -35,8 +38,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @ExtendWith(SpringExtension.class)
 @ExtendWith(MockitoExtension.class)
@@ -51,7 +53,7 @@ public class ControllerTests {
     EmployeeService service;
 
     @MockBean
-    EmployeeConverter employeeConverter;
+    EmployeeMapper employeeMapper;
 
     @Autowired
     private MockMvc mockMvc;
@@ -60,14 +62,15 @@ public class ControllerTests {
     @DisplayName("POST /api/users")
     @WithMockUser(roles = "ADMIN")
     public void createPassTest() throws Exception {
-        var response = new EmployeeDto();
-        response.id = 1;
-        response.name = "Mike";
-        response.email = "mail@mail.com";
+        var response = EmployeeDto.builder()
+                .id(1)
+                .name("Mike")
+                .email("mail@mail.com")
+                .build();
         var employee = Employee.builder().id(1).name("Mike").email("mail@mail.com").build();
 
-        when(employeeConverter.toDto(any(Employee.class))).thenReturn(response);
-        when(employeeConverter.fromDto(any(EmployeeDto.class))).thenReturn(employee);
+        when(employeeMapper.toDto(any(Employee.class))).thenReturn(response);
+        when(employeeMapper.toEntity(any(EmployeeDto.class))).thenReturn(employee);
         when(service.create(any(Employee.class))).thenReturn(employee);
 
         MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders
@@ -77,8 +80,8 @@ public class ControllerTests {
 
         mockMvc.perform(mockRequest)
                 .andExpect(status().isCreated())
-               // .andExpect(jsonPath("$.id", is(1)));
-                       .andReturn();
+                // .andExpect(jsonPath("$.id", is(1)));
+                .andReturn();
 
         verify(service).create(any());
     }
@@ -104,7 +107,7 @@ public class ControllerTests {
                 //.andExpect(jsonPath("$.id", is(1)))
                 .andReturn().getResponse();
 
-        verify(this.service, times(1)).create(any(Employee.class));
+        verify(this.service, times(1)).create(any());
         verifyNoMoreInteractions(this.service);
     }
 
@@ -112,13 +115,16 @@ public class ControllerTests {
     @DisplayName("GET /api/users/{id}")
     @WithMockUser(roles = "USER")
     public void getPassByIdTest() throws Exception {
-        var response = new EmployeeDto();
+        var response = EmployeeReadDto.builder()
+                .name("Mike")
+                .build();
+
         var employee = Employee.builder()
                 .id(1)
                 .name("Mike")
                 .build();
 
-        when(employeeConverter.toDto(any(Employee.class))).thenReturn(response);
+        when(employeeMapper.toReadDto(any(Employee.class))).thenReturn(response);
         when(service.getById(1)).thenReturn(employee);
 
         MockHttpServletRequestBuilder mockRequest = get("/api/users/1");
@@ -134,12 +140,15 @@ public class ControllerTests {
     @DisplayName("PUT /api/users/{id}")
     @WithMockUser(roles = "ADMIN")
     public void updatePassByIdTest() throws Exception {
-        var response = new EmployeeDto();
-        response.id = 1;
-        var employee = Employee.builder().id(1).build();
+        var response = EmployeeDto.builder().id(1).build();
+        var employee = Employee.builder().id(1)
+                .name("Billy")
+                .email("billys@mail.com")
+                .country("England")
+                .build();
 
-        when(employeeConverter.toDto(any(Employee.class))).thenReturn(response);
-        when(employeeConverter.fromDto(any(EmployeeDto.class))).thenReturn(employee);
+        when(employeeMapper.toDto(any(Employee.class))).thenReturn(response);
+        when(employeeMapper.updateDtoToEntity(any(EmployeeUpdateDto.class))).thenReturn(employee);
         when(service.updateById(eq(1), any(Employee.class))).thenReturn(employee);
 
         MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders
@@ -199,4 +208,38 @@ public class ControllerTests {
         assertNotNull(responseContent);
     }
 
+    @Test
+    @DisplayName("GET /api/employee/emails")
+    void getNullEmailsTest() throws Exception {
+        List<Employee> list = Collections.emptyList();
+        List<EmployeeReadDto> listDto = List.of(EmployeeReadDto.builder().name("Name").email(null).build());
+
+        doReturn(listDto).when(employeeMapper).listToReadDto(list);
+        when(service.filterNullEmails()).thenReturn(list);
+
+        mockMvc.perform(get("/api/employee/emails"))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$[0].name", is("Name")))
+                .andReturn();
+
+        verify(service).filterNullEmails();
+    }
+
+    @Test
+    @DisplayName("GET /api/employee/countries")
+    void getLowerCaseCountriesTest() throws Exception {
+        List<Employee> list = Collections.emptyList();
+        List<EmployeeReadDto> listDto = List.of(EmployeeReadDto.builder().name("Name").country("country").build());
+
+        doReturn(listDto).when(employeeMapper).listToReadDto(list);
+        when(service.filterLowerCaseCountries()).thenReturn(list);
+
+        mockMvc.perform(get("/api/employee/countries"))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$[0].name", is("Name")));
+
+        verify(service).filterLowerCaseCountries();
+    }
 }
