@@ -13,19 +13,20 @@ import org.springframework.stereotype.Component;
 @Component
 public class LoggingControllerClassesAspect {
 
-    @Pointcut("execution(public * com.example.demowithtests.web.*.*.*(..))")
+    @Pointcut("execution(public * com.example.demowithtests.web.EmployeeController.*(..))")
     public void callAtMyControllersPublicMethods() {
     }
 
     @Before("callAtMyControllersPublicMethods()")
     public void logBefore(JoinPoint joinPoint) {
         String methodName = joinPoint.getSignature().toShortString();
-        log.info("Controller: " + methodName + " - start.");
+        //log.info("Controller: " + methodName + " - start.");
+        log.info("\u001B[32m" + "Controller: " + methodName + " - start." + "\u001B[0m");
     }
 
     @AfterReturning(value = "callAtMyControllersPublicMethods()")
     public void logAfter(JoinPoint joinPoint) {
         String methodName = joinPoint.getSignature().toShortString();
-        log.info("Controller: " + methodName + " - end.");
+        log.info("\u001B[32m" + "Controller: " + methodName + " - end." + "\u001B[0m");
     }
 }

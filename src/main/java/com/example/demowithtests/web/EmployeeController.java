@@ -65,10 +65,10 @@ public class EmployeeController {
     @ResponseStatus(HttpStatus.OK)
     public Page<Employee> getPage(
             @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "5") int size) {
-        log.debug("getPage() - start: page= {}, size = {}", page, size);
+        //log.debug("getPage() - start: page= {}, size = {}", page, size);
         var paging = PageRequest.of(page, size);
         var content = employeeService.getAllWithPagination(paging);
-        log.debug("getPage() - end: content = {}", content);
+        //log.debug("getPage() - end: content = {}", content);
         return content;
     }
 
