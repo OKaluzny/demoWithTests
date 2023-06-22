@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @RestController
 @AllArgsConstructor
@@ -142,5 +143,11 @@ public class EmployeeController {
     @ResponseStatus(HttpStatus.OK)
     public List<Employee> getByCountry(@RequestParam(required = true) String country) {
         return employeeService.filterByCountry(country);
+    }
+
+    @PatchMapping("/users/ukrainians")
+    @ResponseStatus(HttpStatus.OK)
+    public Set<String> sendEmailsAllUkrainian() {
+        return employeeService.sendEmailsAllUkrainian();
     }
 }

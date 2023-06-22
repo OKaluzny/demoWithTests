@@ -2,11 +2,13 @@ package com.example.demowithtests.service;
 
 import com.example.demowithtests.domain.Employee;
 import com.example.demowithtests.repository.EmployeeRepository;
+import com.example.demowithtests.service.emailSevice.EmailSenderService;
 import com.example.demowithtests.util.annotations.entity.ActivateCustomAnnotations;
 import com.example.demowithtests.util.annotations.entity.Name;
 import com.example.demowithtests.util.annotations.entity.ToLowerCase;
 import com.example.demowithtests.util.exception.ResourceNotFoundException;
 import com.example.demowithtests.util.exception.ResourceWasDeletedException;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -17,23 +19,20 @@ import org.springframework.stereotype.Service;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityNotFoundException;
 import javax.persistence.PersistenceContext;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Slf4j
+@AllArgsConstructor
 @Service
 public class EmployeeServiceBean implements EmployeeService {
 
     private final EmployeeRepository employeeRepository;
+    private final EmailSenderService emailSenderService;
+
     @PersistenceContext
     private EntityManager entityManager;
 
-    public EmployeeServiceBean(EmployeeRepository employeeRepository) {
-        this.employeeRepository = employeeRepository;
-    }
 
     @Override
     @ActivateCustomAnnotations({Name.class, ToLowerCase.class})
@@ -170,5 +169,30 @@ public class EmployeeServiceBean implements EmployeeService {
     @Override
     public List<Employee> filterByCountry(String country) {
         return employeeRepository.findByCountry(country);
+    }
+
+    @Override
+    public Set<String> sendEmailsAllUkrainian() {
+        var ukrainians = employeeRepository.findAllUkrainian()
+                .orElseThrow(() -> new EntityNotFoundException("Employees from Ukraine not found!"));
+        var emails = new HashSet<String>();
+        ukrainians.forEach(employee -> {
+            emailSenderService.sendEmail(
+                    /*employee.getEmail(),*/
+                    "kaluzny.oleg@gmail.com", //для тесту
+                    "Need to update your information",
+                    String.format(
+                            "Dear " + employee.getName() + "!\n" +
+                                    "\n" +
+                                    "The expiration date of your information is coming up soon. \n" +
+                                    "Please. Don't delay in updating it. \n" +
+                                    "\n" +
+                                    "Best regards,\n" +
+                                    "Ukrainian Info Service.")
+            );
+            emails.add(employee.getEmail());
+        });
+
+        return emails;
     }
 }

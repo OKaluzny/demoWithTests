@@ -6,6 +6,7 @@ import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 public interface EmployeeService {
 
@@ -53,5 +54,7 @@ public interface EmployeeService {
     Optional<String> findEmails();
 
     List<Employee> filterByCountry(String country);
+
+    Set<String> sendEmailsAllUkrainian();
 
 }

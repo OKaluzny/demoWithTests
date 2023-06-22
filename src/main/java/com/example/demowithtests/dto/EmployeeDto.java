@@ -22,7 +22,6 @@ public class EmployeeDto {
     public String name;
 
     @Schema(description = "Name of the country.", example = "England", required = true)
-    @CountryRightFormed
     public String country;
 
     @Email

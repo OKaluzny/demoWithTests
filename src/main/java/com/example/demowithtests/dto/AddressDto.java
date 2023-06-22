@@ -1,6 +1,6 @@
 package com.example.demowithtests.dto;
 
-import lombok.experimental.Accessors;
+import com.example.demowithtests.util.annotations.dto.CountryRightFormed;
 
 import java.time.Instant;
 import java.util.Date;
@@ -12,6 +12,7 @@ public class AddressDto {
 
     public Boolean addressHasActive = Boolean.TRUE;
 
+    @CountryRightFormed
     public String country;
 
     public String city;
