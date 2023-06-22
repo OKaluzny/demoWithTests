@@ -1,7 +1,7 @@
 package com.example.demowithtests;
 
 import com.example.demowithtests.domain.Employee;
-import com.example.demowithtests.dto.EmployeeDto;
+import com.example.demowithtests.dto.old_dto.EmployeeDto;
 import com.example.demowithtests.service.EmployeeService;
 import com.example.demowithtests.util.config.EmployeeConverter;
 import com.example.demowithtests.web.EmployeeController;

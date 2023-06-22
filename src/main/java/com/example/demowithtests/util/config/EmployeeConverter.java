@@ -1,8 +1,8 @@
 package com.example.demowithtests.util.config;
 
 import com.example.demowithtests.domain.Employee;
-import com.example.demowithtests.dto.EmployeeDto;
-import com.example.demowithtests.dto.EmployeeReadDto;
+import com.example.demowithtests.dto.old_dto.EmployeeDto;
+import com.example.demowithtests.dto.old_dto.EmployeeReadDto;
 import ma.glasnost.orika.MapperFacade;
 import org.springframework.stereotype.Component;
 

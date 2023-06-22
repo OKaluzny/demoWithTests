@@ -17,7 +17,7 @@
     <description>demoWithTests</description>
 
     <properties>
-        <java.version>11</java.version>
+        <java.version>17</java.version>
     </properties>
 
     <dependencies>
@@ -127,13 +127,13 @@
         <dependency>
             <groupId>org.mapstruct</groupId>
             <artifactId>mapstruct</artifactId>
-            <version>1.5.1.Final</version>
+            <version>1.5.3.Final</version>
         </dependency>
         <!-- mapstruct-processor -->
         <dependency>
             <groupId>org.mapstruct</groupId>
             <artifactId>mapstruct-processor</artifactId>
-            <version>1.5.1.Final</version>
+            <version>1.5.3.Final</version>
         </dependency>
 
     </dependencies>
