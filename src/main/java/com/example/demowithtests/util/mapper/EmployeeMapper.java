@@ -1,9 +1,9 @@
 package com.example.demowithtests.util.mapper;
 
 import com.example.demowithtests.domain.Employee;
-import com.example.demowithtests.dto.EmployeeDtoRec;
-import com.example.demowithtests.dto.EmployeeReadDtoRec;
-import com.example.demowithtests.dto.EmployeeUpdateDtoRec;
+import com.example.demowithtests.dto.employee.EmployeeDto;
+import com.example.demowithtests.dto.employee.EmployeeReadDto;
+import com.example.demowithtests.dto.employee.EmployeeUpdateDto;
 import org.mapstruct.InheritInverseConfiguration;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
@@ -17,14 +17,14 @@ import java.util.List;
 public interface EmployeeMapper {
     EmployeeMapper INSTANCE = Mappers.getMapper(EmployeeMapper.class);
 
-    EmployeeReadDtoRec toReadDto(Employee entity);
-    EmployeeDtoRec toDto(Employee entity);
+    EmployeeReadDto toReadDto(Employee entity);
+    EmployeeDto toDto(Employee entity);
     @InheritInverseConfiguration
-    Employee toEntity(EmployeeDtoRec dto);
+    Employee toEntity(EmployeeDto dto);
 
-    Employee updateDtoToEntity(EmployeeUpdateDtoRec dto);
+    Employee updateDtoToEntity(EmployeeUpdateDto dto);
 
-    List<EmployeeReadDtoRec> listToReadDto(List<Employee> entityList);
+    List<EmployeeReadDto> listToReadDto(List<Employee> entityList);
     @InheritInverseConfiguration
-    List<Employee> listToDomain(List<EmployeeDtoRec> entityList);
+    List<Employee> listToDomain(List<EmployeeDto> entityList);
 }

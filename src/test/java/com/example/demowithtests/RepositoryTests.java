@@ -9,8 +9,10 @@ import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.annotation.Rollback;
+import org.springframework.test.context.event.annotation.BeforeTestMethod;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -46,6 +48,8 @@ public class RepositoryTests {
         Assertions.assertThat(employee.getId()).isGreaterThan(0);
         Assertions.assertThat(employee.getId()).isEqualTo(1);
         Assertions.assertThat(employee.getName()).isEqualTo("Mark");
+
+        employeeRepository.saveAll(addEmployeesIntoDB());
     }
 
     @Test
@@ -116,4 +120,47 @@ public class RepositoryTests {
         Assertions.assertThat(employeeNull).isNull();
     }
 
+    @Test
+    @Order(7)
+    @DisplayName("Find employee by 'null' email test")
+    void findByEmailThatNullTest() {
+        List<Employee> allByEmailNull = employeeRepository.findAllByEmailNull();
+
+        assertThat(allByEmailNull).isNotEmpty();
+        assertThat(allByEmailNull.get(0).getEmail()).isNull();
+        assertThat(allByEmailNull.get(0).getName()).isEqualTo("NullEmail");
+    }
+
+    @Test
+    @Order(8)
+    @DisplayName("Find all employees by lower case country test")
+    void findAllLowerCaseCountriesTest() {
+        List<Employee> lowerCaseCountries = employeeRepository.findAllLowerCaseCountries();
+
+        assertThat(lowerCaseCountries).isNotEmpty();
+        assertThat(lowerCaseCountries.get(0).getCountry().charAt(0)).isLowerCase();
+    }
+
+    @Test
+    @Order(9)
+    @DisplayName("Update Lower case countries to Upper case")
+    void updateLowerCaseCountriesToUpperCaseTest() {
+        employeeRepository.updateLowerCaseCountriesToUpperCase();
+
+        List<Employee> lowerCaseCountries = employeeRepository.findAllLowerCaseCountries();
+
+        assertThat(lowerCaseCountries).isEmpty();
+    }
+
+    private List<Employee> addEmployeesIntoDB() {
+        return List.of(
+                Employee.builder()
+                        .name("NullEmail")
+                        .country("lowerCaseCountry")
+                        .email(null)
+                        .addresses(null)
+                        .gender(null)
+                        .build()
+        );
+    }
 }

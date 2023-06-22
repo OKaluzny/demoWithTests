@@ -1,7 +1,9 @@
-package com.example.demowithtests.dto;
+package com.example.demowithtests.dto.employee;
 
 import com.example.demowithtests.domain.Gender;
+import com.example.demowithtests.dto.AddressDto;
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.Builder;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
@@ -10,7 +12,8 @@ import javax.validation.constraints.Size;
 import java.time.Instant;
 import java.util.Set;
 
-public record EmployeeDtoRec(
+@Builder
+public record EmployeeDto(
         @Positive
         Integer id,
 
@@ -29,9 +32,9 @@ public record EmployeeDtoRec(
 
         Gender gender,
         Instant startDate,
-        Set<AddressDtoRec> addresses) {
+        Set<AddressDto> addresses) {
 
-    public EmployeeDtoRec {
+    public EmployeeDto {
         startDate = Instant.now();
     }
 }

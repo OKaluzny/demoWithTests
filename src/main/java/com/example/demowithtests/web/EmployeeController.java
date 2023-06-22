@@ -1,7 +1,9 @@
 package com.example.demowithtests.web;
 
 import com.example.demowithtests.domain.Employee;
-import com.example.demowithtests.dto.*;
+import com.example.demowithtests.dto.employee.EmployeeDto;
+import com.example.demowithtests.dto.employee.EmployeeReadDto;
+import com.example.demowithtests.dto.employee.EmployeeUpdateDto;
 import com.example.demowithtests.service.EmployeeService;
 import com.example.demowithtests.util.mapper.EmployeeMapper;
 import io.swagger.v3.oas.annotations.Operation;
@@ -41,7 +43,7 @@ public class EmployeeController {
             @ApiResponse(responseCode = "400", description = "Invalid input"),
             @ApiResponse(responseCode = "404", description = "NOT FOUND. Specified employee request not found."),
             @ApiResponse(responseCode = "409", description = "Employee already exists")})
-    public EmployeeReadDtoRec saveEmployee(@RequestBody @Valid EmployeeDtoRec requestForSave) {
+    public EmployeeReadDto saveEmployee(@RequestBody @Valid EmployeeDto requestForSave) {
 
         var employee = employeeMapper.toEntity(requestForSave);
         return employeeMapper.toReadDto(employeeService.create(employee));
@@ -49,7 +51,7 @@ public class EmployeeController {
 
     @PostMapping("/usersS")
     @ResponseStatus(HttpStatus.CREATED)
-    public void saveEmployee1(@RequestBody EmployeeDtoRec employee) {
+    public void saveEmployee1(@RequestBody EmployeeDto employee) {
 
         employeeService.create(employeeMapper.toEntity(employee));
 
@@ -58,14 +60,14 @@ public class EmployeeController {
     //Получение списка юзеров
     @GetMapping("/users")
     @ResponseStatus(HttpStatus.OK)
-    public List<EmployeeReadDtoRec> getAllUsers() {
+    public List<EmployeeReadDto> getAllUsers() {
         return employeeMapper.listToReadDto(employeeService.getAll());
     }
 
     @GetMapping("/users/p")
     @ResponseStatus(HttpStatus.OK)
-    public Page<EmployeeReadDtoRec> getPage(@RequestParam(defaultValue = "0") int page,
-                                            @RequestParam(defaultValue = "5") int size
+    public Page<EmployeeReadDto> getPage(@RequestParam(defaultValue = "0") int page,
+                                         @RequestParam(defaultValue = "5") int size
     ) {
         Pageable paging = PageRequest.of(page, size);
         return employeeService.getAllWithPagination(paging).map(employeeMapper::toReadDto);
@@ -80,7 +82,7 @@ public class EmployeeController {
             @ApiResponse(responseCode = "400", description = "Invalid input"),
             @ApiResponse(responseCode = "404", description = "NOT FOUND. Specified employee request not found."),
             @ApiResponse(responseCode = "409", description = "Employee already exists")})
-    public EmployeeReadDtoRec getEmployeeById(@PathVariable Integer id) {
+    public EmployeeReadDto getEmployeeById(@PathVariable Integer id) {
         log.debug("getEmployeeById() EmployeeController - start: id = {}", id);
         var employee = employeeService.getById(id);
         log.debug("getById() EmployeeController - to dto start: id = {}", id);
@@ -92,9 +94,9 @@ public class EmployeeController {
     //Обновление юзера
     @PutMapping("/users/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public EmployeeReadDtoRec refreshEmployee(@PathVariable("id") Integer id, @RequestBody @Valid EmployeeUpdateDtoRec employee) {
+    public EmployeeDto refreshEmployee(@PathVariable("id") Integer id, @RequestBody @Valid EmployeeUpdateDto employee) {
         Employee updateDtoToEntity = employeeMapper.updateDtoToEntity(employee);
-        return employeeMapper.toReadDto(employeeService.updateById(id, updateDtoToEntity));
+        return employeeMapper.toDto(employeeService.updateById(id, updateDtoToEntity));
     }
 
     //Удаление по id
@@ -113,11 +115,11 @@ public class EmployeeController {
 
     @GetMapping("/users/country")
     @ResponseStatus(HttpStatus.OK)
-    public Page<EmployeeReadDtoRec> findByCountry(@RequestParam(required = false) String country,
-                                                  @RequestParam(defaultValue = "0") int page,
-                                                  @RequestParam(defaultValue = "3") int size,
-                                                  @RequestParam(defaultValue = "") List<String> sortList,
-                                                  @RequestParam(defaultValue = "DESC") Sort.Direction sortOrder) {
+    public Page<EmployeeReadDto> findByCountry(@RequestParam(required = false) String country,
+                                               @RequestParam(defaultValue = "0") int page,
+                                               @RequestParam(defaultValue = "3") int size,
+                                               @RequestParam(defaultValue = "") List<String> sortList,
+                                               @RequestParam(defaultValue = "DESC") Sort.Direction sortOrder) {
         //Pageable paging = PageRequest.of(page, size);
         //Pageable paging = PageRequest.of(page, size, Sort.by("name").ascending());
         return employeeService.findByCountryContaining(country, page, size, sortList, sortOrder.toString())
@@ -144,19 +146,19 @@ public class EmployeeController {
 
     @GetMapping("/users/countryBy")
     @ResponseStatus(HttpStatus.OK)
-    public List<EmployeeReadDtoRec> getByCountry(@RequestParam(required = true) String country) {
+    public List<EmployeeReadDto> getByCountry(@RequestParam(required = true) String country) {
         return employeeMapper.listToReadDto(employeeService.filterByCountry(country));
     }
 
     @GetMapping("/employee/emails")
     @ResponseStatus(HttpStatus.OK)
-    public List<EmployeeReadDtoRec> getNullEmails() {
+    public List<EmployeeReadDto> getNullEmails() {
         return employeeMapper.listToReadDto(employeeService.filterNullEmails());
     }
 
     @GetMapping("/employee/countries")
     @ResponseStatus(HttpStatus.OK)
-    public List<EmployeeReadDtoRec> getLowerCaseCountries() {
+    public List<EmployeeReadDto> getLowerCaseCountries() {
         return employeeMapper.listToReadDto(employeeService.filterLowerCaseCountries());
     }
 

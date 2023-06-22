@@ -1,13 +1,15 @@
-package com.example.demowithtests.dto;
+package com.example.demowithtests.dto.employee;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.Builder;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.Instant;
 
-public record EmployeeUpdateDtoRec(
+@Builder
+public record EmployeeUpdateDto(
         @NotNull
         @Size(min = 2, max = 32, message = "Name must be between 2 and 32 characters long")
         @Schema(description = "Name of an employee.", example = "Billy", required = true)
@@ -24,7 +26,7 @@ public record EmployeeUpdateDtoRec(
         Instant updateDate
 ) {
 
-    public EmployeeUpdateDtoRec {
+    public EmployeeUpdateDto {
         updateDate = Instant.now();
     }
 }
