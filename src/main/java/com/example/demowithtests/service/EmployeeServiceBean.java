@@ -2,6 +2,9 @@ package com.example.demowithtests.service;
 
 import com.example.demowithtests.domain.Employee;
 import com.example.demowithtests.repository.EmployeeRepository;
+import com.example.demowithtests.util.annotations.entity.ActivateCustomAnnotations;
+import com.example.demowithtests.util.annotations.entity.Name;
+import com.example.demowithtests.util.annotations.entity.ToLowerCase;
 import com.example.demowithtests.util.exception.EmployeeNotFoundException;
 import com.example.demowithtests.util.exception.InputParameterException;
 import com.example.demowithtests.util.exception.ResourceNotFoundException;
@@ -33,6 +36,7 @@ public class EmployeeServiceBean implements EmployeeService {
     private EntityManager entityManager;
 
     @Override
+    @ActivateCustomAnnotations({Name.class, ToLowerCase.class})
     // @Transactional(propagation = Propagation.MANDATORY)
     public Employee create(Employee employee) {
         return employeeRepository.save(employee);
@@ -50,9 +54,9 @@ public class EmployeeServiceBean implements EmployeeService {
 
     @Override
     public Page<Employee> getAllWithPagination(Pageable pageable) {
-        log.debug("getAllWithPagination() - start: pageable = {}", pageable);
+        //log.debug("getAllWithPagination() - start: pageable = {}", pageable);
         Page<Employee> list = employeeRepository.findAll(pageable);
-        log.debug("getAllWithPagination() - end: list = {}", list);
+        //log.debug("getAllWithPagination() - end: list = {}", list);
         return list;
     }
 
