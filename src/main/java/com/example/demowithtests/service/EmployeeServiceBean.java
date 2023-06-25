@@ -17,6 +17,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManager;
+import javax.persistence.EntityNotFoundException;
 import javax.persistence.PersistenceContext;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -215,17 +216,17 @@ public class EmployeeServiceBean implements EmployeeService {
 
     @Override
     public List<Employee> filterByCountry(String country) throws EmployeeNotFoundException {
-        return checkListIsEmpty(employeeRepository.findByCountry(country));
+        return employeeRepository.findByCountry(country).orElseThrow(EntityNotFoundException::new);
     }
 
     @Override
     public List<Employee> filterNullEmails() throws EmployeeNotFoundException {
-        return checkListIsEmpty(employeeRepository.findAllByEmailNull());
+        return employeeRepository.findAllByEmailNull().orElseThrow(EntityNotFoundException::new);
     }
 
     @Override
     public List<Employee> filterLowerCaseCountries() throws EmployeeNotFoundException {
-        return checkListIsEmpty(employeeRepository.findAllLowerCaseCountries());
+        return employeeRepository.findAllLowerCaseCountries().orElseThrow(EntityNotFoundException::new);
     }
 
     @Override

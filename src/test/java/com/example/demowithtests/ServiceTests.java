@@ -138,7 +138,7 @@ public class ServiceTests {
     @DisplayName("Filter employees with 'null' email test")
     void filterNullEmailsTest() {
 
-        when(employeeRepository.findAllByEmailNull()).thenReturn(employeeList);
+        when(employeeRepository.findAllByEmailNull().orElseThrow()).thenReturn(employeeList);
         List<Employee> nullEmails = service.filterNullEmails();
         assertThat(nullEmails).isNotEmpty();
         assertThat(nullEmails.get(1).getEmail()).isNull();
@@ -150,7 +150,7 @@ public class ServiceTests {
     @DisplayName("Filter employees with 'null' email exception test")
     void filterNullEmailsThrowsTest() {
 
-        when(employeeRepository.findAllByEmailNull()).thenReturn(Collections.emptyList());
+        when(employeeRepository.findAllByEmailNull().orElseThrow()).thenReturn(Collections.emptyList());
         assertThrows(EntityNotFoundException.class, () -> service.filterNullEmails());
     }
 
@@ -158,7 +158,7 @@ public class ServiceTests {
     @DisplayName("Filter Employees with Lower Case Countries test")
     void filterLowerCaseCountriesTest() {
 
-        when(employeeRepository.findAllLowerCaseCountries()).thenReturn(employeeList);
+        when(employeeRepository.findAllLowerCaseCountries().orElseThrow()).thenReturn(employeeList);
         List<Employee> lowerCaseCountries = service.filterLowerCaseCountries();
         assertThat(lowerCaseCountries).isNotEmpty();
         assertThat(lowerCaseCountries.get(1).getCountry().charAt(0)).isLowerCase();
@@ -169,7 +169,7 @@ public class ServiceTests {
     @DisplayName("Filter Employees with Lower Case Countries exception test")
     void filterLowerCaseCountriesThrowsTest() {
 
-        when(employeeRepository.findAllLowerCaseCountries()).thenReturn(Collections.emptyList());
+        when(employeeRepository.findAllLowerCaseCountries().orElseThrow()).thenReturn(Collections.emptyList());
         assertThrows(EntityNotFoundException.class, () -> service.filterLowerCaseCountries());
     }
 }
