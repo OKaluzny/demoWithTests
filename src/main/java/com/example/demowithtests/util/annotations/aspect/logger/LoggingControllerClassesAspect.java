@@ -1,4 +1,4 @@
-package com.example.demowithtests.util.annotations;
+package com.example.demowithtests.util.annotations.aspect.logger;
 
 import lombok.extern.log4j.Log4j2;
 import org.aspectj.lang.JoinPoint;
@@ -8,25 +8,26 @@ import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.stereotype.Component;
 
+import static com.example.demowithtests.util.annotations.aspect.logger.LogColourConstant.*;
+
 @Log4j2
 @Aspect
 @Component
 public class LoggingControllerClassesAspect {
 
     @Pointcut("execution(public * com.example.demowithtests.web.EmployeeController.*(..))")
-    public void callAtMyControllersPublicMethods() {
+    public void callAtEmployeeControllersPublicMethods() {
     }
 
-    @Before("callAtMyControllersPublicMethods()")
+    @Before("callAtEmployeeControllersPublicMethods()")
     public void logBefore(JoinPoint joinPoint) {
         String methodName = joinPoint.getSignature().toShortString();
-        //log.info("Controller: " + methodName + " - start.");
-        log.info("\u001B[32m" + "Controller: " + methodName + " - start." + "\u001B[0m");
+        log.info(ANSI_GREEN + "Controller: " + methodName + " - start." + ANSI_RESET);
     }
 
-    @AfterReturning(value = "callAtMyControllersPublicMethods()")
+    @AfterReturning(value = "callAtEmployeeControllersPublicMethods()")
     public void logAfter(JoinPoint joinPoint) {
         String methodName = joinPoint.getSignature().toShortString();
-        log.info("\u001B[32m" + "Controller: " + methodName + " - end." + "\u001B[0m");
+        log.info(ANSI_GREEN + "Controller: " + methodName + " - end." + ANSI_RESET);
     }
 }
