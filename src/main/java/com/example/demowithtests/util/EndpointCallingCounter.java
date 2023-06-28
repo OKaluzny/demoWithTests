@@ -1,7 +1,5 @@
 package com.example.demowithtests.util;
 
-import org.springframework.stereotype.Component;
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -9,7 +7,6 @@ import java.util.Map;
 /**
  * @author Artem Kovalov on 25.06.2023
  */
-@Component
 public record EndpointCallingCounter() {
 
     private static final Map<String, Integer> endpointsStat = new HashMap<>();
