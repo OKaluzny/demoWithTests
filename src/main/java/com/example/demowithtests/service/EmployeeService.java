@@ -8,7 +8,7 @@ import javax.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.Optional;
 
-public interface EmployeeService extends EntityCheckingService<Employee> {
+public interface EmployeeService {
 
     Employee create(Employee employee);
 

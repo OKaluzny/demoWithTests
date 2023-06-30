@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.validation.constraints.NotNull;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface EmployeeRepository extends JpaRepository<Employee, Integer> {
@@ -18,7 +19,7 @@ public interface EmployeeRepository extends JpaRepository<Employee, Integer> {
     //@Query(value = "SELECT * FROM users", nativeQuery = true)
 
     @Query(value = "select e from Employee e where e.country =?1")
-    List<Employee> findByCountry(String country);
+    Optional<List<Employee>> findByCountry(String country);
 
     @Query(value = "select * from users join addresses on users.id = addresses.employee_id " +
             "where users.gender = :gender and addresses.country = :country", nativeQuery = true)
@@ -35,10 +36,10 @@ public interface EmployeeRepository extends JpaRepository<Employee, Integer> {
 
     Page<Employee> findByCountryContaining(String country, Pageable pageable);
 
-    List<Employee> findAllByEmailNull();
+    Optional<List<Employee>> findAllByEmailNull();
 
     @Query(value = "select * from users where country ~ '^[a-z]|^[а-я]'", nativeQuery = true)
-    List<Employee> findAllLowerCaseCountries();
+    Optional<List<Employee>> findAllLowerCaseCountries();
 
     @Modifying
     @Transactional

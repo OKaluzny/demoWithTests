@@ -124,7 +124,7 @@ public class RepositoryTests {
     @Order(7)
     @DisplayName("Find employee by 'null' email test")
     void findByEmailThatNullTest() {
-        List<Employee> allByEmailNull = employeeRepository.findAllByEmailNull();
+        List<Employee> allByEmailNull = employeeRepository.findAllByEmailNull().orElseThrow();
 
         assertThat(allByEmailNull).isNotEmpty();
         assertThat(allByEmailNull.get(0).getEmail()).isNull();
@@ -135,7 +135,7 @@ public class RepositoryTests {
     @Order(8)
     @DisplayName("Find all employees by lower case country test")
     void findAllLowerCaseCountriesTest() {
-        List<Employee> lowerCaseCountries = employeeRepository.findAllLowerCaseCountries();
+        List<Employee> lowerCaseCountries = employeeRepository.findAllLowerCaseCountries().orElseThrow();
 
         assertThat(lowerCaseCountries).isNotEmpty();
         assertThat(lowerCaseCountries.get(0).getCountry().charAt(0)).isLowerCase();
@@ -147,7 +147,7 @@ public class RepositoryTests {
     void updateLowerCaseCountriesToUpperCaseTest() {
         employeeRepository.updateLowerCaseCountriesToUpperCase();
 
-        List<Employee> lowerCaseCountries = employeeRepository.findAllLowerCaseCountries();
+        List<Employee> lowerCaseCountries = employeeRepository.findAllLowerCaseCountries().orElseThrow();
 
         assertThat(lowerCaseCountries).isEmpty();
     }

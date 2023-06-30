@@ -1,5 +1,7 @@
 package com.example.demowithtests.domain;
 
+import com.example.demowithtests.util.annotations.entity.Name;
+import com.example.demowithtests.util.annotations.entity.ToLowerCase;
 import lombok.*;
 
 import javax.persistence.*;
@@ -18,7 +20,9 @@ public class Employee {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+    @Name
     private String name;
+    @ToLowerCase
     private String country;
     private String email;
     private boolean isDeleted;
