@@ -1,6 +1,7 @@
 package com.example.demowithtests.service;
 
 import com.example.demowithtests.domain.Employee;
+import com.example.demowithtests.domain.WorkPass;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -60,4 +61,8 @@ public interface EmployeeService {
     List<Employee> filterLowerCaseCountries();
 
     void updateLowerCaseCountriesToUpperCase();
+
+    WorkPass createPassport(WorkPass workPass);
+
+    Employee setWorkPassToEmployee(Integer employeeId, Integer passportId);
 }

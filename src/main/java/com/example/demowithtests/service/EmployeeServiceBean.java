@@ -1,7 +1,9 @@
 package com.example.demowithtests.service;
 
 import com.example.demowithtests.domain.Employee;
+import com.example.demowithtests.domain.WorkPass;
 import com.example.demowithtests.repository.EmployeeRepository;
+import com.example.demowithtests.repository.WorkPassRepository;
 import com.example.demowithtests.util.annotations.entity.ActivateCustomAnnotations;
 import com.example.demowithtests.util.annotations.entity.Name;
 import com.example.demowithtests.util.annotations.entity.ToLowerCase;
@@ -19,6 +21,7 @@ import org.springframework.stereotype.Service;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityNotFoundException;
 import javax.persistence.PersistenceContext;
+import javax.persistence.criteria.CriteriaBuilder;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -31,7 +34,7 @@ import java.util.stream.Collectors;
 public class EmployeeServiceBean implements EmployeeService {
 
     private final EmployeeRepository employeeRepository;
-//    private final EntityCheckingService<Employee> entityCheckingService;
+    private final WorkPassRepository workPassRepository;
 
     @PersistenceContext
     private EntityManager entityManager;
@@ -55,9 +58,7 @@ public class EmployeeServiceBean implements EmployeeService {
 
     @Override
     public Page<Employee> getAllWithPagination(Pageable pageable) {
-        //log.debug("getAllWithPagination() - start: pageable = {}", pageable);
         Page<Employee> list = employeeRepository.findAll(pageable);
-        //log.debug("getAllWithPagination() - end: list = {}", list);
         return list;
     }
 
@@ -112,44 +113,10 @@ public class EmployeeServiceBean implements EmployeeService {
         }
     }
 
-
-   /* public boolean isValid(Employee employee) {
-        String regex = "^[0-9]{10}$";
-        Pattern pattern = Pattern.compile(regex);
-        Matcher matcher = pattern.matcher(employee.getPhone());
-        boolean isFound = matcher.find();
-        if (isFound) {
-            System.out.println("Number is valid");
-            return true;
-        } else {
-            System.out.println("Number is invalid");
-            return false;
-        }
-    }*/
-
-    /*public boolean isVodafone(Employee employee) {
-        String regex = "^[0][9][5]{1}[0-9]{7}$";
-        Pattern pattern = Pattern.compile(regex);
-        Matcher matcher = pattern.matcher(employee.getPhone());
-        boolean isFound = matcher.find();
-        if (isFound) {
-            System.out.println("Number is Vodafone");
-            return true;
-        } else {
-            System.out.println("Number is not Vodafone");
-            return false;
-        }
-    }*/
-
     @Override
     public void removeAll() {
         employeeRepository.deleteAll();
     }
-
-    /*@Override
-    public Page<Employee> findByCountryContaining(String country, Pageable pageable) {
-        return employeeRepository.findByCountryContaining(country, pageable);
-    }*/
 
     @Override
     public Page<Employee> findByCountryContaining(String country, int page, int size, List<String> sortList, String sortOrder) {
@@ -232,5 +199,22 @@ public class EmployeeServiceBean implements EmployeeService {
     @Override
     public void updateLowerCaseCountriesToUpperCase() {
         employeeRepository.updateLowerCaseCountriesToUpperCase();
+    }
+
+    @Override
+    public WorkPass createPassport(WorkPass workPass) {
+        return workPassRepository.save(workPass);
+    }
+
+    public Employee setWorkPassToEmployee(Integer employeeId, Integer passportId) {
+        Employee employee = employeeRepository.findById(employeeId).orElseThrow(EmployeeNotFoundException::new);
+        WorkPass workPass = workPassRepository.findById(passportId).orElseThrow(EmployeeNotFoundException::new);
+        if (workPass.getIsHanded()) {
+            throw new EmployeeNotFoundException();
+        }
+        workPass.setIsHanded(true);
+        workPassRepository.save(workPass);
+        employee.setWorkPass(workPass);
+        return employeeRepository.save(employee);
     }
 }

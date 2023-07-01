@@ -1,6 +1,7 @@
 package com.example.demowithtests.web;
 
 import com.example.demowithtests.domain.Employee;
+import com.example.demowithtests.domain.WorkPass;
 import com.example.demowithtests.dto.employee.EmployeeDto;
 import com.example.demowithtests.dto.employee.EmployeeReadDto;
 import com.example.demowithtests.dto.employee.EmployeeUpdateDto;
@@ -166,5 +167,17 @@ public class EmployeeController {
     @ResponseStatus(HttpStatus.OK)
     public void updateLowerCaseCountriesToUpper() {
         employeeService.updateLowerCaseCountriesToUpperCase();
+    }
+
+    @PostMapping("/users/passport")
+    @ResponseStatus(HttpStatus.CREATED)
+    public WorkPass createPassport(@RequestBody WorkPass workPass) {
+        return employeeService.createPassport(workPass);
+    }
+
+    @PatchMapping("/users/setPass")
+    @ResponseStatus(HttpStatus.OK)
+    public Employee setPassport(@RequestParam Integer employeeId, @RequestParam Integer passportId) {
+        return employeeService.setWorkPassToEmployee(employeeId, passportId);
     }
 }

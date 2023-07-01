@@ -31,6 +31,10 @@ public class Employee {
     @JoinColumn(name = "employee_id")
     private Set<Address> addresses = new HashSet<>();
 
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "pass_id", referencedColumnName = "id")
+    private WorkPass workPass;
+
     @Enumerated(EnumType.STRING)
     private Gender gender;
 
