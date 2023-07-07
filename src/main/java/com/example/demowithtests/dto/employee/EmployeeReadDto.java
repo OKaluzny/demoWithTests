@@ -1,7 +1,7 @@
 package com.example.demowithtests.dto.employee;
 
 import com.example.demowithtests.domain.Gender;
-import com.example.demowithtests.domain.WorkPass;
+import com.example.demowithtests.domain.EmployeePassport;
 import com.example.demowithtests.dto.AddressDto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
@@ -29,7 +29,7 @@ public record EmployeeReadDto(
         Set<AddressDto> addresses,
         Date date,
 
-        WorkPass workPass
+        EmployeePassport employeePassport
 ) {
 
     public EmployeeReadDto {

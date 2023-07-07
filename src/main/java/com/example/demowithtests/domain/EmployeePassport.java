@@ -13,7 +13,7 @@ import java.util.UUID;
 @Builder
 @Getter
 @Setter
-public class WorkPass {
+public class EmployeePassport {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,7 +24,7 @@ public class WorkPass {
     private LocalDateTime expireDate;
     private Boolean isHanded = Boolean.FALSE;
 
-    @OneToOne(mappedBy = "workPass")
+    @OneToOne(mappedBy = "employeePassport")
     private Employee employee;
 
 }

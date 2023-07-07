@@ -1,7 +1,7 @@
 package com.example.demowithtests.web;
 
 import com.example.demowithtests.domain.Employee;
-import com.example.demowithtests.domain.WorkPass;
+import com.example.demowithtests.domain.EmployeePassport;
 import com.example.demowithtests.dto.employee.EmployeeDto;
 import com.example.demowithtests.dto.employee.EmployeeReadDto;
 import com.example.demowithtests.dto.employee.EmployeeUpdateDto;
@@ -171,8 +171,8 @@ public class EmployeeController {
 
     @PostMapping("/users/passport")
     @ResponseStatus(HttpStatus.CREATED)
-    public WorkPass createPassport(@RequestBody WorkPass workPass) {
-        return employeeService.createPassport(workPass);
+    public EmployeePassport createPassport(@RequestBody EmployeePassport employeePassport) {
+        return employeeService.createPassport(employeePassport);
     }
 
     @PatchMapping("/users/setPass")

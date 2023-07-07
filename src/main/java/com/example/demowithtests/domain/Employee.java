@@ -33,7 +33,7 @@ public class Employee {
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "pass_id", referencedColumnName = "id")
-    private WorkPass workPass;
+    private EmployeePassport employeePassport;
 
     @Enumerated(EnumType.STRING)
     private Gender gender;

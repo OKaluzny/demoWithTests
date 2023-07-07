@@ -1,7 +1,7 @@
 package com.example.demowithtests.service;
 
 import com.example.demowithtests.domain.Employee;
-import com.example.demowithtests.domain.WorkPass;
+import com.example.demowithtests.domain.EmployeePassport;
 import com.example.demowithtests.repository.EmployeeRepository;
 import com.example.demowithtests.repository.WorkPassRepository;
 import com.example.demowithtests.util.annotations.entity.ActivateCustomAnnotations;
@@ -21,7 +21,6 @@ import org.springframework.stereotype.Service;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityNotFoundException;
 import javax.persistence.PersistenceContext;
-import javax.persistence.criteria.CriteriaBuilder;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -202,19 +201,19 @@ public class EmployeeServiceBean implements EmployeeService {
     }
 
     @Override
-    public WorkPass createPassport(WorkPass workPass) {
-        return workPassRepository.save(workPass);
+    public EmployeePassport createPassport(EmployeePassport employeePassport) {
+        return workPassRepository.save(employeePassport);
     }
 
     public Employee setWorkPassToEmployee(Integer employeeId, Integer passportId) {
         Employee employee = employeeRepository.findById(employeeId).orElseThrow(EmployeeNotFoundException::new);
-        WorkPass workPass = workPassRepository.findById(passportId).orElseThrow(EmployeeNotFoundException::new);
-        if (workPass.getIsHanded()) {
+        EmployeePassport employeePassport = workPassRepository.findById(passportId).orElseThrow(EmployeeNotFoundException::new);
+        if (employeePassport.getIsHanded()) {
             throw new EmployeeNotFoundException();
         }
-        workPass.setIsHanded(true);
-        workPassRepository.save(workPass);
-        employee.setWorkPass(workPass);
+        employeePassport.setIsHanded(true);
+        workPassRepository.save(employeePassport);
+        employee.setEmployeePassport(employeePassport);
         return employeeRepository.save(employee);
     }
 }

@@ -1,11 +1,10 @@
 package com.example.demowithtests.service;
 
 import com.example.demowithtests.domain.Employee;
-import com.example.demowithtests.domain.WorkPass;
+import com.example.demowithtests.domain.EmployeePassport;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-import javax.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.Optional;
 
@@ -62,7 +61,7 @@ public interface EmployeeService {
 
     void updateLowerCaseCountriesToUpperCase();
 
-    WorkPass createPassport(WorkPass workPass);
+    EmployeePassport createPassport(EmployeePassport employeePassport);
 
     Employee setWorkPassToEmployee(Integer employeeId, Integer passportId);
 }
