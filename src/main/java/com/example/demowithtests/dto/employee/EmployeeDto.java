@@ -2,6 +2,7 @@ package com.example.demowithtests.dto.employee;
 
 import com.example.demowithtests.domain.Gender;
 import com.example.demowithtests.dto.AddressDto;
+import com.example.demowithtests.dto.WorkPlaceDto;
 import com.example.demowithtests.util.annotations.dto.BlockedEmailDomains;
 import com.example.demowithtests.util.annotations.dto.CountryRightFormed;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -38,7 +39,9 @@ public record EmployeeDto(
         Gender gender,
         Instant startDate,
         @Valid
-        Set<AddressDto> addresses) {
+        Set<AddressDto> addresses,
+
+        Set<WorkPlaceDto> workPlaces) {
 
     public EmployeeDto {
         startDate = Instant.now();

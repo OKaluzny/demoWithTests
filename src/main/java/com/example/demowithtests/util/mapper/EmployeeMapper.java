@@ -1,6 +1,8 @@
 package com.example.demowithtests.util.mapper;
 
 import com.example.demowithtests.domain.Employee;
+import com.example.demowithtests.domain.WorkPlace;
+import com.example.demowithtests.dto.WorkPlaceDto;
 import com.example.demowithtests.dto.employee.EmployeeDto;
 import com.example.demowithtests.dto.employee.EmployeeReadDto;
 import com.example.demowithtests.dto.employee.EmployeeUpdateDto;
@@ -27,4 +29,6 @@ public interface EmployeeMapper {
     List<EmployeeReadDto> listToReadDto(List<Employee> entityList);
     @InheritInverseConfiguration
     List<Employee> listToDomain(List<EmployeeDto> entityList);
+
+    WorkPlace map(WorkPlaceDto workPlaceDto);
 }

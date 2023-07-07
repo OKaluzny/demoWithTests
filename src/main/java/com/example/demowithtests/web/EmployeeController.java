@@ -167,4 +167,10 @@ public class EmployeeController {
     public void updateLowerCaseCountriesToUpper() {
         employeeService.updateLowerCaseCountriesToUpperCase();
     }
+
+    @PatchMapping("/employee/add-workplace")
+    @ResponseStatus(HttpStatus.OK)
+    public Employee addWorkPlace(@RequestParam Integer employeeId, @RequestParam Integer workPlaceId) {
+        return employeeService.addWorkPlace(employeeId, workPlaceId);
+    }
 }

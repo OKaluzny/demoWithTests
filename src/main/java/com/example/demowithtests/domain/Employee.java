@@ -34,4 +34,10 @@ public class Employee {
     @Enumerated(EnumType.STRING)
     private Gender gender;
 
+    @ManyToMany
+    @JoinTable(
+            name = "users_work_places",
+            joinColumns = @JoinColumn(name = "employee_id"),
+            inverseJoinColumns = @JoinColumn(name = "work_places_id"))
+    private Set<WorkPlace> workPlaces = new HashSet<>();
 }

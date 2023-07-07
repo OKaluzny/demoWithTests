@@ -60,4 +60,6 @@ public interface EmployeeService {
     List<Employee> filterLowerCaseCountries();
 
     void updateLowerCaseCountriesToUpperCase();
+
+    Employee addWorkPlace(Integer employeeId, Integer workPlaceId);
 }

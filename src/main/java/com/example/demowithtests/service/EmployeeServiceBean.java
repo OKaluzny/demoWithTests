@@ -1,7 +1,9 @@
 package com.example.demowithtests.service;
 
 import com.example.demowithtests.domain.Employee;
+import com.example.demowithtests.domain.WorkPlace;
 import com.example.demowithtests.repository.EmployeeRepository;
+import com.example.demowithtests.repository.WorkPlaceRepository;
 import com.example.demowithtests.util.annotations.entity.ActivateCustomAnnotations;
 import com.example.demowithtests.util.annotations.entity.Name;
 import com.example.demowithtests.util.annotations.entity.ToLowerCase;
@@ -19,10 +21,8 @@ import org.springframework.stereotype.Service;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityNotFoundException;
 import javax.persistence.PersistenceContext;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Optional;
+import javax.transaction.Transactional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -31,6 +31,7 @@ import java.util.stream.Collectors;
 public class EmployeeServiceBean implements EmployeeService {
 
     private final EmployeeRepository employeeRepository;
+    private final WorkPlaceRepository workPlaceRepository;
 //    private final EntityCheckingService<Employee> entityCheckingService;
 
     @PersistenceContext
@@ -232,5 +233,18 @@ public class EmployeeServiceBean implements EmployeeService {
     @Override
     public void updateLowerCaseCountriesToUpperCase() {
         employeeRepository.updateLowerCaseCountriesToUpperCase();
+    }
+
+    @Override
+    public Employee addWorkPlace(Integer employeeId, Integer workPlaceId) {
+        Employee employee = employeeRepository.findById(employeeId).orElseThrow(ResourceNotFoundException::new);
+        WorkPlace workPlace = workPlaceRepository.findById(workPlaceId).orElseThrow(ResourceNotFoundException::new);
+        Set<WorkPlace> workPlaces = employee.getWorkPlaces();
+        workPlaces.add(workPlace);
+        employee.setWorkPlaces(workPlaces);
+
+        return employeeRepository.save(employee);
+//        return employee;
+
     }
 }
