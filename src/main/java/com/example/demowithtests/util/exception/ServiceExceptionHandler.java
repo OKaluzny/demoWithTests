@@ -23,4 +23,9 @@ public class ServiceExceptionHandler {
         return getResponseEntity("No entities found", request, HttpStatus.NOT_FOUND);
     }
 
+    @ExceptionHandler(PassportHandedException.class)
+    protected ResponseEntity<ErrorDetails> handlePassportHand(WebRequest request) {
+        return getResponseEntity("Passport already handed", request, HttpStatus.NOT_FOUND);
+    }
+
 }
