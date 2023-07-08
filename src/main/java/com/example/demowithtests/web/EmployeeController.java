@@ -3,6 +3,7 @@ package com.example.demowithtests.web;
 import com.example.demowithtests.domain.Employee;
 import com.example.demowithtests.domain.EmployeePassport;
 import com.example.demowithtests.dto.employee.EmployeeDto;
+import com.example.demowithtests.dto.employee.EmployeePassportDto;
 import com.example.demowithtests.dto.employee.EmployeeReadDto;
 import com.example.demowithtests.dto.employee.EmployeeUpdateDto;
 import com.example.demowithtests.service.EmployeeService;
@@ -171,13 +172,14 @@ public class EmployeeController {
 
     @PostMapping("/users/passport")
     @ResponseStatus(HttpStatus.CREATED)
-    public EmployeePassport createPassport(@RequestBody EmployeePassport employeePassport) {
-        return employeeService.createPassport(employeePassport);
+    public EmployeePassportDto createPassport(@RequestBody EmployeePassportDto employeePassportDto) {
+        var passport = employeeMapper.passportToEntity(employeePassportDto);
+        return employeeMapper.passportToDto(employeeService.createPassport(passport));
     }
 
     @PatchMapping("/users/setPass")
     @ResponseStatus(HttpStatus.OK)
-    public Employee setPassport(@RequestParam Integer employeeId, @RequestParam Integer passportId) {
-        return employeeService.setWorkPassToEmployee(employeeId, passportId);
+    public EmployeeReadDto setPassport(@RequestParam Integer employeeId, @RequestParam Integer passportId, @RequestParam String photo) {
+        return employeeMapper.toReadDto(employeeService.handPassportToEmployee(employeeId, passportId, photo));
     }
 }

@@ -39,9 +39,7 @@ public record EmployeeDto(
         Gender gender,
         Instant startDate,
         @Valid
-        Set<AddressDto> addresses,
-
-        EmployeePassport employeePassport
+        Set<AddressDto> addresses
 ) {
 
     public EmployeeDto {

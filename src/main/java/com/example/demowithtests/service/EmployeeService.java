@@ -63,5 +63,5 @@ public interface EmployeeService {
 
     EmployeePassport createPassport(EmployeePassport employeePassport);
 
-    Employee setWorkPassToEmployee(Integer employeeId, Integer passportId);
+    Employee handPassportToEmployee(Integer employeeId, Integer passportId, String photo);
 }

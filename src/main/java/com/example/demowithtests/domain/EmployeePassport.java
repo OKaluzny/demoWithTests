@@ -24,7 +24,11 @@ public class EmployeePassport {
     private LocalDateTime expireDate;
     private Boolean isHanded = Boolean.FALSE;
 
-    @OneToOne(mappedBy = "employeePassport")
+    @OneToOne(mappedBy = "passport")
     private Employee employee;
+
+    @OneToOne(mappedBy = "passport", cascade = CascadeType.ALL)
+    @PrimaryKeyJoinColumn
+    private EmployeePhoto photo;
 
 }

@@ -1,9 +1,9 @@
 package com.example.demowithtests.util.mapper;
 
 import com.example.demowithtests.domain.Employee;
-import com.example.demowithtests.dto.employee.EmployeeDto;
-import com.example.demowithtests.dto.employee.EmployeeReadDto;
-import com.example.demowithtests.dto.employee.EmployeeUpdateDto;
+import com.example.demowithtests.domain.EmployeePassport;
+import com.example.demowithtests.domain.EmployeePhoto;
+import com.example.demowithtests.dto.employee.*;
 import org.mapstruct.InheritInverseConfiguration;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
@@ -27,4 +27,10 @@ public interface EmployeeMapper {
     List<EmployeeReadDto> listToReadDto(List<Employee> entityList);
     @InheritInverseConfiguration
     List<Employee> listToDomain(List<EmployeeDto> entityList);
+
+    EmployeePassportDto passportToDto(EmployeePassport passport);
+    EmployeePassport passportToEntity(EmployeePassportDto passportDto);
+
+    EmployeePhotoDto photoToDto(EmployeePhoto photo);
+    EmployeePhoto photoToEntity(EmployeePhotoDto photoDto);
 }
