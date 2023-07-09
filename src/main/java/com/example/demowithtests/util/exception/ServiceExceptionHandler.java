@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 
 import javax.persistence.EntityNotFoundException;
+import java.sql.SQLException;
 
 import static com.example.demowithtests.util.exception.ErrorDetails.getResponseEntity;
 
@@ -26,6 +27,11 @@ public class ServiceExceptionHandler {
     @ExceptionHandler(PassportHandedException.class)
     protected ResponseEntity<ErrorDetails> handlePassportHand(WebRequest request) {
         return getResponseEntity("Passport already handed", request, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(SQLException.class)
+    protected ResponseEntity<ErrorDetails> handleRecordExists(WebRequest request) {
+        return getResponseEntity("SQL EXCEPTION", request, HttpStatus.I_AM_A_TEAPOT);
     }
 
 }

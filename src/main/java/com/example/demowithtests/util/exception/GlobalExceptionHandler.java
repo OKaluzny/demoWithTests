@@ -18,7 +18,7 @@ public class GlobalExceptionHandler {
         String requestId = requestIdParam != null
                 ? requestIdParam
                 : requestDescription.substring(requestDescription.lastIndexOf('/') +1);
-        String message = "Employee not found with id = " + requestId;
+        String message = "Entity not found with id = " + requestId;
         return getResponseEntity(message, request, HttpStatus.NOT_FOUND);
     }
 
