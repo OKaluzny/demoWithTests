@@ -1,15 +1,13 @@
 package com.example.demowithtests.service;
 
 import com.example.demowithtests.domain.Employee;
-import com.example.demowithtests.domain.EmployeePassport;
-import com.example.demowithtests.domain.EmployeePhoto;
-import com.example.demowithtests.repository.EmployeePhotoRepository;
 import com.example.demowithtests.repository.EmployeeRepository;
-import com.example.demowithtests.repository.EmployeePassportRepository;
 import com.example.demowithtests.util.annotations.entity.ActivateCustomAnnotations;
 import com.example.demowithtests.util.annotations.entity.Name;
 import com.example.demowithtests.util.annotations.entity.ToLowerCase;
-import com.example.demowithtests.util.exception.*;
+import com.example.demowithtests.util.exception.EmployeeNotFoundException;
+import com.example.demowithtests.util.exception.InputParameterException;
+import com.example.demowithtests.util.exception.ResourceNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -33,8 +31,7 @@ import java.util.stream.Collectors;
 public class EmployeeServiceBean implements EmployeeService {
 
     private final EmployeeRepository employeeRepository;
-    private final EmployeePassportRepository employeePassportRepository;
-    private final EmployeePhotoRepository employeePhotoRepository;
+    private final PassportService passportService;
 
     @PersistenceContext
     private EntityManager entityManager;
@@ -202,18 +199,9 @@ public class EmployeeServiceBean implements EmployeeService {
     }
 
     @Override
-    public EmployeePassport createPassport(EmployeePassport employeePassport) {
-        return employeePassportRepository.save(employeePassport);
-    }
-
-    public Employee handPassportToEmployee(Integer employeeId, Integer passportId, String photo) {
+    public Employee handPassportToEmployee(Integer employeeId, Integer passportId, String photoLink) {
         Employee employee = employeeRepository.findById(employeeId).orElseThrow(ResourceNotFoundException::new);
-        EmployeePassport employeePassport = employeePassportRepository.findById(passportId).orElseThrow(ResourceNotFoundException::new);
-        if (employeePassport.getIsHanded()) {
-            throw new PassportHandedException();
-        }
-        employeePassportRepository.save(employeePassport);
-        employee.setPassport(employeePassport);
+        employee.setPassport(passportService.handPassport(passportId, photoLink));
         return employeeRepository.save(employee);
     }
 }

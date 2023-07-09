@@ -1,7 +1,7 @@
 package com.example.demowithtests.service;
 
 import com.example.demowithtests.domain.Employee;
-import com.example.demowithtests.domain.EmployeePassport;
+import com.example.demowithtests.domain.Passport;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -61,7 +61,5 @@ public interface EmployeeService {
 
     void updateLowerCaseCountriesToUpperCase();
 
-    EmployeePassport createPassport(EmployeePassport employeePassport);
-
-    Employee handPassportToEmployee(Integer employeeId, Integer passportId, String photo);
+    Employee handPassportToEmployee(Integer employeeId, Integer passportId, String photoLink);
 }
