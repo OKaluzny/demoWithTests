@@ -4,8 +4,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
-import java.util.UUID;
 
 @Entity
 @Table(name = "photo")
@@ -14,17 +12,17 @@ import java.util.UUID;
 @Builder
 @Getter
 @Setter
-public class EmployeePhoto {
+public class PassportPhoto {
 
     @Id
     @Column(name = "passport_id")
     private Integer passportId;
-    private String photo;
+    private String photoLink;
 
     @OneToOne
     @MapsId
     @JoinColumn(name = "passport_id")
     @JsonIgnore
-    private EmployeePassport passport;
+    private Passport passport;
 
 }

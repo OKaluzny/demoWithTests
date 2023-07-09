@@ -1,8 +1,7 @@
 package com.example.demowithtests.dto.employee;
 
 import com.example.demowithtests.domain.Gender;
-import com.example.demowithtests.domain.EmployeePassport;
-import com.example.demowithtests.dto.AddressDto;
+import com.example.demowithtests.dto.passport.PassportDto;
 import com.example.demowithtests.util.annotations.dto.BlockedEmailDomains;
 import com.example.demowithtests.util.annotations.dto.CountryRightFormed;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -38,6 +37,7 @@ public record EmployeeDto(
 
         Gender gender,
         Instant startDate,
+        PassportDto passport,
         @Valid
         Set<AddressDto> addresses
 ) {

@@ -13,22 +13,24 @@ import java.util.UUID;
 @Builder
 @Getter
 @Setter
-public class EmployeePassport {
+public class Passport {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    private String uuid = UUID.randomUUID().toString();
-    private String series;
+    @Column(unique = true)
     private Long number;
+    @Column(unique = true)
+    private String series;
     private LocalDateTime expireDate;
-    private Boolean isHanded = Boolean.FALSE;
+    private final String uuid = UUID.randomUUID().toString();
+    private boolean isHanded = false;
 
     @OneToOne(mappedBy = "passport")
     private Employee employee;
 
     @OneToOne(mappedBy = "passport", cascade = CascadeType.ALL)
     @PrimaryKeyJoinColumn
-    private EmployeePhoto photo;
+    private PassportPhoto photo;
 
 }
