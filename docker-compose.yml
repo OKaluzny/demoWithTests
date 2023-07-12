@@ -12,11 +12,14 @@ services:
   # App backend service
   app:
     image: demo-app:latest
-    # Give the container the name web-app. You can changes to something else.
+    build:
+      context: ./
+      dockerfile: "Dockerfile"
+      # Give the container the name web-app. You can changes to something else.
     container_name: web-app
     # Forward the exposed port 8080 on the container to port 8080 on the host machine
     ports:
-      - "8088:8088"
+      - "8089:8089"
     networks:
       - backend
     # This service depends on postgres. Start that first.
@@ -30,7 +33,7 @@ services:
   # Database Service (Postgres)
   db:
     # Use the Docker Image postgres. This will pull the 12 version.
-    image: postgres:12
+    image: postgres:14
     # Give the container the name postgres-db. You can changes to something else.
     container_name: postgres-db
     restart: always
@@ -42,15 +45,14 @@ services:
       - backend
     # Maps port 5432 (localhost) to port 5432 on the container. You can change the ports to fix your needs.
     ports:
-      - "5432:5432"
+      - "5433:5432"
     # Setup the username, password, and database name. You can changes these values.
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: employee
-      PGDATA: /var/lib/postgresql/data/pgdata
+      - "POSTGRES_USER=postgres"
+      - "POSTGRES_PASSWORD=postgres"
+      - "POSTGRES_DB=employee"
     healthcheck:
-      test: pg_isready
+      test: [ "CMD-SHELL", "pg_isready -d $${POSTGRES_DB} -U $${POSTGRES_USER}" ]
       interval: 1m
       timeout: 10s
       retries: 5
