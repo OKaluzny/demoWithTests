@@ -2,9 +2,9 @@ package com.example.demowithtests.dto;
 
 import com.example.demowithtests.domain.Gender;
 import com.example.demowithtests.util.annotations.dto.BlockedEmailDomains;
-import com.example.demowithtests.util.annotations.dto.CountryRightFormed;
 import io.swagger.v3.oas.annotations.media.Schema;
 
+import javax.validation.Valid;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -32,9 +32,8 @@ public class EmployeeDto {
 
     public Instant startDate = Instant.now();
 
-    //public Set<AddressDto> addresses = new HashSet<>();
-
     public Gender gender;
 
+    @Valid
     public Set<AddressDto> addresses = new HashSet<>();
 }
