@@ -1,8 +1,14 @@
 package com.example.demowithtests.dto;
 
-public class WorkPlaceDto {
-  public Integer id;
-  public String name;
-  public Boolean airCondition;
-  public Boolean coffeeMachine;
+import lombok.Builder;
+
+@Builder
+public record WorkPlaceDto(Integer id,
+                           String name,
+                           Boolean airCondition,
+                           Boolean coffeeMachine) {
+    public WorkPlaceDto {
+        airCondition = airCondition == null ? Boolean.TRUE : airCondition;
+        coffeeMachine = coffeeMachine == null ? Boolean.TRUE : coffeeMachine;
+    }
 }

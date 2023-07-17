@@ -1,6 +1,7 @@
 package com.example.demowithtests.dto.employee;
 
 import com.example.demowithtests.domain.Gender;
+import com.example.demowithtests.domain.UsersWorkPlaces;
 import com.example.demowithtests.dto.AddressDto;
 import com.example.demowithtests.dto.WorkPlaceDto;
 import com.example.demowithtests.util.annotations.dto.BlockedEmailDomains;
@@ -41,7 +42,8 @@ public record EmployeeDto(
         @Valid
         Set<AddressDto> addresses,
 
-        Set<WorkPlaceDto> workPlaces) {
+        Set<UsersWorkPlaces> workPlaces
+) {
 
     public EmployeeDto {
         startDate = Instant.now();

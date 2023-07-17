@@ -6,7 +6,7 @@ import com.example.demowithtests.dto.WorkPlaceReadDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
-@Mapper(uses = {WorkPlaceMapper.class})
+@Mapper(componentModel = "spring")
 public interface WorkPlaceMapper {
   WorkPlaceMapper INSTANCE = Mappers.getMapper(WorkPlaceMapper.class);
 

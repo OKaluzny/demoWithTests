@@ -1,17 +1,22 @@
 package com.example.demowithtests.service;
 
 import com.example.demowithtests.domain.Employee;
+import com.example.demowithtests.domain.UsersWorkPlaces;
+import com.example.demowithtests.domain.UsersWorkPlacesKey;
 import com.example.demowithtests.domain.WorkPlace;
 import com.example.demowithtests.repository.EmployeeRepository;
+import com.example.demowithtests.repository.UserWorkPlacesRepository;
 import com.example.demowithtests.repository.WorkPlaceRepository;
 import com.example.demowithtests.util.annotations.entity.ActivateCustomAnnotations;
 import com.example.demowithtests.util.annotations.entity.Name;
 import com.example.demowithtests.util.annotations.entity.ToLowerCase;
+import com.example.demowithtests.util.exception.CustomException;
 import com.example.demowithtests.util.exception.EmployeeNotFoundException;
 import com.example.demowithtests.util.exception.InputParameterException;
 import com.example.demowithtests.util.exception.ResourceNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -21,7 +26,6 @@ import org.springframework.stereotype.Service;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityNotFoundException;
 import javax.persistence.PersistenceContext;
-import javax.transaction.Transactional;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -32,7 +36,9 @@ public class EmployeeServiceBean implements EmployeeService {
 
     private final EmployeeRepository employeeRepository;
     private final WorkPlaceRepository workPlaceRepository;
-//    private final EntityCheckingService<Employee> entityCheckingService;
+    //    private final EntityCheckingService<Employee> entityCheckingService;
+    private final UserWorkPlacesRepository userWorkPlacesRepository;
+    private final UserWorkPlaceService userWorkPlaceService;
 
     @PersistenceContext
     private EntityManager entityManager;
@@ -239,12 +245,11 @@ public class EmployeeServiceBean implements EmployeeService {
     public Employee addWorkPlace(Integer employeeId, Integer workPlaceId) {
         Employee employee = employeeRepository.findById(employeeId).orElseThrow(ResourceNotFoundException::new);
         WorkPlace workPlace = workPlaceRepository.findById(workPlaceId).orElseThrow(ResourceNotFoundException::new);
-        Set<WorkPlace> workPlaces = employee.getWorkPlaces();
-        workPlaces.add(workPlace);
-        employee.setWorkPlaces(workPlaces);
+
+        UsersWorkPlaces userWorkPlace = userWorkPlaceService.create(employee, workPlace);
+//        userWorkPlaceService.startDeactivateTimer(userWorkPlace, 30);
 
         return employeeRepository.save(employee);
-//        return employee;
-
     }
+
 }

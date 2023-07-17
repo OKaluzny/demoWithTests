@@ -1,8 +1,13 @@
 package com.example.demowithtests.dto;
 
-public class WorkPlaceReadDto {
-  public Integer id;
-  public String name;
-  public Boolean airCondition = Boolean.TRUE;
-  public Boolean coffeeMachine = Boolean.TRUE;
+import com.example.demowithtests.domain.UsersWorkPlaces;
+
+import java.util.Set;
+
+public record WorkPlaceReadDto(Integer id,
+                               String name,
+                               Boolean airCondition,
+                               Boolean coffeeMachine,
+                               Set<UsersWorkPlaces> usersWorkPlaces
+) {
 }

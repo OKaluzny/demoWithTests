@@ -3,6 +3,7 @@ package com.example.demowithtests.web;
 import com.example.demowithtests.domain.Employee;
 import com.example.demowithtests.dto.employee.EmployeeDto;
 import com.example.demowithtests.dto.employee.EmployeeReadDto;
+import com.example.demowithtests.dto.employee.EmployeeSetWorkPlaceDto;
 import com.example.demowithtests.dto.employee.EmployeeUpdateDto;
 import com.example.demowithtests.service.EmployeeService;
 import com.example.demowithtests.util.mapper.EmployeeMapper;
@@ -170,7 +171,8 @@ public class EmployeeController {
 
     @PatchMapping("/employee/add-workplace")
     @ResponseStatus(HttpStatus.OK)
-    public Employee addWorkPlace(@RequestParam Integer employeeId, @RequestParam Integer workPlaceId) {
-        return employeeService.addWorkPlace(employeeId, workPlaceId);
+    public EmployeeReadDto addWorkPlace(@RequestBody EmployeeSetWorkPlaceDto setWorkPlaceDto) {
+        var employee = employeeService.addWorkPlace(setWorkPlaceDto.employeeId(), setWorkPlaceDto.workPlaceId());
+        return employeeMapper.toReadDto(employee);
     }
 }

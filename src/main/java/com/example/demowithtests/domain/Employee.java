@@ -5,17 +5,18 @@ import com.example.demowithtests.util.annotations.entity.ToLowerCase;
 import lombok.*;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
-@Entity
-@Table(name = "users")
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 @Getter
 @Setter
-public class Employee {
+@Entity
+@Table(name = "users")
+public class Employee implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,10 +35,14 @@ public class Employee {
     @Enumerated(EnumType.STRING)
     private Gender gender;
 
-    @ManyToMany
-    @JoinTable(
-            name = "users_work_places",
-            joinColumns = @JoinColumn(name = "employee_id"),
-            inverseJoinColumns = @JoinColumn(name = "work_places_id"))
-    private Set<WorkPlace> workPlaces = new HashSet<>();
+    @OneToMany(mappedBy = "employee")
+    private Set<UsersWorkPlaces> usersWorkPlaces = new HashSet<>();
+
+//    @ManyToMany
+//    @JoinTable(
+//            name = "users_work_places",
+//            joinColumns = @JoinColumn(name = "employee_id"),
+//            inverseJoinColumns = @JoinColumn(name = "work_places_id"))
+//    private Set<WorkPlace> workPlaces = new HashSet<>();
+
 }

@@ -53,4 +53,6 @@ management:
     health:
       enabled: true
 
+workplace:
+  delay: 30
 

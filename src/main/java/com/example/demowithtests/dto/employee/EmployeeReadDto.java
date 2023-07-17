@@ -1,6 +1,7 @@
 package com.example.demowithtests.dto.employee;
 
 import com.example.demowithtests.domain.Gender;
+import com.example.demowithtests.domain.UsersWorkPlaces;
 import com.example.demowithtests.dto.AddressDto;
 import com.example.demowithtests.dto.WorkPlaceReadDto;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -27,7 +28,7 @@ public record EmployeeReadDto(
         String country,
         Gender gender,
         Set<AddressDto> addresses,
-        Set<WorkPlaceReadDto> workPlaces,
+        Set<UsersWorkPlaces> usersWorkPlaces,
         Date date
 ) {
 
