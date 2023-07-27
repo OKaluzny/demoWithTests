@@ -4,7 +4,7 @@ import com.example.demowithtests.domain.Employee;
 import com.example.demowithtests.dto.EmployeeDto;
 import com.example.demowithtests.dto.EmployeeReadDto;
 import com.example.demowithtests.service.EmployeeService;
-import com.example.demowithtests.util.config.EmployeeConverter;
+import com.example.demowithtests.util.config.mappers.EmployeeMapper;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -31,7 +31,7 @@ import java.util.Set;
 public class EmployeeController {
 
     private final EmployeeService employeeService;
-    private final EmployeeConverter converter;
+    private final EmployeeMapper employeeMapper;
 
     @PostMapping("/users")
     @ResponseStatus(HttpStatus.CREATED)
@@ -42,18 +42,17 @@ public class EmployeeController {
             @ApiResponse(responseCode = "404", description = "NOT FOUND. Specified employee request not found."),
             @ApiResponse(responseCode = "409", description = "Employee already exists")})
     public EmployeeDto saveEmployee(@RequestBody @Valid EmployeeDto requestForSave) {
-        log.debug("saveEmployee() - start: requestForSave = {}", requestForSave);
-        //var employee = converter.getMapperFacade().map(requestForSave, Employee.class);
-        var employee = converter.fromDto(requestForSave);
-        var dto = converter.toDto(employeeService.create(employee));
-        log.debug("saveEmployee() - stop: dto = {}", dto);
+        log.debug("saveEmployee() - start: requestForSave = {}", requestForSave.name());
+        var employee = employeeMapper.toEmployeeEntity(requestForSave);
+        var dto = employeeMapper.toEmployee(employeeService.create(employee));
+        log.debug("saveEmployee() - stop: dto = {}", dto.name());
         return dto;
     }
 
     @PostMapping("/usersS")
     @ResponseStatus(HttpStatus.CREATED)
     public void saveEmployee1(@RequestBody Employee employee) {
-        employeeService.create(employee);
+        employeeService.createEM(employee);
     }
 
     @GetMapping("/users")
@@ -85,7 +84,7 @@ public class EmployeeController {
         log.debug("getEmployeeById() EmployeeController - start: id = {}", id);
         var employee = employeeService.getById(id);
         log.debug("getById() EmployeeController - to dto start: id = {}", id);
-        var dto = converter.toReadDto(employee);
+        var dto = employeeMapper.toReadEmployee(employee);
         log.debug("getEmployeeById() EmployeeController - end: name = {}", dto.name);
         return dto;
     }

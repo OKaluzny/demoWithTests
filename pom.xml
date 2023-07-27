@@ -17,7 +17,8 @@
     <description>demoWithTests</description>
 
     <properties>
-        <java.version>11</java.version>
+        <java.version>17</java.version>
+        <org.mapstruct.version>1.5.3.Final</org.mapstruct.version>
     </properties>
 
     <dependencies>
@@ -99,17 +100,11 @@
             <version>2.1.214</version>
             <scope>test</scope>
         </dependency>
-        <!-- orika -->
+        <!-- mapstruct -->
         <dependency>
-            <groupId>dev.akkinoc.spring.boot</groupId>
-            <artifactId>orika-spring-boot-starter</artifactId>
-            <version>2.3.3</version>
-        </dependency>
-        <dependency>
-            <groupId>ma.glasnost.orika</groupId>
-            <artifactId>orika-core</artifactId>
-            <version>1.5.4</version>
-            <scope>compile</scope>
+            <groupId>org.mapstruct</groupId>
+            <artifactId>mapstruct</artifactId>
+            <version>${org.mapstruct.version}</version>
         </dependency>
         <!-- swagger -->
         <dependency>

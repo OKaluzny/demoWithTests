@@ -33,7 +33,6 @@ public class EmployeeServiceBean implements EmployeeService {
     @PersistenceContext
     private EntityManager entityManager;
 
-
     @Override
     @ActivateCustomAnnotations({Name.class, ToLowerCase.class})
     // @Transactional(propagation = Propagation.MANDATORY)
