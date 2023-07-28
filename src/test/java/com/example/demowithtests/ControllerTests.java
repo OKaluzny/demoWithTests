@@ -4,7 +4,7 @@ import com.example.demowithtests.domain.Employee;
 import com.example.demowithtests.dto.EmployeeDto;
 import com.example.demowithtests.dto.EmployeeReadDto;
 import com.example.demowithtests.service.EmployeeService;
-import com.example.demowithtests.util.config.mappers.EmployeeMapper;
+import com.example.demowithtests.util.mappers.EmployeeMapper;
 import com.example.demowithtests.web.EmployeeController;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
@@ -129,7 +129,7 @@ public class ControllerTests {
                 .name("Mike")
                 .build();
 
-        when(employeeMapper.toReadEmployee(any(Employee.class))).thenReturn(response);
+        when(employeeMapper.toEmployeeRead(any(Employee.class))).thenReturn(response);
         when(service.getById(1)).thenReturn(employee);
 
         MockHttpServletRequestBuilder mockRequest = get("/api/users/1");
@@ -146,16 +146,17 @@ public class ControllerTests {
     @DisplayName("PUT /api/users/{id}")
     @WithMockUser(roles = "ADMIN")
     public void updatePassByIdTest() throws Exception {
-        //var response = new EmployeeDto();
-        //response.id = 1;
+        var response = new EmployeeReadDto();
+        response.id = 1;
         var employee = Employee.builder().id(1).build();
 
-        //when(employeeConverter.toDto(any(Employee.class))).thenReturn(response);
-        //when(employeeConverter.fromDto(any(EmployeeDto.class))).thenReturn(employee);
+        when(employeeMapper.toEmployeeEntity(any(EmployeeDto.class))).thenReturn(employee);
         when(service.updateById(eq(1), any(Employee.class))).thenReturn(employee);
+        when(employeeMapper.toEmployeeRead(any(Employee.class))).thenReturn(response);
 
         MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders
                 .put("/api/users/1")
+                .with(csrf())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(mapper.writeValueAsString(employee));
 
@@ -184,27 +185,37 @@ public class ControllerTests {
     }
 
     @Test
-    @DisplayName("GET /api/users/p")
+    @DisplayName("GET /api/users/pages")
     @WithMockUser(roles = "USER")
     public void getUsersPageTest() throws Exception {
 
-        var employee1 = Employee.builder().id(1).name("John").country("US").build();
-        var employee2 = Employee.builder().id(2).name("Jane").country("UK").build();
-        var employee3 = Employee.builder().id(3).name("Bob").country("US").build();
+        var employee = Employee.builder().id(1).name("John").country("US").build();
+        var employeeTwo = Employee.builder().id(2).name("Jane").country("UK").build();
+        var employeeThree = Employee.builder().id(3).name("Bob").country("US").build();
 
-        List<Employee> list = Arrays.asList(employee1, employee2, employee3);
+        List<Employee> list = Arrays.asList(employee, employeeTwo, employeeThree);
         Page<Employee> employeesPage = new PageImpl<>(list);
         Pageable pageable = PageRequest.of(0, 5);
 
-        when(service.getAllWithPagination(eq(pageable))).thenReturn(employeesPage);
+        EmployeeReadDto dto = new EmployeeReadDto();
+        EmployeeReadDto dtoTwo = new EmployeeReadDto();
+        EmployeeReadDto dtoThree = new EmployeeReadDto();
 
-        MvcResult result = mockMvc.perform(get("/api/users/p")
+        when(service.getAllWithPagination(eq(pageable))).thenReturn(employeesPage);
+        when(employeeMapper.toEmployeeRead(employee)).thenReturn(dto);
+        when(employeeMapper.toEmployeeRead(employeeTwo)).thenReturn(dtoTwo);
+        when(employeeMapper.toEmployeeRead(employeeThree)).thenReturn(dtoThree);
+
+        MvcResult result = mockMvc.perform(get("/api/users/pages")
                         .param("page", "0")
                         .param("size", "5"))
                 .andExpect(status().isOk())
                 .andReturn();
 
         verify(service).getAllWithPagination(eq(pageable));
+        verify(employeeMapper, times(1)).toEmployeeRead(employee);
+        verify(employeeMapper, times(1)).toEmployeeRead(employeeTwo);
+        verify(employeeMapper, times(1)).toEmployeeRead(employeeThree);
 
         String contentType = result.getResponse().getContentType();
         assertNotNull(contentType);

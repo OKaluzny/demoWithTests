@@ -1,4 +1,4 @@
-package com.example.demowithtests.util.config.mappers;
+package com.example.demowithtests.util.mappers;
 
 import com.example.demowithtests.domain.Employee;
 import com.example.demowithtests.dto.EmployeeDto;
@@ -12,9 +12,9 @@ public interface EmployeeMapper {
 
     EmployeeDto toEmployee(Employee employee);
 
-    EmployeeReadDto toReadEmployee(Employee employee);
+    EmployeeReadDto toEmployeeRead(Employee employee);
 
     List<EmployeeDto> toEmployeeList(List<Employee> employees);
 
-    Employee toEmployeeEntity(EmployeeDto request);
+    Employee toEmployeeEntity(EmployeeDto employeeDto);
 }
