@@ -2,9 +2,9 @@ package com.example.demowithtests.domain;
 
 import com.example.demowithtests.util.annotations.entity.Name;
 import com.example.demowithtests.util.annotations.entity.ToLowerCase;
+import jakarta.persistence.*;
 import lombok.*;
 
-import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 

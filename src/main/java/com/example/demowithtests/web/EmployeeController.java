@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -18,7 +19,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -49,12 +49,12 @@ public class EmployeeController {
         return dto;
     }
 
-    @PostMapping("/usersS")
+    @PostMapping("/users/jpa")
     @ResponseStatus(HttpStatus.CREATED)
     public void saveEmployee(@RequestBody Employee employee) {
-        log.debug("saveEmployee() - start: employee = {}", employee.getId());
-        employeeService.createEM(employee);
-        log.debug("saveEmployee() - stop: employee = {}", employee);
+        log.debug("saveEmployeeWithJpa() - start: employee = {}", employee);
+        employeeService.createWithJpa(employee);
+        log.debug("saveEmployeeWithJpa() - stop: employee = {}", employee.getId());
     }
 
     @GetMapping("/users")
@@ -117,10 +117,10 @@ public class EmployeeController {
     @GetMapping("/users/country")
     @ResponseStatus(HttpStatus.OK)
     public Page<EmployeeReadDto> findByCountry(@RequestParam(required = false) String country,
-                                        @RequestParam(defaultValue = "0") int page,
-                                        @RequestParam(defaultValue = "3") int size,
-                                        @RequestParam(defaultValue = "") List<String> sortList,
-                                        @RequestParam(defaultValue = "DESC") Sort.Direction sortOrder) {
+                                               @RequestParam(defaultValue = "0") int page,
+                                               @RequestParam(defaultValue = "3") int size,
+                                               @RequestParam(defaultValue = "") List<String> sortList,
+                                               @RequestParam(defaultValue = "DESC") Sort.Direction sortOrder) {
         //Pageable paging = PageRequest.of(page, size);
         //Pageable paging = PageRequest.of(page, size, Sort.by("name").ascending());
         return employeeService.findByCountryContaining(country, page, size, sortList, sortOrder.toString())

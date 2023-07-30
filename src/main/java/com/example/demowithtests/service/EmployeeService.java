@@ -12,7 +12,7 @@ public interface EmployeeService {
 
     Employee create(Employee employee);
 
-    Employee createEM(Employee employee);
+    Employee createWithJpa(Employee employee);
 
     List<Employee> getAll();
 

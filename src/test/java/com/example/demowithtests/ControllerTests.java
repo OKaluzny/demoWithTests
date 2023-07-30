@@ -90,20 +90,20 @@ public class ControllerTests {
     }
 
     @Test
-    @DisplayName("Entity POST /api/users")
+    @DisplayName("POST /api/users/jpa")
     @WithMockUser(roles = "ADMIN")
-    public void testEntitySave() throws Exception {
+    public void testSaveWithJpa() throws Exception {
 
         var employeeToBeReturn = Employee.builder()
                 .id(1)
                 .name("Mark")
                 .country("France").build();
 
-        doReturn(employeeToBeReturn).when(service).createEM(any());
-        when(this.service.createEM(any(Employee.class))).thenReturn(employeeToBeReturn);
+        doReturn(employeeToBeReturn).when(service).createWithJpa(any());
+        when(this.service.createWithJpa(any(Employee.class))).thenReturn(employeeToBeReturn);
         // Execute the POST request
         MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders
-                .post("/api/usersS")
+                .post("/api/users/jpa")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(mapper.writeValueAsString(employeeToBeReturn));
         mockMvc
@@ -111,7 +111,7 @@ public class ControllerTests {
                 .andExpect(status().isCreated())
                 .andReturn().getResponse();
 
-        verify(this.service, times(1)).createEM(any(Employee.class));
+        verify(this.service, times(1)).createWithJpa(any(Employee.class));
         verifyNoMoreInteractions(this.service);
     }
 

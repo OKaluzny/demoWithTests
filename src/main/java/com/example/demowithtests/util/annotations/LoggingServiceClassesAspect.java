@@ -10,6 +10,9 @@ import org.springframework.stereotype.Component;
 
 import java.util.Collection;
 
+import static com.example.demowithtests.util.annotations.LogColorConstants.ANSI_BLUE;
+import static com.example.demowithtests.util.annotations.LogColorConstants.ANSI_RESET;
+
 @Log4j2
 @Aspect
 @Component
@@ -24,9 +27,9 @@ public class LoggingServiceClassesAspect {
         String methodName = joinPoint.getSignature().toShortString();
         Object[] args = joinPoint.getArgs();
         if (args.length > 0) {
-            log.debug("\u001B[34m" + "Service: " + methodName + " - start. Args count - {}" + "\u001B[0m", args.length);
+            log.debug(ANSI_BLUE + "Service: " + methodName + " - start. Args count - {}" + ANSI_RESET, args.length);
         } else {
-            log.debug("\u001B[34m" + "Service: " + methodName + " - start." + "\u001B[0m");
+            log.debug(ANSI_BLUE + "Service: " + methodName + " - start." + ANSI_RESET);
         }
     }
 
@@ -42,9 +45,9 @@ public class LoggingServiceClassesAspect {
             } else {
                 outputValue = returningValue;
             }
-            log.debug("\u001B[34m" + "Service: " + methodName + " - end. Returns - {}" + "\u001B[0m", outputValue);
+            log.debug(ANSI_BLUE + "Service: " + methodName + " - end. Returns - {}" + ANSI_RESET, outputValue);
         } else {
-            log.debug("\u001B[34m" + "Service: " + methodName + " - end." + "\u001B[0m");
+            log.debug(ANSI_BLUE + "Service: " + methodName + " - end." + ANSI_RESET);
         }
     }
 }

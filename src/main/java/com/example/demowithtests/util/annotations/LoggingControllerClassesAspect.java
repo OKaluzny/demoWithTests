@@ -8,6 +8,9 @@ import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.stereotype.Component;
 
+import static com.example.demowithtests.util.annotations.LogColorConstants.ANSI_GREEN;
+import static com.example.demowithtests.util.annotations.LogColorConstants.ANSI_RESET;
+
 @Log4j2
 @Aspect
 @Component
@@ -21,12 +24,12 @@ public class LoggingControllerClassesAspect {
     public void logBefore(JoinPoint joinPoint) {
         String methodName = joinPoint.getSignature().toShortString();
         //log.info("Controller: " + methodName + " - start.");
-        log.info("\u001B[32m" + "Controller: " + methodName + " - start." + "\u001B[0m");
+        log.info(ANSI_GREEN + "Controller: " + methodName + " - start." + ANSI_RESET);
     }
 
     @AfterReturning(value = "callAtMyControllersPublicMethods()")
     public void logAfter(JoinPoint joinPoint) {
         String methodName = joinPoint.getSignature().toShortString();
-        log.info("\u001B[32m" + "Controller: " + methodName + " - end." + "\u001B[0m");
+        log.info(ANSI_GREEN + "Controller: " + methodName + " - end." + ANSI_RESET);
     }
 }

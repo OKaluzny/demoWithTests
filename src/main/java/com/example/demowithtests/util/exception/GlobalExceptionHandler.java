@@ -8,8 +8,8 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 
-import javax.mail.AuthenticationFailedException;
-import javax.mail.SendFailedException;
+import jakarta.mail.AuthenticationFailedException;
+import jakarta.mail.SendFailedException;
 import java.util.Date;
 
 @ControllerAdvice
