@@ -71,8 +71,8 @@ public class ControllerTests {
                 .name("Mike")
                 .email("mail@mail.com").build();
 
-        when(employeeMapper.toEmployeeEntity(any(EmployeeDto.class))).thenReturn(employee);
-        when(employeeMapper.toEmployee(any(Employee.class))).thenReturn(response);
+        when(employeeMapper.toEmployee(any(EmployeeDto.class))).thenReturn(employee);
+        when(employeeMapper.toEmployeeDto(any(Employee.class))).thenReturn(response);
         when(service.create(any(Employee.class))).thenReturn(employee);
 
         MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders
@@ -91,7 +91,7 @@ public class ControllerTests {
 
     @Test
     @DisplayName("POST /api/users/jpa")
-    @WithMockUser(roles = "ADMIN")
+    @WithMockUser(roles = "USER")
     public void testSaveWithJpa() throws Exception {
 
         var employeeToBeReturn = Employee.builder()
@@ -129,7 +129,7 @@ public class ControllerTests {
                 .name("Mike")
                 .build();
 
-        when(employeeMapper.toEmployeeRead(any(Employee.class))).thenReturn(response);
+        when(employeeMapper.toEmployeeReadDto(any(Employee.class))).thenReturn(response);
         when(service.getById(1)).thenReturn(employee);
 
         MockHttpServletRequestBuilder mockRequest = get("/api/users/1");
@@ -150,9 +150,9 @@ public class ControllerTests {
         response.id = 1;
         var employee = Employee.builder().id(1).build();
 
-        when(employeeMapper.toEmployeeEntity(any(EmployeeDto.class))).thenReturn(employee);
+        when(employeeMapper.toEmployee(any(EmployeeDto.class))).thenReturn(employee);
         when(service.updateById(eq(1), any(Employee.class))).thenReturn(employee);
-        when(employeeMapper.toEmployeeRead(any(Employee.class))).thenReturn(response);
+        when(employeeMapper.toEmployeeReadDto(any(Employee.class))).thenReturn(response);
 
         MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders
                 .put("/api/users/1")
@@ -202,9 +202,9 @@ public class ControllerTests {
         EmployeeReadDto dtoThree = new EmployeeReadDto();
 
         when(service.getAllWithPagination(eq(pageable))).thenReturn(employeesPage);
-        when(employeeMapper.toEmployeeRead(employee)).thenReturn(dto);
-        when(employeeMapper.toEmployeeRead(employeeTwo)).thenReturn(dtoTwo);
-        when(employeeMapper.toEmployeeRead(employeeThree)).thenReturn(dtoThree);
+        when(employeeMapper.toEmployeeReadDto(employee)).thenReturn(dto);
+        when(employeeMapper.toEmployeeReadDto(employeeTwo)).thenReturn(dtoTwo);
+        when(employeeMapper.toEmployeeReadDto(employeeThree)).thenReturn(dtoThree);
 
         MvcResult result = mockMvc.perform(get("/api/users/pages")
                         .param("page", "0")
@@ -213,9 +213,9 @@ public class ControllerTests {
                 .andReturn();
 
         verify(service).getAllWithPagination(eq(pageable));
-        verify(employeeMapper, times(1)).toEmployeeRead(employee);
-        verify(employeeMapper, times(1)).toEmployeeRead(employeeTwo);
-        verify(employeeMapper, times(1)).toEmployeeRead(employeeThree);
+        verify(employeeMapper, times(1)).toEmployeeReadDto(employee);
+        verify(employeeMapper, times(1)).toEmployeeReadDto(employeeTwo);
+        verify(employeeMapper, times(1)).toEmployeeReadDto(employeeThree);
 
         String contentType = result.getResponse().getContentType();
         assertNotNull(contentType);

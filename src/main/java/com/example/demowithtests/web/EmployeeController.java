@@ -43,8 +43,8 @@ public class EmployeeController {
             @ApiResponse(responseCode = "409", description = "Employee already exists")})
     public EmployeeDto saveEmployee(@RequestBody @Valid EmployeeDto requestForSave) {
         log.debug("saveEmployee() - start: requestForSave = {}", requestForSave.name());
-        var employee = employeeMapper.toEmployeeEntity(requestForSave);
-        var dto = employeeMapper.toEmployee(employeeService.create(employee));
+        var employee = employeeMapper.toEmployee(requestForSave);
+        var dto = employeeMapper.toEmployeeDto(employeeService.create(employee));
         log.debug("saveEmployee() - stop: dto = {}", dto.name());
         return dto;
     }
@@ -70,7 +70,7 @@ public class EmployeeController {
         log.debug("getPage() - start: page= {}, size = {}", page, size);
         var paging = PageRequest.of(page, size);
         var content = employeeService.getAllWithPagination(paging)
-                .map(employeeMapper::toEmployeeRead);
+                .map(employeeMapper::toEmployeeReadDto);
         log.debug("getPage() - end: content = {}", content);
         return content;
     }
@@ -87,7 +87,7 @@ public class EmployeeController {
         log.debug("getEmployeeById() EmployeeController - start: id = {}", id);
         var employee = employeeService.getById(id);
         log.debug("getById() EmployeeController - to dto start: id = {}", id);
-        var dto = employeeMapper.toEmployeeRead(employee);
+        var dto = employeeMapper.toEmployeeReadDto(employee);
         log.debug("getEmployeeById() EmployeeController - end: name = {}", dto.name);
         return dto;
     }
@@ -96,8 +96,8 @@ public class EmployeeController {
     @ResponseStatus(HttpStatus.OK)
     public EmployeeReadDto refreshEmployee(@PathVariable("id") Integer id, @RequestBody EmployeeDto employee) {
         log.debug("refreshEmployee() EmployeeController - start: id = {}", id);
-        Employee entity = employeeMapper.toEmployeeEntity(employee);
-        EmployeeReadDto dto = employeeMapper.toEmployeeRead(employeeService.updateById(id, entity));
+        Employee entity = employeeMapper.toEmployee(employee);
+        EmployeeReadDto dto = employeeMapper.toEmployeeReadDto(employeeService.updateById(id, entity));
         log.debug("refreshEmployee() EmployeeController - end: name = {}", dto.name);
         return dto;
     }
@@ -123,8 +123,7 @@ public class EmployeeController {
                                                @RequestParam(defaultValue = "DESC") Sort.Direction sortOrder) {
         //Pageable paging = PageRequest.of(page, size);
         //Pageable paging = PageRequest.of(page, size, Sort.by("name").ascending());
-        return employeeService.findByCountryContaining(country, page, size, sortList, sortOrder.toString())
-                .map(employeeMapper::toEmployeeRead);
+        return employeeService.findByCountryContaining(country, page, size, sortList, sortOrder.toString()).map(employeeMapper::toEmployeeReadDto);
     }
 
     @GetMapping("/users/c")

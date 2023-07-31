@@ -10,11 +10,11 @@ import java.util.List;
 @Mapper(componentModel = "spring")
 public interface EmployeeMapper {
 
-    EmployeeDto toEmployee(Employee employee);
+    EmployeeDto toEmployeeDto(Employee employee);
 
-    EmployeeReadDto toEmployeeRead(Employee employee);
+    EmployeeReadDto toEmployeeReadDto(Employee employee);
 
-    List<EmployeeDto> toEmployeeList(List<Employee> employees);
+    List<EmployeeDto> toListEmployeeDto(List<Employee> employees);
 
-    Employee toEmployeeEntity(EmployeeDto employeeDto);
+    Employee toEmployee(EmployeeDto employeeDto);
 }
