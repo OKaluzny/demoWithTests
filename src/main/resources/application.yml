@@ -2,9 +2,9 @@
 spring:
   application:
     name: employee-service
-  #main:
-   # allow-bean-definition-overriding: true
-   # lazy-initialization: true
+    #main:
+    # allow-bean-definition-overriding: true
+    # lazy-initialization: true
   # Database
   datasource:
     driver-class-name: org.postgresql.Driver
@@ -38,7 +38,7 @@ logging:
   level:
     org.springframework: info
     #org.hibernate: debug
-    #com.example.demowithtests: debug
+    com.example.demowithtests: debug
 # Server configuration
 server:
   port: 8089 #set your port

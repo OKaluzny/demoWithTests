@@ -155,4 +155,13 @@ public class EmployeeController {
     public Set<String> sendEmailsAllUkrainian() {
         return employeeService.sendEmailsAllUkrainian();
     }
+
+    @GetMapping("/users/names")
+    @ResponseStatus(HttpStatus.OK)
+    public List<Employee> findByNameContaining(@RequestParam String employeeName) {
+        log.debug("findByNameContaining() EmployeeController - start: employeeName = {}", employeeName);
+        List<Employee> employees = employeeService.findByNameContaining(employeeName);
+        log.debug("findByNameContaining() EmployeeController - end: employees = {}", employees.size());
+        return employees;
+    }
 }

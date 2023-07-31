@@ -58,7 +58,7 @@ public class ControllerTests {
     private MockMvc mockMvc;
 
     @Test
-    @DisplayName("POST /api/users")
+    @DisplayName("POST API -> /api/users")
     @WithMockUser(roles = "ADMIN")
     public void createPassTest() throws Exception {
 
@@ -90,7 +90,7 @@ public class ControllerTests {
     }
 
     @Test
-    @DisplayName("POST /api/users/jpa")
+    @DisplayName("POST API -> /api/users/jpa")
     @WithMockUser(roles = "USER")
     public void testSaveWithJpa() throws Exception {
 
@@ -116,7 +116,7 @@ public class ControllerTests {
     }
 
     @Test
-    @DisplayName("GET /api/users/{id}")
+    @DisplayName("GET API -> /api/users/{id}")
     @WithMockUser(roles = "USER")
     public void getPassByIdTest() throws Exception {
 
@@ -143,7 +143,7 @@ public class ControllerTests {
     }
 
     @Test
-    @DisplayName("PUT /api/users/{id}")
+    @DisplayName("PUT API -> /api/users/{id}")
     @WithMockUser(roles = "ADMIN")
     public void updatePassByIdTest() throws Exception {
         var response = new EmployeeReadDto();
@@ -168,7 +168,7 @@ public class ControllerTests {
     }
 
     @Test
-    @DisplayName("DELETE /api/users/{id}")
+    @DisplayName("DELETE API -> /api/users/{id}")
     @WithMockUser(roles = "ADMIN")
     public void deletePassTest() throws Exception {
 
@@ -185,7 +185,7 @@ public class ControllerTests {
     }
 
     @Test
-    @DisplayName("GET /api/users/pages")
+    @DisplayName("GET API -> /api/users/pages")
     @WithMockUser(roles = "USER")
     public void getUsersPageTest() throws Exception {
 

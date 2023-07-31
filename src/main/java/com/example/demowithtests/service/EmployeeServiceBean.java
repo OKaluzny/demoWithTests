@@ -54,9 +54,9 @@ public class EmployeeServiceBean implements EmployeeService {
 
     @Override
     public Page<Employee> getAllWithPagination(Pageable pageable) {
-        //log.debug("getAllWithPagination() - start: pageable = {}", pageable);
+        log.debug("getAllWithPagination() - start: pageable = {}", pageable);
         Page<Employee> list = employeeRepository.findAll(pageable);
-        //log.debug("getAllWithPagination() - end: list = {}", list);
+        log.debug("getAllWithPagination() - end: list = {}", list);
         return list;
     }
 
@@ -169,7 +169,7 @@ public class EmployeeServiceBean implements EmployeeService {
 
     @Override
     public List<Employee> filterByCountry(String country) {
-        return employeeRepository.findByCountry(country);
+        return employeeRepository.findEmployeesByCountry(country);
     }
 
     @Override
@@ -195,5 +195,14 @@ public class EmployeeServiceBean implements EmployeeService {
         });
 
         return emails;
+    }
+
+    /**
+     * @param name
+     * @return
+     */
+    @Override
+    public List<Employee> findByNameContaining(String name) {
+        return employeeRepository.findByNameContaining(name);
     }
 }

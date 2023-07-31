@@ -4,6 +4,7 @@ import com.example.demowithtests.domain.Employee;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -15,10 +16,12 @@ import java.util.Optional;
 @Repository
 public interface EmployeeRepository extends JpaRepository<Employee, Integer> {
 
-    //@Query(value = "SELECT * FROM users", nativeQuery = true)
-
     @Query(value = "select e from Employee e where e.country =?1")
-    List<Employee> findByCountry(String country);
+    @EntityGraph(attributePaths = {"addresses"})
+    List<Employee> findEmployeesByCountry(String country);
+
+    @EntityGraph(type = EntityGraph.EntityGraphType.FETCH, attributePaths = "addresses")
+    List<Employee> findByNameContaining(String name);
 
     @Query(value = "SELECT u.* FROM users u JOIN addresses a ON u.id = a.employee_id " +
             "WHERE u.gender = :gender AND a.country = :country", nativeQuery = true)

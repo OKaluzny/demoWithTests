@@ -57,4 +57,6 @@ public interface EmployeeService {
 
     Set<String> sendEmailsAllUkrainian();
 
+    List<Employee> findByNameContaining(String name);
+
 }
