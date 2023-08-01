@@ -20,11 +20,15 @@ public final class Employee {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+
     @Name
     private String name;
+
     private String country;
+
     @ToLowerCase
     private String email;
+
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "employee_id")
     @OrderBy("id desc, country asc")
@@ -32,4 +36,8 @@ public final class Employee {
 
     @Enumerated(EnumType.STRING)
     private Gender gender;
+
+    @OneToOne  (cascade = CascadeType.ALL)
+    @JoinColumn(name = "document_id", referencedColumnName = "id")
+    private Document document;
 }
