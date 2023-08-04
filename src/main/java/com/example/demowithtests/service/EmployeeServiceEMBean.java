@@ -4,15 +4,23 @@ import com.example.demowithtests.domain.Employee;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
 
 import java.util.Set;
 import java.util.stream.Collectors;
 
+@Slf4j
+@Service
 public class EmployeeServiceEMBean implements EmployeeServiceEM {
 
     @PersistenceContext
     private EntityManager entityManager;
 
+    /**
+     * @param employee
+     * @return
+     */
     @Override
     @Transactional //jakarta
     public Employee createWithJpa(Employee employee) {
@@ -48,8 +56,6 @@ public class EmployeeServiceEMBean implements EmployeeServiceEM {
     @Override
     @Transactional //jakarta
     public Set<String> findAllCountriesWithJpa() {
-        return entityManager.createQuery("select distinct country from Employee", String.class)
-                .getResultStream()
-                .collect(Collectors.toSet());
+        return entityManager.createQuery("select distinct country from Employee", String.class).getResultStream().collect(Collectors.toSet());
     }
 }
