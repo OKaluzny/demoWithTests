@@ -4,6 +4,7 @@ import com.example.demowithtests.domain.Employee;
 import com.example.demowithtests.dto.EmployeeDto;
 import com.example.demowithtests.dto.EmployeeReadDto;
 import com.example.demowithtests.service.EmployeeService;
+import com.example.demowithtests.service.EmployeeServiceEM;
 import com.example.demowithtests.util.mappers.EmployeeMapper;
 import com.example.demowithtests.web.EmployeeController;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -50,6 +51,9 @@ public class ControllerTests {
 
     @MockBean
     EmployeeService service;
+
+    @MockBean
+    EmployeeServiceEM serviceEM;
 
     @MockBean
     EmployeeMapper employeeMapper;
@@ -99,8 +103,8 @@ public class ControllerTests {
                 .name("Mark")
                 .country("France").build();
 
-        doReturn(employeeToBeReturn).when(service).createWithJpa(any());
-        when(this.service.createWithJpa(any(Employee.class))).thenReturn(employeeToBeReturn);
+        doReturn(employeeToBeReturn).when(serviceEM).createWithJpa(any());
+        when(this.serviceEM.createWithJpa(any(Employee.class))).thenReturn(employeeToBeReturn);
         // Execute the POST request
         MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders
                 .post("/api/users/jpa")
@@ -111,8 +115,8 @@ public class ControllerTests {
                 .andExpect(status().isCreated())
                 .andReturn().getResponse();
 
-        verify(this.service, times(1)).createWithJpa(any(Employee.class));
-        verifyNoMoreInteractions(this.service);
+        verify(this.serviceEM, times(1)).createWithJpa(any(Employee.class));
+        verifyNoMoreInteractions(this.serviceEM);
     }
 
     @Test
