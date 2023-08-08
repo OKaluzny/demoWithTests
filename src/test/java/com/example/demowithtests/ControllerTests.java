@@ -106,12 +106,13 @@ public class ControllerTests {
         doReturn(employeeToBeReturn).when(serviceEM).createWithJpa(any());
         when(this.serviceEM.createWithJpa(any(Employee.class))).thenReturn(employeeToBeReturn);
         // Execute the POST request
-        MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders
+        MockHttpServletRequestBuilder builder = MockMvcRequestBuilders
                 .post("/api/users/jpa")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(mapper.writeValueAsString(employeeToBeReturn));
+                .content(mapper.writeValueAsString(employeeToBeReturn))
+                .with(csrf());
         mockMvc
-                .perform(mockRequest)
+                .perform(builder)
                 .andExpect(status().isCreated())
                 .andReturn().getResponse();
 
