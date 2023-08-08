@@ -7,6 +7,7 @@ import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -25,16 +26,18 @@ public class EmployeeServiceEMBean implements EmployeeServiceEM {
     @Transactional //jakarta
     public Employee createWithJpa(Employee employee) {
         return entityManager.merge(employee);
+        /*entityManager.persist(employee);
+        entityManager.flush();
+        return entityManager.find(Employee.class, employee);*/
     }
 
     /**
-     * @param id
+     * @return
      */
     @Override
     @Transactional //jakarta
-    public void deleteByIdWithJpa(Integer id) {
-        Employee employee = entityManager.find(Employee.class, id);
-        entityManager.remove(employee);
+    public Set<String> findAllCountriesWithJpa() {
+        return entityManager.createQuery("select distinct country from Employee", String.class).getResultStream().collect(Collectors.toSet());
     }
 
     /**
@@ -45,17 +48,18 @@ public class EmployeeServiceEMBean implements EmployeeServiceEM {
     @Override
     @Transactional //jakarta
     public Employee updateByIdWithJpa(Integer id, Employee employee) {
-        Employee refreshEmployee = entityManager.find(Employee.class, id);
+        Employee refreshEmployee = Optional.ofNullable(entityManager.find(Employee.class, id))
+                .orElseThrow(() -> new RuntimeException("id = " + employee.getId()));
         return entityManager.merge(refreshEmployee);
-
     }
 
     /**
-     * @return
+     * @param id
      */
     @Override
     @Transactional //jakarta
-    public Set<String> findAllCountriesWithJpa() {
-        return entityManager.createQuery("select distinct country from Employee", String.class).getResultStream().collect(Collectors.toSet());
+    public void deleteByIdWithJpa(Integer id) {
+        Optional<Employee> employee = Optional.ofNullable(entityManager.find(Employee.class, id));
+        entityManager.remove(employee);
     }
 }

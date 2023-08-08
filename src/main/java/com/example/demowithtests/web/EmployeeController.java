@@ -53,10 +53,11 @@ public class EmployeeController {
 
     @PostMapping("/users/jpa")
     @ResponseStatus(HttpStatus.CREATED)
-    public void saveEmployee(@RequestBody Employee employee) {
+    public Employee saveEmployee(@RequestBody Employee employee) {
         log.debug("saveEmployeeWithJpa() - start: employee = {}", employee);
-        employeeServiceEM.createWithJpa(employee);
+        Employee saved = employeeServiceEM.createWithJpa(employee);
         log.debug("saveEmployeeWithJpa() - stop: employee = {}", employee.getId());
+        return saved;
     }
 
     @GetMapping("/users")
