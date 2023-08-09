@@ -48,11 +48,15 @@ springdoc:
     path: /swagger-ui.html # swagger-ui custom path
   api-docs:
     path: /v3/api-docs.yaml
-management:
+management: # spring actuator
   endpoints:
-    enabled-by-default: false
-  endpoint:
-    health:
-      enabled: true
+    #enabled-by-default: true # If changed to false, you can enable separate functionality as indicated below
+  #endpoint: # here
+   # health:
+    #  enabled: true
+    web:
+      exposure:
+       # exclude: "*"
+        include: "*"
 
 
