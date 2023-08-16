@@ -7,6 +7,7 @@ import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -61,5 +62,11 @@ public class EmployeeServiceEMBean implements EmployeeServiceEM {
     public void deleteByIdWithJpa(Integer id) {
         Optional<Employee> employee = Optional.ofNullable(entityManager.find(Employee.class, id));
         entityManager.remove(employee);
+    }
+
+    @Override
+    @Transactional
+    public List<Employee> getAllEM() {
+        return entityManager.createNativeQuery("SELECT * FROM users", Employee.class).getResultList();
     }
 }
