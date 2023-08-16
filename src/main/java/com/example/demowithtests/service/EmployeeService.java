@@ -58,4 +58,6 @@ public interface EmployeeService {
 
     List<Employee> findByNameContaining(String name);
 
+    void updateEmployeeByName(String name, Integer id);
+
 }

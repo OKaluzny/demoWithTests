@@ -194,4 +194,24 @@ public class EmployeeServiceBean implements EmployeeService {
     public List<Employee> findByNameContaining(String name) {
         return employeeRepository.findByNameContaining(name);
     }
+
+    /**
+     * @param name
+     * @param id
+     * @return
+     */
+    @Override
+    public void updateEmployeeByName(String name, Integer id) {
+        /*var employee = employeeRepository.findById(id)
+                .map(entity -> {
+                    entity.setName(name);
+                    return employeeRepository.save(entity);
+                })
+                .orElseThrow(() -> new EntityNotFoundException("Employee not found with id = " + id));
+        return employee;*/
+
+        employeeRepository.updateEmployeeByName(name, id);
+    }
+
+
 }
