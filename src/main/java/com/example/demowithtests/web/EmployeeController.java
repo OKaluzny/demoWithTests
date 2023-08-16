@@ -167,13 +167,22 @@ public class EmployeeController {
         log.debug("findByNameContaining() EmployeeController - end: employees = {}", employees.size());
         return employees;
     }
-    @PutMapping("/users/names/{id}")
+
+    @PatchMapping("/users/names/{id}")
     @ResponseStatus(HttpStatus.OK)
     public void refreshEmployeeName(@PathVariable("id") Integer id, @RequestParam String employeeName) {
         log.debug("refreshEmployeeName() EmployeeController - start: id = {}", id);
         employeeService.updateEmployeeByName(employeeName, id);
         log.debug("refreshEmployeeName() EmployeeController - end: ");
-        //return entity;
     }
 
+    @PutMapping("/users/names/body/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public Employee refreshEmployeeNameBody(@PathVariable("id") Integer id, @RequestParam String employeeName) {
+        log.debug("refreshEmployeeName() EmployeeController - start: id = {}", id);
+        employeeService.updateEmployeeByName(employeeName, id);
+        Employee employee = employeeService.getById(id);
+        log.debug("refreshEmployeeName() EmployeeController - end: id = {}", id);
+        return employee;
+    }
 }
