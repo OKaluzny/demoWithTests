@@ -24,9 +24,12 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
+import static com.example.demowithtests.util.Endpoints.API_BASE;
+import static com.example.demowithtests.util.Endpoints.USER_ENDPOINT;
+
 @RestController
 @AllArgsConstructor
-@RequestMapping(value = "/api", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(API_BASE)
 @Slf4j
 @Tag(name = "Employee", description = "Employee API")
 public class EmployeeController {
@@ -35,7 +38,7 @@ public class EmployeeController {
     private final EmployeeServiceEM employeeServiceEM;
     private final EmployeeMapper employeeMapper;
 
-    @PostMapping("/users")
+    @PostMapping(USER_ENDPOINT)
     @ResponseStatus(HttpStatus.CREATED)
     @Operation(summary = "This is endpoint to add a new employee.", description = "Create request to add a new employee.", tags = {"Employee"})
     @ApiResponses(value = {
@@ -176,7 +179,7 @@ public class EmployeeController {
         log.debug("refreshEmployeeName() EmployeeController - end: ");
     }
 
-    @PutMapping("/users/names/body/{id}")
+    @PatchMapping("/users/names/body/{id}")
     @ResponseStatus(HttpStatus.OK)
     public Employee refreshEmployeeNameBody(@PathVariable("id") Integer id, @RequestParam String employeeName) {
         log.debug("refreshEmployeeName() EmployeeController - start: id = {}", id);
