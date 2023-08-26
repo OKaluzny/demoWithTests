@@ -8,6 +8,8 @@ import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.stereotype.Component;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.Collection;
 
 import static com.example.demowithtests.util.annotations.LogColorConstants.ANSI_BLUE;
@@ -18,12 +20,15 @@ import static com.example.demowithtests.util.annotations.LogColorConstants.ANSI_
 @Component
 public class LoggingServiceClassesAspect {
 
+    private LocalDateTime start;
+
     @Pointcut("execution(public * com.example.demowithtests.service.EmployeeServiceBean.*(..))")
     public void callAtMyServicesPublicMethods() {
     }
 
     @Before("callAtMyServicesPublicMethods()")
     public void logBefore(JoinPoint joinPoint) {
+        start = LocalDateTime.now();
         String methodName = joinPoint.getSignature().toShortString();
         Object[] args = joinPoint.getArgs();
         if (args.length > 0) {
@@ -45,7 +50,8 @@ public class LoggingServiceClassesAspect {
             } else {
                 outputValue = returningValue;
             }
-            log.debug(ANSI_BLUE + "Service: " + methodName + " - end. Returns - {}" + ANSI_RESET, outputValue);
+            long result = Duration.between(LocalDateTime.now(), start).toMillis();
+            log.debug(ANSI_BLUE + "Service: " + methodName + " - end. Execution time " + result + " ms. Returns - {}" + ANSI_RESET, outputValue);
         } else {
             log.debug(ANSI_BLUE + "Service: " + methodName + " - end." + ANSI_RESET);
         }
