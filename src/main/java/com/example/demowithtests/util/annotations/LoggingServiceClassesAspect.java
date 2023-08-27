@@ -53,7 +53,8 @@ public class LoggingServiceClassesAspect {
             long result = Duration.between(LocalDateTime.now(), start).toMillis();
             log.debug(ANSI_BLUE + "Service: " + methodName + " - end. Execution time " + result + " ms. Returns - {}" + ANSI_RESET, outputValue);
         } else {
-            log.debug(ANSI_BLUE + "Service: " + methodName + " - end." + ANSI_RESET);
+            long result = Duration.between(LocalDateTime.now(), start).toMillis();
+            log.debug(ANSI_BLUE + "Service: " + methodName + " - end. Execution time " + result + " ms." + ANSI_RESET);
         }
     }
 }

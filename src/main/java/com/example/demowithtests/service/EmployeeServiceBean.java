@@ -33,7 +33,17 @@ public class EmployeeServiceBean implements EmployeeService {
     @ActivateCustomAnnotations({Name.class, ToLowerCase.class})
     // @Transactional(propagation = Propagation.MANDATORY)
     public Employee create(Employee employee) {
-        return employeeRepository.save(employee);
+        //return employeeRepository.save(employee);
+        return employeeRepository.saveAndFlush(employee);
+    }
+
+    /**
+     * @param employee
+     * @return
+     */
+    @Override
+    public void createAndSave(Employee employee) {
+        employeeRepository.saveEmployee(employee.getName(), employee.getEmail(), employee.getCountry(), String.valueOf(employee.getGender()));
     }
 
     @Override

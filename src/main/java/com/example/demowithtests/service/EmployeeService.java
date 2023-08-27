@@ -11,6 +11,7 @@ import java.util.Set;
 public interface EmployeeService {
 
     Employee create(Employee employee);
+    void createAndSave(Employee employee);
 
     List<Employee> getAll();
 

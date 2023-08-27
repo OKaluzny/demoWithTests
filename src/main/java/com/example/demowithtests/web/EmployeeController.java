@@ -17,7 +17,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -187,5 +186,12 @@ public class EmployeeController {
         Employee employee = employeeService.getById(id);
         log.debug("refreshEmployeeName() EmployeeController - end: id = {}", id);
         return employee;
+    }
+
+    @PostMapping("/employees")
+    @ResponseStatus(HttpStatus.CREATED)
+    public String createAndSave(@RequestBody Employee employee) {
+        employeeService.createAndSave(employee);
+        return "employee with name: " + employee.getName() + " saved!";
     }
 }
