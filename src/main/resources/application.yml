@@ -51,12 +51,10 @@ springdoc:
 management: # spring actuator
   endpoints:
     #enabled-by-default: true # If changed to false, you can enable separate functionality as indicated below
-  #endpoint: # here
-   # health:
+    #endpoint: # here
+    # health:
     #  enabled: true
     web:
       exposure:
-       # exclude: "*"
+        # exclude: "*"
         include: "*"
-
-
