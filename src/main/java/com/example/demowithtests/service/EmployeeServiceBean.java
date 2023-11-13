@@ -110,7 +110,7 @@ public class EmployeeServiceBean implements EmployeeService {
     }
 
     @Override
-    public void removeAll() {
+    public void removeAllUsers() {
             employeeRepository.deleteAll();
     }
 

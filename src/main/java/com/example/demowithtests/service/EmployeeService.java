@@ -23,7 +23,7 @@ public interface EmployeeService {
 
     Employee removeById(Integer id);
 
-    void removeAll();
+    void removeAllUsers();
 
     /**
      * Counts the total number of employees in the database.

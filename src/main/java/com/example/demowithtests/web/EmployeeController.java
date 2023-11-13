@@ -130,7 +130,7 @@ public class EmployeeController {
     @DeleteMapping("/users")
     @ResponseStatus(HttpStatus.OK)
     public RemoveDto removeAllUsers() {
-        employeeService.removeAll();
+        employeeService.removeAllUsers();
         return new RemoveDto(Date.from(Instant.now()), "All users were deleted");
     }
 
