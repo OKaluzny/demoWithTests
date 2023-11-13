@@ -11,6 +11,7 @@ import com.example.demowithtests.util.exception.ResourceWasDeletedException;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
@@ -96,7 +97,7 @@ public class EmployeeServiceBean implements EmployeeService {
     }
 
     @Override
-    public void removeById(Integer id) {
+    public Employee removeById(Integer id) {
         var employee = employeeRepository.findById(id)
                 .orElseThrow(ResourceWasDeletedException::new);
         if (Boolean.TRUE.equals(employee.getIs_Deleted())) {
@@ -105,11 +106,18 @@ public class EmployeeServiceBean implements EmployeeService {
             employee.setIs_Deleted(Boolean.TRUE);
             employeeRepository.save(employee);
         }
+        return employee;
     }
 
     @Override
     public void removeAll() {
-        employeeRepository.deleteAll();
+            employeeRepository.deleteAll();
+    }
+
+
+    @Override
+    public Long countEmployees() {
+        return employeeRepository.count();
     }
 
     /*@Override

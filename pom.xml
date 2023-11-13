@@ -102,12 +102,12 @@
             <version>2.2.220</version>
             <scope>test</scope>
         </dependency>
-        <!-- mapstruct -->
-        <dependency>
-            <groupId>org.mapstruct</groupId>
-            <artifactId>mapstruct</artifactId>
-            <version>${org.mapstruct.version}</version>
-        </dependency>
+<!--        &lt;!&ndash; mapstruct &ndash;&gt;-->
+<!--        <dependency>-->
+<!--            <groupId>org.mapstruct</groupId>-->
+<!--            <artifactId>mapstruct</artifactId>-->
+<!--            <version>${org.mapstruct.version}</version>-->
+<!--        </dependency>-->
         <!-- swagger -->
         <dependency>
             <groupId>org.springdoc</groupId>
@@ -191,9 +191,9 @@
             </plugin>-->
             <plugin>
                 <groupId>io.fabric8</groupId>
-                <artifactId>docker-maven-plugin</artifactId>
-                <version>0.42.1</version>
-                <executions>
+              <artifactId>docker-maven-plugin</artifactId>
+               <version>0.42.1</version>
+               <executions>
                     <execution>
                         <id>docker-build</id>
                         <phase>package</phase>
