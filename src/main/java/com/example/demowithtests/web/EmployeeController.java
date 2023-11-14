@@ -113,6 +113,13 @@ public class EmployeeController {
         employeeService.removeById(id);
     }
 
+    @DeleteMapping("/soft-users/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public String softRemoveEmployeeById(@PathVariable Integer id){
+        employeeService.softRemoveById(id);
+        return "User deleted";
+    }
+
     @DeleteMapping("/users")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void removeAllUsers() {

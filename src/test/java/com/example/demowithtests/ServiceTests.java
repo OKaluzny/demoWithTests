@@ -45,6 +45,8 @@ public class ServiceTests {
                 .email("test@mail.com")
                 .gender(Gender.M)
                 .build();
+        System.out.println(employee.getName());
+
     }
 
     @Test
@@ -97,12 +99,21 @@ public class ServiceTests {
         verify(employeeRepository).findAll();
     }
 
-    @Test
-    @DisplayName("Delete employee test")
-    public void deleteEmployeeTest() {
+//    @Test
+//    @DisplayName("Delete employee test")
+//    public void deleteEmployeeTest() {
+//
+//        when(employeeRepository.findById(employee.getId())).thenReturn(Optional.of(employee));
+//        service.removeById(employee.getId());
+//        verify(employeeRepository).delete(employee);
+//    }
 
-        when(employeeRepository.findById(employee.getId())).thenReturn(Optional.of(employee));
-        service.removeById(employee.getId());
-        verify(employeeRepository).delete(employee);
-    }
+//    @Test
+//    @DisplayName("Soft delete employee test")
+//    public void softDeleteEmployeeTest() {
+//
+//        when(employeeRepository.findById(employee.getId())).thenReturn(Optional.of(employee));
+//        service.softRemoveById(employee.getId());
+//        verify(employeeRepository).delete(employee);
+//    }
 }

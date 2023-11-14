@@ -48,6 +48,7 @@ services:
       - "5433:5432"
     # Setup the username, password, and database name. You can changes these values.
     environment:
+      - "PG USER: postgres"
       - "POSTGRES_USER=postgres"
       - "POSTGRES_PASSWORD=postgres"
       - "POSTGRES_DB=employee"

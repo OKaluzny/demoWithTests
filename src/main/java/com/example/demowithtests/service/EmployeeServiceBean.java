@@ -33,8 +33,8 @@ public class EmployeeServiceBean implements EmployeeService {
     @ActivateCustomAnnotations({Name.class, ToLowerCase.class})
     // @Transactional(propagation = Propagation.MANDATORY)
     public Employee create(Employee employee) {
-        //return employeeRepository.save(employee);
-        return employeeRepository.saveAndFlush(employee);
+        return employeeRepository.save(employee);
+//        return employeeRepository.saveAndFlush(employee);
     }
 
     /**
@@ -64,9 +64,9 @@ public class EmployeeServiceBean implements EmployeeService {
         var employee = employeeRepository.findById(id)
                 // .orElseThrow(() -> new EntityNotFoundException("Employee not found with id = " + id));
                 .orElseThrow(ResourceNotFoundException::new);
-        /* if (employee.getIsDeleted()) {
+        if (employee.getIsDeleted()) {
             throw new EntityNotFoundException("Employee was deleted with id = " + id);
-        }*/
+        }
         return employee;
     }
 
@@ -86,12 +86,25 @@ public class EmployeeServiceBean implements EmployeeService {
     public void removeById(Integer id) {
         //repository.deleteById(id);
         var employee = employeeRepository.findById(id)
-                // .orElseThrow(() -> new EntityNotFoundException("Employee not found with id = " + id));
+//                 .orElseThrow(() -> new EntityNotFoundException("Employee not found with id = " + id));
                 .orElseThrow(ResourceWasDeletedException::new);
-        //employee.setIsDeleted(true);
-        employeeRepository.delete(employee);
-        //repository.save(employee);
+        employee.setIsDeleted(Boolean.TRUE);
+//        employeeRepository.delete(employee);
+        employeeRepository.save(employee);
     }
+
+    @Override
+    public void softRemoveById(Integer id) {
+        var employee = employeeRepository.findById(id)
+                .orElseThrow(ResourceWasDeletedException::new);
+        if (Boolean.TRUE.equals(employee.getIsDeleted())) {
+            throw new EntityNotFoundException("Employee not found with id = " + id);
+        } else {
+            employee.setIsDeleted(true);
+            employeeRepository.save(employee);
+        }
+    }
+
 
     @Override
     public void removeAll() {
