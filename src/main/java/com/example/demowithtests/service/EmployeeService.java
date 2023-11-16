@@ -25,6 +25,10 @@ public interface EmployeeService {
 
     void removeAllUsers();
 
+    int countEmployeesFromFrance();
+
+    List<Employee> findAllFromFrance();
+
     /**
      * Counts the total number of employees in the database.
      *

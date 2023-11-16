@@ -44,6 +44,12 @@ public final class Employee {
     @Column(name = "is_deleted")
     private Boolean is_Deleted = Boolean.FALSE;
 
+    public Boolean getIs_Deleted() {
+        if (this.is_Deleted == null) {
+            return false;
+        }
+        return this.is_Deleted;
+    }
 
 
 }

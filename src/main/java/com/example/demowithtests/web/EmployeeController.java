@@ -54,6 +54,22 @@ public class EmployeeController {
         return dto;
     }
 
+    @PutMapping("/users/france")
+    @ResponseStatus(HttpStatus.OK)
+    public FranceGreetingDto greetEmployeesFromFrance() {
+        int numberOfEmployees = employeeService.countEmployeesFromFrance();
+        String message = "Happy holidays to users from France!";
+        return new FranceGreetingDto(message, numberOfEmployees);
+    }
+
+    @PatchMapping("/users/france")
+    @ResponseStatus(HttpStatus.OK)
+    public FranceGreetingDto patchGreetEmployeesFromFrance() {
+        int numberOfEmployees = employeeService.countEmployeesFromFrance();
+        String message = "Happy holidays to users from France (PATCH)!";
+        return new FranceGreetingDto(message, numberOfEmployees);
+    }
+
     @PostMapping("/users/jpa")
     @ResponseStatus(HttpStatus.CREATED)
     public Employee saveEmployee(@RequestBody Employee employee) {

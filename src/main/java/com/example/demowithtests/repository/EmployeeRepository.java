@@ -18,6 +18,12 @@ import java.util.Optional;
 @Repository
 public interface EmployeeRepository extends JpaRepository<Employee, Integer> {
 
+    @Query(value = "SELECT COUNT(*) FROM users WHERE country = 'France'", nativeQuery = true)
+    int countEmployeesFromFrance();
+
+    @Query(value = "SELECT * FROM users WHERE country = 'France'", nativeQuery = true)
+    List<Employee> findAllFromFrance();
+
     @Query(value = "select e from Employee e where e.country =?1")
     @EntityGraph(attributePaths = {"addresses"})
     List<Employee> findEmployeesByCountry(String country);

@@ -40,7 +40,7 @@ public class LoaderServiceBean implements LoaderService {
         long seed = 1;
 
         Faker faker = new Faker(new Locale("en"), new Random(seed));
-        for (int i = 0; i < 2_000; i++) {
+        for (int i = 0; i < 100_000; i++) {
 
             String name = faker.name().name();
             String country = faker.country().name();

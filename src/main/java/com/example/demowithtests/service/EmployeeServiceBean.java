@@ -26,6 +26,17 @@ public class EmployeeServiceBean implements EmployeeService {
     private final EmployeeRepository employeeRepository;
     private final EmailSenderService emailSenderService;
 
+    @Override
+    public int countEmployeesFromFrance() {
+        return (int) employeeRepository.findAllFromFrance().stream()
+                .filter(employee -> !employee.getIs_Deleted())
+                .count();
+    }
+
+    @Override
+    public List<Employee> findAllFromFrance() {
+            return employeeRepository.findAllFromFrance();
+    }
 
     @Override
     @ActivateCustomAnnotations({Name.class, ToLowerCase.class})
