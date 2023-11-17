@@ -1,8 +1,10 @@
 package com.example.demowithtests.web;
 
 import com.example.demowithtests.domain.Employee;
-import com.example.demowithtests.dto.EmployeeDto;
+import com.example.demowithtests.dto.EmployeeDeleteDto;
+import com.example.demowithtests.dto.EmployeeSaveDto;
 import com.example.demowithtests.dto.EmployeeReadDto;
+import com.example.demowithtests.dto.EmployeeUpdateDto;
 import com.example.demowithtests.service.EmployeeService;
 import com.example.demowithtests.service.EmployeeServiceEM;
 import com.example.demowithtests.util.mappers.EmployeeMapper;
@@ -22,6 +24,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import static com.example.demowithtests.util.Endpoints.API_BASE;
 import static com.example.demowithtests.util.Endpoints.USER_ENDPOINT;
@@ -45,7 +48,7 @@ public class EmployeeController {
             @ApiResponse(responseCode = "400", description = "Invalid input"),
             @ApiResponse(responseCode = "404", description = "NOT FOUND. Specified employee request not found."),
             @ApiResponse(responseCode = "409", description = "Employee already exists")})
-    public EmployeeDto saveEmployee(@RequestBody @Valid EmployeeDto requestForSave) {
+    public EmployeeSaveDto saveEmployee(@RequestBody @Valid EmployeeSaveDto requestForSave) {
         log.debug("saveEmployee() - start: requestForSave = {}", requestForSave.name());
         var employee = employeeMapper.toEmployee(requestForSave);
         var dto = employeeMapper.toEmployeeDto(employeeService.create(employee));
@@ -64,8 +67,11 @@ public class EmployeeController {
 
     @GetMapping("/users")
     @ResponseStatus(HttpStatus.OK)
-    public List<Employee> getAllUsers() {
-        return employeeService.getAll();
+    public List<EmployeeReadDto> getAllUsers() {
+        List<Employee> employees = employeeService.getAll();
+        return employees.stream()
+                .map(employeeMapper::toEmployeeReadDto)
+                .collect(Collectors.toList());
     }
 
     @GetMapping("/users/pages")
@@ -99,7 +105,7 @@ public class EmployeeController {
 
     @PutMapping("/users/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public EmployeeReadDto refreshEmployee(@PathVariable("id") Integer id, @RequestBody EmployeeDto employee) {
+    public EmployeeReadDto refreshEmployee(@PathVariable("id") Integer id, @RequestBody EmployeeSaveDto employee) {
         log.debug("refreshEmployee() EmployeeController - start: id = {}", id);
         Employee entity = employeeMapper.toEmployee(employee);
         EmployeeReadDto dto = employeeMapper.toEmployeeReadDto(employeeService.updateById(id, entity));
@@ -109,15 +115,16 @@ public class EmployeeController {
 
     @DeleteMapping("/users/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void removeEmployeeById(@PathVariable Integer id) {
-        employeeService.removeById(id);
+    public EmployeeDeleteDto removeEmployeeById(@PathVariable Integer id) {
+        EmployeeDeleteDto dto = employeeMapper.toDeleteEmployeeDto(employeeService.removeById(id));
+        return dto;
     }
 
     @DeleteMapping("/soft-users/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public String softRemoveEmployeeById(@PathVariable Integer id){
-        employeeService.softRemoveById(id);
-        return "User deleted";
+    public EmployeeDeleteDto softRemoveEmployeeById(@PathVariable Integer id) {
+        EmployeeDeleteDto dto = employeeMapper.toDeleteEmployeeDto(employeeService.softRemoveById(id));
+        return dto;
     }
 
     @DeleteMapping("/users")
@@ -158,8 +165,12 @@ public class EmployeeController {
 
     @GetMapping("/users/countryBy")
     @ResponseStatus(HttpStatus.OK)
-    public List<Employee> getByCountry(@RequestParam(required = true) String country) {
-        return employeeService.filterByCountry(country);
+    public List<EmployeeReadDto> getByCountry(@RequestParam(required = true) String country) {
+        List<Employee> employees = employeeService.filterByCountry(country);
+
+        return employees.stream()
+                .map(employeeMapper::toEmployeeReadDto)
+                .collect(Collectors.toList());
     }
 
     @PatchMapping("/users/ukrainians")
@@ -170,11 +181,14 @@ public class EmployeeController {
 
     @GetMapping("/users/names")
     @ResponseStatus(HttpStatus.OK)
-    public List<Employee> findByNameContaining(@RequestParam String employeeName) {
+    public List<EmployeeReadDto> findByNameContaining(@RequestParam String employeeName) {
         log.debug("findByNameContaining() EmployeeController - start: employeeName = {}", employeeName);
         List<Employee> employees = employeeService.findByNameContaining(employeeName);
+
         log.debug("findByNameContaining() EmployeeController - end: employees = {}", employees.size());
-        return employees;
+        return employees.stream()
+                .map(employeeMapper::toEmployeeReadDto)
+                .collect(Collectors.toList());
     }
 
     @PatchMapping("/users/names/{id}")
@@ -185,19 +199,23 @@ public class EmployeeController {
         log.debug("refreshEmployeeName() EmployeeController - end: ");
     }
 
+
     @PatchMapping("/users/names/body/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public Employee refreshEmployeeNameBody(@PathVariable("id") Integer id, @RequestParam String employeeName) {
+    public EmployeeUpdateDto refreshEmployeeNameBody(@PathVariable("id") Integer id, @RequestBody String employeeName) {
         log.debug("refreshEmployeeName() EmployeeController - start: id = {}", id);
         employeeService.updateEmployeeByName(employeeName, id);
         Employee employee = employeeService.getById(id);
         log.debug("refreshEmployeeName() EmployeeController - end: id = {}", id);
-        return employee;
+        EmployeeUpdateDto dto = employeeMapper.toEmployeeUpdateDto(employee);
+
+        return dto;
     }
 
     @PostMapping("/employees")
     @ResponseStatus(HttpStatus.CREATED)
-    public String createAndSave(@RequestBody Employee employee) {
+    public String createAndSave(@RequestBody EmployeeSaveDto employeeSaveDto) {
+        Employee employee = employeeMapper.toEmployee(employeeSaveDto);
         employeeService.createAndSave(employee);
         return "employee with name: " + employee.getName() + " saved!";
     }

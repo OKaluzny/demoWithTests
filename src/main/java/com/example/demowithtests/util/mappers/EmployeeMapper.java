@@ -1,8 +1,10 @@
 package com.example.demowithtests.util.mappers;
 
 import com.example.demowithtests.domain.Employee;
-import com.example.demowithtests.dto.EmployeeDto;
+import com.example.demowithtests.dto.EmployeeDeleteDto;
+import com.example.demowithtests.dto.EmployeeSaveDto;
 import com.example.demowithtests.dto.EmployeeReadDto;
+import com.example.demowithtests.dto.EmployeeUpdateDto;
 import org.mapstruct.Mapper;
 
 import java.util.List;
@@ -10,11 +12,17 @@ import java.util.List;
 @Mapper(componentModel = "spring")
 public interface EmployeeMapper {
 
-    EmployeeDto toEmployeeDto(Employee employee);
+    EmployeeSaveDto toEmployeeDto(Employee employee);
+
+    EmployeeDeleteDto toDeleteEmployeeDto(Employee employee);
 
     EmployeeReadDto toEmployeeReadDto(Employee employee);
 
-    List<EmployeeDto> toListEmployeeDto(List<Employee> employees);
+    EmployeeUpdateDto toEmployeeUpdateDto(Employee employee);
 
-    Employee toEmployee(EmployeeDto employeeDto);
+    List<EmployeeSaveDto> toListEmployeeDto(List<Employee> employees);
+
+    List<EmployeeDeleteDto> toListDeleteEmployeeDto(List<Employee> employees);
+
+    Employee toEmployee(EmployeeSaveDto employeeSaveDto);
 }

@@ -1,7 +1,7 @@
 package com.example.demowithtests;
 
 import com.example.demowithtests.domain.Employee;
-import com.example.demowithtests.dto.EmployeeDto;
+import com.example.demowithtests.dto.EmployeeSaveDto;
 import com.example.demowithtests.dto.EmployeeReadDto;
 import com.example.demowithtests.service.EmployeeService;
 import com.example.demowithtests.service.EmployeeServiceEM;
@@ -66,7 +66,7 @@ public class ControllerTests {
     @WithMockUser(roles = "ADMIN")
     public void createPassTest() throws Exception {
 
-        EmployeeDto response = new EmployeeDto(
+        EmployeeSaveDto response = new EmployeeSaveDto(
                 1, "Mike", "England", "mail@mail.com",
                 null, null, null);
 
@@ -75,7 +75,7 @@ public class ControllerTests {
                 .name("Mike")
                 .email("mail@mail.com").build();
 
-        when(employeeMapper.toEmployee(any(EmployeeDto.class))).thenReturn(employee);
+        when(employeeMapper.toEmployee(any(EmployeeSaveDto.class))).thenReturn(employee);
         when(employeeMapper.toEmployeeDto(any(Employee.class))).thenReturn(response);
         when(service.create(any(Employee.class))).thenReturn(employee);
 
@@ -155,7 +155,7 @@ public class ControllerTests {
         response.id = 1;
         var employee = Employee.builder().id(1).build();
 
-        when(employeeMapper.toEmployee(any(EmployeeDto.class))).thenReturn(employee);
+        when(employeeMapper.toEmployee(any(EmployeeSaveDto.class))).thenReturn(employee);
         when(service.updateById(eq(1), any(Employee.class))).thenReturn(employee);
         when(employeeMapper.toEmployeeReadDto(any(Employee.class))).thenReturn(response);
 

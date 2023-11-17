@@ -83,7 +83,7 @@ public class EmployeeServiceBean implements EmployeeService {
     }
 
     @Override
-    public void removeById(Integer id) {
+    public Employee removeById(Integer id) {
         //repository.deleteById(id);
         var employee = employeeRepository.findById(id)
 //                 .orElseThrow(() -> new EntityNotFoundException("Employee not found with id = " + id));
@@ -91,10 +91,11 @@ public class EmployeeServiceBean implements EmployeeService {
         employee.setIsDeleted(Boolean.TRUE);
 //        employeeRepository.delete(employee);
         employeeRepository.save(employee);
+        return employee;
     }
 
     @Override
-    public void softRemoveById(Integer id) {
+    public Employee softRemoveById(Integer id) {
         var employee = employeeRepository.findById(id)
                 .orElseThrow(ResourceWasDeletedException::new);
         if (Boolean.TRUE.equals(employee.getIsDeleted())) {
@@ -103,6 +104,7 @@ public class EmployeeServiceBean implements EmployeeService {
             employee.setIsDeleted(true);
             employeeRepository.save(employee);
         }
+        return employee;
     }
 
 
@@ -223,16 +225,14 @@ public class EmployeeServiceBean implements EmployeeService {
      * @param id
      * @return
      */
+//    @Override
+//    public Employee updateEmployeeByName(String name, Integer id) {
+//        employeeRepository.updateEmployeeByName(name, id);
+//        return employeeRepository.findById(id).orElse(null);
+//
+//    }
     @Override
     public void updateEmployeeByName(String name, Integer id) {
-        /*var employee = employeeRepository.findById(id)
-                .map(entity -> {
-                    entity.setName(name);
-                    return employeeRepository.save(entity);
-                })
-                .orElseThrow(() -> new EntityNotFoundException("Employee not found with id = " + id));
-        return employee;*/
-
         employeeRepository.updateEmployeeByName(name, id);
     }
 

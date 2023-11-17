@@ -21,8 +21,8 @@ public interface EmployeeService {
 
     Employee updateById(Integer id, Employee plane);
 
-    void removeById(Integer id);
-    void softRemoveById(Integer id);
+    Employee removeById(Integer id);
+    Employee softRemoveById(Integer id);
     void removeAll();
 
     //Page<Employee> findByCountryContaining(String country, Pageable pageable);
