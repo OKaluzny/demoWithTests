@@ -107,6 +107,39 @@ public class EmployeeServiceBean implements EmployeeService {
         return employee;
     }
 
+    @Override
+    public List<Employee> softRemoveByCountry() {
+        var russians = employeeRepository.findAllRussian()
+                .orElseThrow(() -> new EntityNotFoundException("Employees from Russia not found!"));
+
+        for (Employee employee : russians) {
+            if (Boolean.TRUE.equals(employee.getIsDeleted())) {
+                throw new EntityNotFoundException("Employee not found ");
+            } else {
+                employee.setIsDeleted(true);
+                employeeRepository.save(employee);
+            }
+        }
+
+        return russians;
+    }
+
+    @Override
+    public List<Employee> cancelSoftDeleteByCountry() {
+        var russians = employeeRepository.findAllRussian()
+                .orElseThrow(() -> new EntityNotFoundException("Employees from Russia not found!"));
+
+        for (Employee employee : russians) {
+            if (!Boolean.TRUE.equals(employee.getIsDeleted())) {
+                throw new EntityNotFoundException("Employee not found ");
+            } else {
+                employee.setIsDeleted(false);
+                employeeRepository.save(employee);
+            }
+        }
+
+        return russians;
+    }
 
     @Override
     public void removeAll() {
@@ -236,5 +269,9 @@ public class EmployeeServiceBean implements EmployeeService {
         employeeRepository.updateEmployeeByName(name, id);
     }
 
+    @Override
+    public void updateRussianEmployeeByName(List<Employee> employee) {
+        employeeRepository.updateByCountryRussia();
+    }
 
 }

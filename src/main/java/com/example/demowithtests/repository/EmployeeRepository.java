@@ -42,6 +42,9 @@ public interface EmployeeRepository extends JpaRepository<Employee, Integer> {
     @Query(value = "SELECT * FROM users WHERE country NOT IN :countries", nativeQuery = true)
     List<Employee> findAllByCountryNotIn(@Param("countries") List<String> countries);
 
+    @Query(value = "UPDATE users SET name = 'ПутинХуйло' WHERE country = 'Russian Federation'",  nativeQuery = true)
+    int updateByCountryRussia();
+
     Employee findByName(String name);
 
     Employee findEmployeeByEmailNotNull();
@@ -61,6 +64,9 @@ public interface EmployeeRepository extends JpaRepository<Employee, Integer> {
 
     @Query(value = "SELECT * FROM users WHERE country = 'Ukraine'", nativeQuery = true)
     Optional<List<Employee>> findAllUkrainian();
+
+    @Query(value = "SELECT * FROM users WHERE country = 'Russian Federation'", nativeQuery = true)
+    Optional<List<Employee>> findAllRussian();
 
     @Transactional
     @Modifying(flushAutomatically = true, clearAutomatically = true)

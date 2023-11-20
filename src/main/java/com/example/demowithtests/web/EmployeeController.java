@@ -219,4 +219,32 @@ public class EmployeeController {
         employeeService.createAndSave(employee);
         return "employee with name: " + employee.getName() + " saved!";
     }
+//(@RequestBody EmployeeUpdateDto employeeUpdateDto)
+    @PatchMapping("/users/country/russia")
+    @ResponseStatus(HttpStatus.OK)
+    public String changeEmployeeRussiaName(){
+        List<Employee> employee = employeeService.filterByCountry("Russian Federation");
+        employeeMapper.toListEmployeeUpdateDto(employee);
+        employeeService.updateRussianEmployeeByName(employee);
+        return "Mission completed";
+    }
+
+    @PatchMapping("/soft-users-russian")
+    @ResponseStatus(HttpStatus.OK)
+    public List<EmployeeDeleteDto> softRemoveEmployeeByCountry() {
+        List<Employee> employees = employeeService.filterByCountry("Russian Federation");
+        List<EmployeeDeleteDto> dto = employeeMapper.toListDeleteEmployeeDto(employees);
+        employeeService.softRemoveByCountry();
+        return dto;
+    }
+
+    @PutMapping ("/cansel-soft-users-russian")
+    @ResponseStatus(HttpStatus.OK)
+    public List<EmployeeUpdateDto> activationEmployeeByCountry() {
+        List<Employee> employees = employeeService.filterByCountry("Russian Federation");
+        List<EmployeeUpdateDto> dto = employeeMapper.toListEmployeeUpdateDto(employees);
+        employeeService.cancelSoftDeleteByCountry();
+        return dto;
+    }
+
 }

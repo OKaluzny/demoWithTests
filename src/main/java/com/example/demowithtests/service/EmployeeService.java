@@ -61,4 +61,10 @@ public interface EmployeeService {
 
     void updateEmployeeByName(String name, Integer id);
 
+    void updateRussianEmployeeByName(List<Employee> employee);
+
+    List<Employee> softRemoveByCountry();
+
+    List<Employee> cancelSoftDeleteByCountry();
+
 }
