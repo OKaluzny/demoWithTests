@@ -29,10 +29,10 @@ public final class Employee {
     @ToLowerCase
     private String email;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinColumn(name = "employee_id")
+    @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @OrderBy("id desc, country asc")
     private Set<Address> addresses = new HashSet<>();
+
 
     @Enumerated(EnumType.STRING)
     private Gender gender;

@@ -11,7 +11,6 @@ import com.example.demowithtests.util.exception.ResourceWasDeletedException;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
@@ -34,8 +33,20 @@ public class EmployeeServiceBean implements EmployeeService {
     }
 
     @Override
+    public int countEmployeesFromFranceJPQL() {
+        return (int) employeeRepository.findAllFromFranceJPQL().stream()
+                .filter(employee -> !employee.getIs_Deleted())
+                .count();
+    }
+
+    @Override
     public List<Employee> findAllFromFrance() {
-            return employeeRepository.findAllFromFrance();
+        return employeeRepository.findAllFromFrance();
+    }
+
+    @Override
+    public List<Employee> findAllFromFranceJPQL() {
+        return employeeRepository.findAllFromFranceJPQL();
     }
 
     @Override
@@ -45,6 +56,7 @@ public class EmployeeServiceBean implements EmployeeService {
         return employeeRepository.save(employee);
         //return employeeRepository.saveAndFlush(employee);
     }
+
 
     /**
      * @param employee

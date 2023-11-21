@@ -10,6 +10,8 @@ import java.util.Set;
 
 public interface EmployeeService {
 
+    List<Employee> findAllFromFranceJPQL();
+
     Employee create(Employee employee);
     void createAndSave(Employee employee);
 
@@ -26,6 +28,8 @@ public interface EmployeeService {
     void removeAllUsers();
 
     int countEmployeesFromFrance();
+
+    int countEmployeesFromFranceJPQL();
 
     List<Employee> findAllFromFrance();
 
