@@ -11,7 +11,7 @@
 
     <groupId>com.example</groupId>
     <artifactId>demoWithTests</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.0.1</version>
 
     <name>demo-with-tests</name>
     <description>demoWithTests</description>
@@ -102,12 +102,12 @@
             <version>2.2.220</version>
             <scope>test</scope>
         </dependency>
-        <!-- mapstruct -->
-        <dependency>
-            <groupId>org.mapstruct</groupId>
-            <artifactId>mapstruct</artifactId>
-            <version>${org.mapstruct.version}</version>
-        </dependency>
+<!--        &lt;!&ndash; mapstruct &ndash;&gt;-->
+<!--        <dependency>-->
+<!--            <groupId>org.mapstruct</groupId>-->
+<!--            <artifactId>mapstruct</artifactId>-->
+<!--            <version>${org.mapstruct.version}</version>-->
+<!--        </dependency>-->
         <!-- swagger -->
         <dependency>
             <groupId>org.springdoc</groupId>
@@ -191,9 +191,9 @@
             </plugin>-->
             <plugin>
                 <groupId>io.fabric8</groupId>
-                <artifactId>docker-maven-plugin</artifactId>
-                <version>0.42.1</version>
-                <executions>
+              <artifactId>docker-maven-plugin</artifactId>
+               <version>0.42.1</version>
+               <executions>
                     <execution>
                         <id>docker-build</id>
                         <phase>package</phase>

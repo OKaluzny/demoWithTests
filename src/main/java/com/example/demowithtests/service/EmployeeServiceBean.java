@@ -11,10 +11,7 @@ import com.example.demowithtests.util.exception.ResourceWasDeletedException;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -28,14 +25,38 @@ public class EmployeeServiceBean implements EmployeeService {
     private final EmployeeRepository employeeRepository;
     private final EmailSenderService emailSenderService;
 
+    @Override
+    public int countEmployeesFromFrance() {
+        return (int) employeeRepository.findAllFromFrance().stream()
+                .filter(employee -> !employee.getIs_Deleted())
+                .count();
+    }
+
+    @Override
+    public int countEmployeesFromFranceJPQL() {
+        return (int) employeeRepository.findAllFromFranceJPQL().stream()
+                .filter(employee -> !employee.getIs_Deleted())
+                .count();
+    }
+
+    @Override
+    public List<Employee> findAllFromFrance() {
+        return employeeRepository.findAllFromFrance();
+    }
+
+    @Override
+    public List<Employee> findAllFromFranceJPQL() {
+        return employeeRepository.findAllFromFranceJPQL();
+    }
 
     @Override
     @ActivateCustomAnnotations({Name.class, ToLowerCase.class})
     // @Transactional(propagation = Propagation.MANDATORY)
     public Employee create(Employee employee) {
-        //return employeeRepository.save(employee);
-        return employeeRepository.saveAndFlush(employee);
+        return employeeRepository.save(employee);
+        //return employeeRepository.saveAndFlush(employee);
     }
+
 
     /**
      * @param employee
@@ -48,54 +69,78 @@ public class EmployeeServiceBean implements EmployeeService {
 
     @Override
     public List<Employee> getAll() {
-        return employeeRepository.findAll();
+        List<Employee> allEmployees = employeeRepository.findAll();
+
+        return allEmployees.stream()
+                .filter(employee -> !employee.getIs_Deleted())
+                .collect(Collectors.toList());
     }
 
     @Override
     public Page<Employee> getAllWithPagination(Pageable pageable) {
         log.debug("getAllWithPagination() - start: pageable = {}", pageable);
-        Page<Employee> list = employeeRepository.findAll(pageable);
-        log.debug("getAllWithPagination() - end: list = {}", list);
-        return list;
+
+        Page<Employee> page = employeeRepository.findAll(pageable);
+        List<Employee> filteredList = page.getContent().stream()
+                .filter(employee -> !employee.getIs_Deleted())
+                .collect(Collectors.toList());
+
+        Page<Employee> filteredPage = new PageImpl<>(filteredList, pageable, page.getTotalElements());
+
+        log.debug("getAllWithPagination() - end: filteredPage = {}", filteredPage);
+        return filteredPage;
     }
 
     @Override
     public Employee getById(Integer id) {
         var employee = employeeRepository.findById(id)
-                // .orElseThrow(() -> new EntityNotFoundException("Employee not found with id = " + id));
                 .orElseThrow(ResourceNotFoundException::new);
-        /* if (employee.getIsDeleted()) {
-            throw new EntityNotFoundException("Employee was deleted with id = " + id);
-        }*/
-        return employee;
+        if (Boolean.TRUE.equals(employee.getIs_Deleted())) {
+            throw new EntityNotFoundException("Employee deleted with id = " + id);
+        } else {
+            return employee;
+        }
     }
 
-    @Override
+
     public Employee updateById(Integer id, Employee employee) {
         return employeeRepository.findById(id)
                 .map(entity -> {
-                    entity.setName(employee.getName());
-                    entity.setEmail(employee.getEmail());
-                    entity.setCountry(employee.getCountry());
-                    return employeeRepository.save(entity);
+                    if (Boolean.TRUE.equals(employee.getIs_Deleted())) {
+                        throw new EntityNotFoundException("Employee with id = " + id + " is marked as deleted");
+                    }
+                    else {
+                        entity.setName(employee.getName());
+                        entity.setEmail(employee.getEmail());
+                        entity.setCountry(employee.getCountry());
+                        return employeeRepository.save(entity);
+                    }
                 })
                 .orElseThrow(() -> new EntityNotFoundException("Employee not found with id = " + id));
     }
 
     @Override
-    public void removeById(Integer id) {
-        //repository.deleteById(id);
+    public Employee removeById(Integer id) {
         var employee = employeeRepository.findById(id)
-                // .orElseThrow(() -> new EntityNotFoundException("Employee not found with id = " + id));
                 .orElseThrow(ResourceWasDeletedException::new);
-        //employee.setIsDeleted(true);
-        employeeRepository.delete(employee);
-        //repository.save(employee);
+        if (Boolean.TRUE.equals(employee.getIs_Deleted())) {
+            throw new EntityNotFoundException("Employee was deleted with id = " + id);
+        }else {
+            employee.setIs_Deleted(Boolean.TRUE);
+            employeeRepository.save(employee);
+        }
+        return employee;
     }
 
     @Override
-    public void removeAll() {
-        employeeRepository.deleteAll();
+    public void removeAllUsers() {
+            employeeRepository.deleteAll();
+    }
+
+
+    @Override
+    public Long countEmployees() {
+        return employeeRepository.count();
     }
 
     /*@Override

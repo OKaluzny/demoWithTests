@@ -10,6 +10,8 @@ import java.util.Set;
 
 public interface EmployeeService {
 
+    List<Employee> findAllFromFranceJPQL();
+
     Employee create(Employee employee);
     void createAndSave(Employee employee);
 
@@ -21,9 +23,22 @@ public interface EmployeeService {
 
     Employee updateById(Integer id, Employee plane);
 
-    void removeById(Integer id);
+    Employee removeById(Integer id);
 
-    void removeAll();
+    void removeAllUsers();
+
+    int countEmployeesFromFrance();
+
+    int countEmployeesFromFranceJPQL();
+
+    List<Employee> findAllFromFrance();
+
+    /**
+     * Counts the total number of employees in the database.
+     *
+     * @return The total number of employees.
+     */
+    Long countEmployees();
 
     //Page<Employee> findByCountryContaining(String country, Pageable pageable);
 

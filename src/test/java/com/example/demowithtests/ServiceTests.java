@@ -85,6 +85,7 @@ public class ServiceTests {
         Employee expected = service.getById(employee.getId());
         assertThat(expected).isSameAs(employee);
         verify(employeeRepository).findById(employee.getId());
+
     }
 
     @Test
@@ -100,9 +101,8 @@ public class ServiceTests {
     @Test
     @DisplayName("Delete employee test")
     public void deleteEmployeeTest() {
-
         when(employeeRepository.findById(employee.getId())).thenReturn(Optional.of(employee));
         service.removeById(employee.getId());
-        verify(employeeRepository).delete(employee);
+        verify(employeeRepository).save(employee);
     }
 }

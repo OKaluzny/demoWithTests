@@ -29,10 +29,10 @@ public final class Employee {
     @ToLowerCase
     private String email;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinColumn(name = "employee_id")
+    @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @OrderBy("id desc, country asc")
     private Set<Address> addresses = new HashSet<>();
+
 
     @Enumerated(EnumType.STRING)
     private Gender gender;
@@ -40,4 +40,17 @@ public final class Employee {
     @OneToOne  (cascade = CascadeType.ALL)
     @JoinColumn(name = "document_id", referencedColumnName = "id")
     private Document document;
+
+    @Column(name = "is_deleted")
+    private Boolean is_Deleted = Boolean.FALSE;
+
+    public Boolean getIs_Deleted() {
+        if (this.is_Deleted == null) {
+            return false;
+        }
+        return this.is_Deleted;
+    }
+
+
 }
+

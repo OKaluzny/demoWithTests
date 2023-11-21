@@ -1,8 +1,7 @@
 package com.example.demowithtests.web;
 
 import com.example.demowithtests.domain.Employee;
-import com.example.demowithtests.dto.EmployeeDto;
-import com.example.demowithtests.dto.EmployeeReadDto;
+import com.example.demowithtests.dto.*;
 import com.example.demowithtests.service.EmployeeService;
 import com.example.demowithtests.service.EmployeeServiceEM;
 import com.example.demowithtests.util.mappers.EmployeeMapper;
@@ -19,6 +18,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.Instant;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -52,6 +53,31 @@ public class EmployeeController {
         log.debug("saveEmployee() - stop: dto = {}", dto.name());
         return dto;
     }
+
+    @PutMapping("/users/france")
+    @ResponseStatus(HttpStatus.OK)
+    public FranceGreetingDto greetEmployeesFromFrance() {
+        int numberOfEmployees = employeeService.countEmployeesFromFrance();
+        String message = "Happy holidays to users from France!";
+        return new FranceGreetingDto(message, numberOfEmployees);
+    }
+
+    @PatchMapping("/users/france")
+    @ResponseStatus(HttpStatus.OK)
+    public FranceGreetingDto patchGreetEmployeesFromFrance() {
+        int numberOfEmployees = employeeService.countEmployeesFromFrance();
+        String message = "Happy holidays to users from France (PATCH)!";
+        return new FranceGreetingDto(message, numberOfEmployees);
+    }
+
+    @GetMapping ("/users/france/jpql")
+    @ResponseStatus(HttpStatus.OK)
+    public FranceGreetingDto patchGreetEmployeesFromFranceJPQL() {
+        int numberOfEmployees = employeeService.countEmployeesFromFranceJPQL();
+        String message = "Happy holidays to users from France (PATCH)! (JPQL)";
+        return new FranceGreetingDto(message, numberOfEmployees);
+    }
+
 
     @PostMapping("/users/jpa")
     @ResponseStatus(HttpStatus.CREATED)
@@ -97,6 +123,7 @@ public class EmployeeController {
         return dto;
     }
 
+
     @PutMapping("/users/{id}")
     @ResponseStatus(HttpStatus.OK)
     public EmployeeReadDto refreshEmployee(@PathVariable("id") Integer id, @RequestBody EmployeeDto employee) {
@@ -107,16 +134,29 @@ public class EmployeeController {
         return dto;
     }
 
+
     @DeleteMapping("/users/{id}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void removeEmployeeById(@PathVariable Integer id) {
-        employeeService.removeById(id);
+    @ResponseStatus(HttpStatus.OK)
+    public DeleteDto removeEmployeeById(@PathVariable Integer id) {
+        // Employee employee = employeeService.getById(id);
+        // Employee entity = employeeMapper.toEmployee(employee);
+        DeleteDto dto = employeeMapper.toDeleteEmployeeDto(employeeService.removeById(id));
+        log.debug("Remove employee() - stop: dto = {}", dto);
+        return dto;
+    }
+
+    @GetMapping("/users/count")
+    @ResponseStatus(HttpStatus.OK)
+    public CountDto countEmployees() {
+        var count = employeeService.countEmployees();
+        return new CountDto(count);
     }
 
     @DeleteMapping("/users")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void removeAllUsers() {
-        employeeService.removeAll();
+    @ResponseStatus(HttpStatus.OK)
+    public RemoveDto removeAllUsers() {
+        employeeService.removeAllUsers();
+        return new RemoveDto(Date.from(Instant.now()), "All users were deleted");
     }
 
     @GetMapping("/users/country")

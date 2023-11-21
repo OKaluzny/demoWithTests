@@ -18,6 +18,21 @@ import java.util.Optional;
 @Repository
 public interface EmployeeRepository extends JpaRepository<Employee, Integer> {
 
+    @Query(value = "SELECT COUNT(*) FROM users WHERE country = 'France'", nativeQuery = true)
+    int countEmployeesFromFrance();
+
+    // JPQL Query
+    @Query("SELECT COUNT(e) FROM Employee e JOIN e.addresses WHERE e.country = 'France'")
+    int countEmployeesFromFranceJPQL(String country);
+
+    // Native SQL Query
+    @Query(value = "SELECT * FROM users WHERE country = 'France'", nativeQuery = true)
+    List<Employee> findAllFromFrance();
+
+    // JPQL Query
+    @Query("SELECT e FROM Employee e JOIN FETCH e.addresses WHERE e.country = 'France'")
+    List<Employee> findAllFromFranceJPQL();
+
     @Query(value = "select e from Employee e where e.country =?1")
     @EntityGraph(attributePaths = {"addresses"})
     List<Employee> findEmployeesByCountry(String country);
@@ -43,6 +58,8 @@ public interface EmployeeRepository extends JpaRepository<Employee, Integer> {
     List<Employee> findAllByCountryNotIn(@Param("countries") List<String> countries);
 
     Employee findByName(String name);
+
+
 
     Employee findEmployeeByEmailNotNull();
 
