@@ -70,15 +70,6 @@ public class EmployeeController {
         return new FranceGreetingDto(message, numberOfEmployees);
     }
 
-    @GetMapping ("/users/france/jpql")
-    @ResponseStatus(HttpStatus.OK)
-    public FranceGreetingDto patchGreetEmployeesFromFranceJPQL() {
-        int numberOfEmployees = employeeService.countEmployeesFromFranceJPQL();
-        String message = "Happy holidays to users from France (PATCH)! (JPQL)";
-        return new FranceGreetingDto(message, numberOfEmployees);
-    }
-
-
     @PostMapping("/users/jpa")
     @ResponseStatus(HttpStatus.CREATED)
     public Employee saveEmployee(@RequestBody Employee employee) {

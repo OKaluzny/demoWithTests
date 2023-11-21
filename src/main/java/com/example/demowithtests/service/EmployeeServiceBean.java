@@ -33,20 +33,8 @@ public class EmployeeServiceBean implements EmployeeService {
     }
 
     @Override
-    public int countEmployeesFromFranceJPQL() {
-        return (int) employeeRepository.findAllFromFranceJPQL().stream()
-                .filter(employee -> !employee.getIs_Deleted())
-                .count();
-    }
-
-    @Override
     public List<Employee> findAllFromFrance() {
-        return employeeRepository.findAllFromFrance();
-    }
-
-    @Override
-    public List<Employee> findAllFromFranceJPQL() {
-        return employeeRepository.findAllFromFranceJPQL();
+            return employeeRepository.findAllFromFrance();
     }
 
     @Override

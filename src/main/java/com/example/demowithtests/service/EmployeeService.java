@@ -29,8 +29,6 @@ public interface EmployeeService {
 
     int countEmployeesFromFrance();
 
-    int countEmployeesFromFranceJPQL();
-
     List<Employee> findAllFromFrance();
 
     /**

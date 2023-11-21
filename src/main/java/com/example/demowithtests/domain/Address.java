@@ -28,10 +28,4 @@ public class Address {
 
     @Column(name = "street")
     private String street;
-
-    @ManyToOne
-    @JoinColumn(name = "employee_id")
-    private Employee employee;
-
-
 }
