@@ -67,4 +67,8 @@ public interface EmployeeService {
 
     List<Employee> cancelSoftDeleteByCountry();
 
+    List<Employee> findAllUkrainianOleh();
+
+    int countAllUkrainianWomen();
+
 }

@@ -20,6 +20,8 @@ public interface EmployeeMapper {
 
     EmployeeUpdateDto toEmployeeUpdateDto(Employee employee);
 
+    List<EmployeeReadDto> toListEmployeeReadDto(List<Employee> employees);
+
     List<EmployeeUpdateDto> toListEmployeeUpdateDto(List<Employee> employees);
 
     List<EmployeeSaveDto> toListEmployeeDto(List<Employee> employees);

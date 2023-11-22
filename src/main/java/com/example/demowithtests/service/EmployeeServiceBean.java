@@ -274,4 +274,17 @@ public class EmployeeServiceBean implements EmployeeService {
         employeeRepository.updateByCountryRussia();
     }
 
+    @Override
+    public List<Employee> findAllUkrainianOleh() {
+        var employeesOlehUA = employeeRepository.findAllUkrainianByNameOleh()
+                .orElseThrow(() -> new EntityNotFoundException("Employees from Ukraine with name Oleh not found!"));
+
+        return employeesOlehUA;
+
+    }
+
+    @Override
+    public int countAllUkrainianWomen() {
+        return employeeRepository.countAllUkrainianWomen();
+    }
 }

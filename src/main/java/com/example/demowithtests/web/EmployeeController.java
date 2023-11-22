@@ -247,4 +247,17 @@ public class EmployeeController {
         return dto;
     }
 
+    @GetMapping("/users-Oleh-Ukraine")
+    @ResponseStatus(HttpStatus.OK)
+    public List<EmployeeReadDto> getAllOlehFromUkraine() {
+        List<Employee> employees = employeeService.findAllUkrainianOleh();
+        List<EmployeeReadDto> dto = employeeMapper.toListEmployeeReadDto(employees);
+        return dto;
+    }
+
+    @GetMapping("/count-UA-women")
+    @ResponseStatus(HttpStatus.OK)
+    public int getAllUAWomen(){
+        return employeeService.countAllUkrainianWomen();
+    }
 }
