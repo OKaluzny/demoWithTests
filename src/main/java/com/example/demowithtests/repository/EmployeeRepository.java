@@ -22,6 +22,10 @@ public interface EmployeeRepository extends JpaRepository<Employee, Integer> {
     @EntityGraph(attributePaths = {"addresses"})
     List<Employee> findEmployeesByCountry(String country);
 
+    //ToDo write implementation
+    @Query(value = "select count(*) as amount from users where country = ?1", nativeQuery = true) //sql
+    int countEmployeesByCountry(String country);
+
     @EntityGraph(type = EntityGraph.EntityGraphType.FETCH, attributePaths = "addresses")
     List<Employee> findByNameContaining(String name);
 
@@ -72,5 +76,17 @@ public interface EmployeeRepository extends JpaRepository<Employee, Integer> {
     @Modifying(flushAutomatically = true, clearAutomatically = true)
     @Query(value = "UPDATE users SET name = ?1, email = ?2, country = ?3 WHERE id = ?4", nativeQuery = true)
     Integer updateEmployee(String name, String email, String country, Integer id);
+
+    @Override
+    @Modifying(clearAutomatically = true, flushAutomatically = true)
+    @Transactional
+    @EntityGraph(type = EntityGraph.EntityGraphType.FETCH, value = "user_entity-graph")
+    <S extends Employee> S save(S entity);
+
+    @Override
+    @Modifying(clearAutomatically = true, flushAutomatically = true)
+    @Transactional
+    @EntityGraph(type = EntityGraph.EntityGraphType.FETCH, value = "user_entity-graph")
+    <S extends Employee> List<S> saveAll(Iterable<S> entities);
 
 }
