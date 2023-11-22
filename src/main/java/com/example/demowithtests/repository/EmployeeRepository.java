@@ -70,10 +70,10 @@ public interface EmployeeRepository extends JpaRepository<Employee, Integer> {
     @Query(value = "SELECT * FROM users WHERE country = 'Russian Federation'", nativeQuery = true)
     Optional<List<Employee>> findAllRussian();
 
-    @Query(value = "SELECT * FROM users WHERE name = 'Oleh' AND country = 'Ukraine'", nativeQuery = true)
+    @Query("SELECT e FROM Employee e WHERE e.name = 'Oleh' AND e.country = 'Ukraine'")
     Optional<List<Employee>> findAllUkrainianByNameOleh();
 
-    @Query(value = "SELECT COUNT(*) FROM users WHERE gender = 'F' AND country ='Ukraine' ", nativeQuery = true)
+    @Query("SELECT COUNT(e) FROM Employee e WHERE e.gender = 'F' AND e.country = 'Ukraine'")
     int countAllUkrainianWomen();
 
 
