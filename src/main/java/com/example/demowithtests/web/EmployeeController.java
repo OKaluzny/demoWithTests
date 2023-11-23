@@ -194,4 +194,12 @@ public class EmployeeController {
         employeeService.createAndSave(employee);
         return "employee with name: " + employee.getName() + " saved!";
     }
+
+    @GetMapping("/employees/check")
+    @ResponseStatus(HttpStatus.OK)
+    public Page<Employee> checkEmails(@RequestParam String email, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "5") int size) {
+        var paging = PageRequest.of(page, size);
+        var content = employeeService.checkDuplicateEmails(email, paging);
+        return content;
+    }
 }

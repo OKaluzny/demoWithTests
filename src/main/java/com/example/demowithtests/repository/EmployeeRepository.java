@@ -26,6 +26,8 @@ public interface EmployeeRepository extends JpaRepository<Employee, Integer> {
     @Query(value = "select count(*) as amount from users where country = ?1", nativeQuery = true) //sql
     int countEmployeesByCountry(String country);
 
+    Page<Employee> findEmployeesByEmail(String email, Pageable pageable);
+
     @EntityGraph(type = EntityGraph.EntityGraphType.FETCH, attributePaths = "addresses")
     List<Employee> findByNameContaining(String name);
 

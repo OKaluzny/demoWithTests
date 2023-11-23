@@ -11,6 +11,7 @@ import java.util.Set;
 public interface EmployeeService {
 
     Employee create(Employee employee);
+
     void createAndSave(Employee employee);
 
     List<Employee> getAll();
@@ -60,5 +61,7 @@ public interface EmployeeService {
     List<Employee> findByNameContaining(String name);
 
     void updateEmployeeByName(String name, Integer id);
+
+    Page<Employee> checkDuplicateEmails(String email, Pageable pageable);
 
 }

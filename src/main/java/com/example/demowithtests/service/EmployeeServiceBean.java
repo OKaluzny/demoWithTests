@@ -28,13 +28,12 @@ public class EmployeeServiceBean implements EmployeeService {
     private final EmployeeRepository employeeRepository;
     private final EmailSenderService emailSenderService;
 
-
     @Override
     @ActivateCustomAnnotations({Name.class, ToLowerCase.class})
     // @Transactional(propagation = Propagation.MANDATORY)
     public Employee create(Employee employee) {
-        //return employeeRepository.save(employee);
-        return employeeRepository.saveAndFlush(employee);
+        return employeeRepository.save(employee);
+        //return employeeRepository.saveAndFlush(employee);
     }
 
     /**
@@ -93,10 +92,38 @@ public class EmployeeServiceBean implements EmployeeService {
         //repository.save(employee);
     }
 
+   /* @Override
+    public void removeById(Integer id) {
+        employeeRepository.findById(id)
+                .filter(this::IsEmployeePresent)
+                .map(employee -> {
+                    employee.setIsDeleted(Boolean.TRUE);
+                    return employeeRepository.save(employee);
+                })
+                .orElseThrow(ResourceWasDeletedException::new);
+    }*/
+
     @Override
     public void removeAll() {
         employeeRepository.deleteAll();
     }
+
+    /*private boolean IsEmployeePresent(Employee employee) {
+        Boolean isDeleted = employee.getIsDeleted();
+        if (isDeleted != null && isDeleted.equals(Boolean.FALSE)) return true;
+        else return false;
+    }
+
+    @Override
+    public void removeAll() {
+        List<Employee> list =
+                employeeRepository.findAll().stream()
+                        .filter(this::IsEmployeePresent)
+                        .peek(emp -> emp.setIsDeleted(Boolean.TRUE))
+                        .toList();
+
+        employeeRepository.saveAll(list);
+    }*/
 
     /*@Override
     public Page<Employee> findByCountryContaining(String country, Pageable pageable) {
@@ -223,5 +250,12 @@ public class EmployeeServiceBean implements EmployeeService {
         employeeRepository.updateEmployeeByName(name, id);
     }
 
-
+    /**
+     * @param email
+     * @return
+     */
+    @Override
+    public Page<Employee> checkDuplicateEmails(String email, Pageable pageable) {
+        return employeeRepository.findEmployeesByEmail(email, pageable);
+    }
 }
