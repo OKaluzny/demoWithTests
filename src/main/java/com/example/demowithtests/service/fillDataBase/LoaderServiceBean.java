@@ -43,13 +43,26 @@ public class LoaderServiceBean implements LoaderService {
         for (int i = 0; i < 2_000; i++) {
 
             String name = faker.name().name();
-            String country = faker.country().name();
+            //String country = faker.country().name();
+            String country = i % 30 == 0 ? "Ukraine" : faker.country().name();
             String email = faker.name().name();
 
-            Set<Address> addresses = Set.copyOf(Arrays.asList(new Address(), new Address()));
+            Set<Address> addresses = Set.copyOf(
+                    Arrays.asList(
+                            Address.builder()
+                                    .country(faker.address().country())
+                                    .city(faker.address().city())
+                                    .street(faker.address().streetAddress())
+                                    .addressHasActive(Boolean.valueOf(faker.address().streetAddress(false)))
+                                    .build(),
+                            Address.builder()
+                                    .country(faker.address().country())
+                                    .city(faker.address().city())
+                                    .street(faker.address().streetAddress())
+                                    .addressHasActive(Boolean.valueOf(faker.address().streetAddress(true)))
+                                    .build()));
 
-            Employee employee = Employee
-                    .builder()
+            Employee employee = Employee.builder()
                     .name(name)
                     .country(country)
                     .email(email.toLowerCase().replaceAll(" ", "") + "@mail.com")
@@ -58,7 +71,6 @@ public class LoaderServiceBean implements LoaderService {
 
             employees.add(employee);
         }
-
         return employees;
     }
 }
