@@ -37,7 +37,7 @@ public final class Employee {
     @Enumerated(EnumType.STRING)
     private Gender gender;
 
-    @OneToOne  (cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "document_id", referencedColumnName = "id")
     private Document document;
 }
