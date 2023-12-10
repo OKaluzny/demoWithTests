@@ -1,5 +1,6 @@
 package com.example.demowithtests.service;
 
+import com.example.demowithtests.domain.Document;
 import com.example.demowithtests.domain.Employee;
 import com.example.demowithtests.repository.EmployeeRepository;
 import com.example.demowithtests.service.emailSevice.EmailSenderService;
@@ -71,14 +72,12 @@ public class EmployeeServiceBean implements EmployeeService {
 
     @Override
     public Employee updateById(Integer id, Employee employee) {
-        return employeeRepository.findById(id)
-                .map(entity -> {
-                    entity.setName(employee.getName());
-                    entity.setEmail(employee.getEmail());
-                    entity.setCountry(employee.getCountry());
-                    return employeeRepository.save(entity);
-                })
-                .orElseThrow(() -> new EntityNotFoundException("Employee not found with id = " + id));
+        return employeeRepository.findById(id).map(entity -> {
+            entity.setName(employee.getName());
+            entity.setEmail(employee.getEmail());
+            entity.setCountry(employee.getCountry());
+            return employeeRepository.save(entity);
+        }).orElseThrow(() -> new EntityNotFoundException("Employee not found with id = " + id));
     }
 
     @Override
@@ -156,9 +155,7 @@ public class EmployeeServiceBean implements EmployeeService {
     public List<String> getAllEmployeeCountry() {
         log.info("getAllEmployeeCountry() - start:");
         List<Employee> employeeList = employeeRepository.findAll();
-        List<String> countries = employeeList.stream()
-                .map(country -> country.getCountry())
-                .collect(Collectors.toList());
+        List<String> countries = employeeList.stream().map(country -> country.getCountry()).collect(Collectors.toList());
         /*List<String> countries = employeeList.stream()
                 .map(Employee::getCountry)
                 //.sorted(Comparator.naturalOrder())
@@ -171,25 +168,16 @@ public class EmployeeServiceBean implements EmployeeService {
     @Override
     public List<String> getSortCountry() {
         List<Employee> employeeList = employeeRepository.findAll();
-        return employeeList.stream()
-                .map(Employee::getCountry)
-                .filter(c -> c.startsWith("U"))
-                .sorted(Comparator.naturalOrder())
-                .collect(Collectors.toList());
+        return employeeList.stream().map(Employee::getCountry).filter(c -> c.startsWith("U")).sorted(Comparator.naturalOrder()).collect(Collectors.toList());
     }
 
     @Override
     public Optional<String> findEmails() {
         var employeeList = employeeRepository.findAll();
 
-        var emails = employeeList.stream()
-                .map(Employee::getEmail)
-                .collect(Collectors.toList());
+        var emails = employeeList.stream().map(Employee::getEmail).collect(Collectors.toList());
 
-        var opt = emails.stream()
-                .filter(s -> s.endsWith(".com"))
-                .findFirst()
-                .orElse("error?");
+        var opt = emails.stream().filter(s -> s.endsWith(".com")).findFirst().orElse("error?");
         return Optional.ofNullable(opt);
     }
 
@@ -200,23 +188,13 @@ public class EmployeeServiceBean implements EmployeeService {
 
     @Override
     public Set<String> sendEmailsAllUkrainian() {
-        var ukrainians = employeeRepository.findAllUkrainian()
-                .orElseThrow(() -> new EntityNotFoundException("Employees from Ukraine not found!"));
+        var ukrainians = employeeRepository.findAllUkrainian().orElseThrow(() -> new EntityNotFoundException("Employees from Ukraine not found!"));
         var emails = new HashSet<String>();
         ukrainians.forEach(employee -> {
             emailSenderService.sendEmail(
                     /*employee.getEmail(),*/
                     "kaluzny.oleg@gmail.com", //для тесту
-                    "Need to update your information",
-                    String.format(
-                            "Dear " + employee.getName() + "!\n" +
-                                    "\n" +
-                                    "The expiration date of your information is coming up soon. \n" +
-                                    "Please. Don't delay in updating it. \n" +
-                                    "\n" +
-                                    "Best regards,\n" +
-                                    "Ukrainian Info Service.")
-            );
+                    "Need to update your information", String.format("Dear " + employee.getName() + "!\n" + "\n" + "The expiration date of your information is coming up soon. \n" + "Please. Don't delay in updating it. \n" + "\n" + "Best regards,\n" + "Ukrainian Info Service."));
             emails.add(employee.getEmail());
         });
 
@@ -257,5 +235,14 @@ public class EmployeeServiceBean implements EmployeeService {
     @Override
     public Page<Employee> checkDuplicateEmails(String email, Pageable pageable) {
         return employeeRepository.findEmployeesByEmail(email, pageable);
+    }
+
+    @Override
+    public Employee setDocument(Integer id, Document document) {
+        return employeeRepository.findById(id)
+                .map(entity -> {
+            entity.setDocument(document);
+            return employeeRepository.save(entity);
+        }).orElseThrow(() -> new EntityNotFoundException("Employee not found with id = " + id));
     }
 }

@@ -1,5 +1,6 @@
 package com.example.demowithtests.service;
 
+import com.example.demowithtests.domain.Document;
 import com.example.demowithtests.domain.Employee;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -63,5 +64,7 @@ public interface EmployeeService {
     void updateEmployeeByName(String name, Integer id);
 
     Page<Employee> checkDuplicateEmails(String email, Pageable pageable);
+
+    Employee setDocument(Integer id, Document document);
 
 }

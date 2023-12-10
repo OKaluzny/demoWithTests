@@ -1,10 +1,14 @@
 package com.example.demowithtests.web;
 
+import com.example.demowithtests.domain.Document;
 import com.example.demowithtests.domain.Employee;
+import com.example.demowithtests.dto.DocumentDto;
 import com.example.demowithtests.dto.EmployeeDto;
 import com.example.demowithtests.dto.EmployeeReadDto;
 import com.example.demowithtests.service.EmployeeService;
 import com.example.demowithtests.service.EmployeeServiceEM;
+import com.example.demowithtests.service.document.DocumentService;
+import com.example.demowithtests.util.mappers.DocumentMapper;
 import com.example.demowithtests.util.mappers.EmployeeMapper;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -36,6 +40,8 @@ public class EmployeeController {
     private final EmployeeService employeeService;
     private final EmployeeServiceEM employeeServiceEM;
     private final EmployeeMapper employeeMapper;
+    private final DocumentMapper documentMapper;
+    private final DocumentService documentService;
 
     @PostMapping(USER_ENDPOINT)
     @ResponseStatus(HttpStatus.CREATED)
@@ -201,5 +207,24 @@ public class EmployeeController {
         var paging = PageRequest.of(page, size);
         var content = employeeService.checkDuplicateEmails(email, paging);
         return content;
+    }
+
+    @PutMapping("/employees/{id}/documents")
+    @ResponseStatus(HttpStatus.OK)
+    public Employee addDocument(@PathVariable("id") Integer id, @RequestBody @Valid DocumentDto documentDto) {
+        log.debug("addDocumentToUser() EmployeeController - start: documentDto = {}", documentDto);
+        Document document = documentMapper.toDocument(documentDto);
+        Document savedDocument = documentService.create(document);
+        log.debug("addDocumentToUser() EmployeeController - end: documentDto = {}", documentDto);
+        return employeeService.setDocument(id, savedDocument);
+    }
+
+    @PatchMapping("/employees/{id}/documents")
+    @ResponseStatus(HttpStatus.OK)
+    public Employee removeDocument(@PathVariable("id") Integer id) {
+        log.debug("removeDocumentFromUser() EmployeeController - start: id = {}", id);
+        Employee employee = employeeService.setDocument(id, null);
+        log.debug("removeDocumentFromUser() EmployeeController - end: id = {}", id);
+        return employee;
     }
 }

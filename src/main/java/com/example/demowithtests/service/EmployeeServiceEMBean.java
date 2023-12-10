@@ -38,7 +38,8 @@ public class EmployeeServiceEMBean implements EmployeeServiceEM {
     @Override
     @Transactional //jakarta
     public Set<String> findAllCountriesWithJpa() {
-        return entityManager.createQuery("select distinct country from Employee", String.class).getResultStream().collect(Collectors.toSet());
+        return entityManager.createQuery("select distinct country from Employee",
+                String.class).getResultStream().collect(Collectors.toSet());
     }
 
     /**
