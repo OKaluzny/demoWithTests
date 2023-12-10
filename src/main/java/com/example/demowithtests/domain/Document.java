@@ -20,7 +20,7 @@ public final class Document {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(unique = true, nullable = false)
+    @Column(nullable = false)
     private String number;
 
     @Builder.Default
