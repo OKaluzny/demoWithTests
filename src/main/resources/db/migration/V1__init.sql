@@ -21,5 +21,15 @@ create table if not exists public.addresses
 
 );
 
+create table if not exists public.documents
+(
+    id          serial
+        primary key,
+    expire_date timestamp(6),
+    is_handled  boolean,
+    number      varchar(255) not null,
+    uuid        varchar(255)
+);
+
 
 
