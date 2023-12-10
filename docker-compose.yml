@@ -5,7 +5,7 @@ networks:
     name: demo
     driver: bridge
 volumes:
-  postgres_data:
+  demo_postgres_data:
     driver: local
 # Define services
 services:
@@ -33,14 +33,14 @@ services:
   # Database Service (Postgres)
   db:
     # Use the Docker Image postgres. This will pull the 12 version.
-    image: postgres:14
+    image: postgres:16-alpine
     # Give the container the name postgres-db. You can changes to something else.
     container_name: postgres-db
     restart: always
     # Set a volume some that database is not lost after shutting down the container.
     # I used the name postgres-data but you can changed it to something else.
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - demo_postgres_data:/var/lib/postgresql/data
     networks:
       - backend
     # Maps port 5432 (localhost) to port 5432 on the container. You can change the ports to fix your needs.
