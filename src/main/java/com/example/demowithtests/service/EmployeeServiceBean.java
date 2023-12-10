@@ -4,6 +4,7 @@ import com.example.demowithtests.domain.Document;
 import com.example.demowithtests.domain.Employee;
 import com.example.demowithtests.repository.EmployeeRepository;
 import com.example.demowithtests.service.emailSevice.EmailSenderService;
+import com.example.demowithtests.service.history.HistoryService;
 import com.example.demowithtests.util.annotations.entity.ActivateCustomAnnotations;
 import com.example.demowithtests.util.annotations.entity.Name;
 import com.example.demowithtests.util.annotations.entity.ToLowerCase;
@@ -28,6 +29,7 @@ public class EmployeeServiceBean implements EmployeeService {
 
     private final EmployeeRepository employeeRepository;
     private final EmailSenderService emailSenderService;
+    private final HistoryService historyService;
 
     @Override
     @ActivateCustomAnnotations({Name.class, ToLowerCase.class})
@@ -242,6 +244,20 @@ public class EmployeeServiceBean implements EmployeeService {
         return employeeRepository.findById(id)
                 .map(entity -> {
             entity.setDocument(document);
+                    historyService.create("The document was assigned to the person with id: " + id,
+                            entity.getDocument());
+                    return employeeRepository.save(entity);
+                })
+                .orElseThrow(() -> new EntityNotFoundException("Employee not found with id = " + id));
+    }
+
+    @Override
+    public Employee removeDocument(Integer id) {
+        return employeeRepository.findById(id)
+                .map(entity -> {
+                    historyService.create("The document was removed from the person with id: " + id,
+                            entity.getDocument());
+                    entity.setDocument(null);
             return employeeRepository.save(entity);
         }).orElseThrow(() -> new EntityNotFoundException("Employee not found with id = " + id));
     }

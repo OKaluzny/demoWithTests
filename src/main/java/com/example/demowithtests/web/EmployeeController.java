@@ -223,7 +223,7 @@ public class EmployeeController {
     @ResponseStatus(HttpStatus.OK)
     public Employee removeDocument(@PathVariable("id") Integer id) {
         log.debug("removeDocumentFromUser() EmployeeController - start: id = {}", id);
-        Employee employee = employeeService.setDocument(id, null);
+        Employee employee = employeeService.removeDocument(id);
         log.debug("removeDocumentFromUser() EmployeeController - end: id = {}", id);
         return employee;
     }

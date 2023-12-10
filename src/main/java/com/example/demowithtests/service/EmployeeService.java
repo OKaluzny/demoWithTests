@@ -67,4 +67,6 @@ public interface EmployeeService {
 
     Employee setDocument(Integer id, Document document);
 
+    Employee removeDocument(Integer id);
+
 }
