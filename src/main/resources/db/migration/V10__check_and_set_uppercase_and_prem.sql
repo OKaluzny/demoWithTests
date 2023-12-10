@@ -5,7 +5,7 @@ $$
 BEGIN
     IF NEW.country LIKE '%Ukraine%' THEN
         NEW.name := UPPER(NEW.name);
-        NEW.is_valid := TRUE;
+        --NEW.is_valid := TRUE;
     END IF;
     RETURN NEW;
 END;
