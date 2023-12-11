@@ -239,6 +239,14 @@ public class EmployeeServiceBean implements EmployeeService {
         return employeeRepository.findEmployeesByEmail(email, pageable);
     }
 
+    /**
+     * Sets the document for the employee with the specified ID.
+     *
+     * @param id the ID of the employee
+     * @param document the document to be assigned to the employee
+     * @return the updated employee with the assigned document
+     * @throws EntityNotFoundException if no employee is found with the specified ID
+     */
     @Override
     public Employee setDocument(Integer id, Document document) {
         return employeeRepository.findById(id)
@@ -251,6 +259,13 @@ public class EmployeeServiceBean implements EmployeeService {
                 .orElseThrow(() -> new EntityNotFoundException("Employee not found with id = " + id));
     }
 
+    /**
+     * Removes the document of an employee with the specified ID.
+     *
+     * @param id the ID of the employee
+     * @return the updated Employee object with the document removed
+     * @throws EntityNotFoundException if no employee is found with the specified ID
+     */
     @Override
     public Employee removeDocument(Integer id) {
         return employeeRepository.findById(id)
