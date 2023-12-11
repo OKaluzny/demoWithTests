@@ -174,10 +174,8 @@ public class ServiceTests {
 
         given(employeeRepository.findById(id)).willReturn(Optional.of(employee));
         given(employeeRepository.save(employee)).willReturn(employeeWithDocument);
-
         // Act
         Employee actualEmployee = service.setDocument(id, document);
-
         // Assert
         assertEquals(employeeWithDocument, actualEmployee, "The actual employee does not match the expected employee.");
         verify(historyService).create("The document was assigned to the person with id: " + id, document);
@@ -189,9 +187,7 @@ public class ServiceTests {
         Document document = new Document();
         document.setNumber("123");
         Integer id = 1;
-
         given(employeeRepository.findById(id)).willReturn(Optional.empty());
-
         // Assert
         assertThrows(jakarta.persistence.EntityNotFoundException.class, () -> service.setDocument(id, document), "setDocument did not throw an exception as expected when attempting to assign document to non-existent employee.");
     }
@@ -207,10 +203,8 @@ public class ServiceTests {
         employeeList.add(employee1);
         employeeList.add(employee2);
         when(employeeRepository.findByNameContaining(anyString())).thenReturn(employeeList);
-
         // act
         List<Employee> result = service.findByNameContaining("John");
-
         // assert
         assertThat(result.size()).isEqualTo(2);
         assertThat(result.get(0).getName()).isEqualTo("John");
