@@ -22,6 +22,10 @@ import org.springframework.stereotype.Service;
 import java.util.*;
 import java.util.stream.Collectors;
 
+/**
+ * This class implements the EmployeeService interface and provides the business logic for managing employees.
+ * It utilizes the EmployeeRepository, EmailSenderService, and HistoryService dependencies.
+ */
 @Slf4j
 @AllArgsConstructor
 @Service
@@ -31,6 +35,13 @@ public class EmployeeServiceBean implements EmployeeService {
     private final EmailSenderService emailSenderService;
     private final HistoryService historyService;
 
+
+    /**
+     * Creates a new employee.
+     *
+     * @param employee the Employee object to be created
+     * @return the newly created Employee object
+     */
     @Override
     @ActivateCustomAnnotations({Name.class, ToLowerCase.class})
     // @Transactional(propagation = Propagation.MANDATORY)
@@ -61,6 +72,13 @@ public class EmployeeServiceBean implements EmployeeService {
         return list;
     }
 
+    /**
+     * Retrieves an employee by their ID.
+     *
+     * @param id the ID of the employee to retrieve
+     * @return the employee with the given ID, if found
+     * @throws ResourceNotFoundException if no employee is found with the given ID
+     */
     @Override
     public Employee getById(Integer id) {
         var employee = employeeRepository.findById(id)
@@ -72,6 +90,14 @@ public class EmployeeServiceBean implements EmployeeService {
         return employee;
     }
 
+    /**
+     * Updates an employee by their id.
+     *
+     * @param id       the id of the employee to be updated
+     * @param employee the updated employee object
+     * @return the updated employee
+     * @throws EntityNotFoundException if the employee with the given id is not found
+     */
     @Override
     public Employee updateById(Integer id, Employee employee) {
         return employeeRepository.findById(id).map(entity -> {
@@ -231,14 +257,25 @@ public class EmployeeServiceBean implements EmployeeService {
     }
 
     /**
-     * @param email
-     * @return
+     * Checks if there are any duplicate emails in the employee repository.
+     *
+     * @param email    the email address to check for duplicates
+     * @param pageable the pageable configuration for the query
+     * @return a page of Employee objects matching the given email, with pagination applied
      */
     @Override
     public Page<Employee> checkDuplicateEmails(String email, Pageable pageable) {
         return employeeRepository.findEmployeesByEmail(email, pageable);
     }
 
+    /**
+     * Sets the document for the employee with the specified ID.
+     *
+     * @param id the ID of the employee
+     * @param document the document to be assigned to the employee
+     * @return the updated employee with the assigned document
+     * @throws EntityNotFoundException if no employee is found with the specified ID
+     */
     @Override
     public Employee setDocument(Integer id, Document document) {
         return employeeRepository.findById(id)
@@ -251,6 +288,13 @@ public class EmployeeServiceBean implements EmployeeService {
                 .orElseThrow(() -> new EntityNotFoundException("Employee not found with id = " + id));
     }
 
+    /**
+     * Removes the document of an employee with the specified ID.
+     *
+     * @param id the ID of the employee
+     * @return the updated Employee object with the document removed
+     * @throws EntityNotFoundException if no employee is found with the specified ID
+     */
     @Override
     public Employee removeDocument(Integer id) {
         return employeeRepository.findById(id)
