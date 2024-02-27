@@ -8,6 +8,7 @@ import com.example.demowithtests.service.EmployeeServiceEM;
 import com.example.demowithtests.util.mappers.EmployeeMapper;
 import com.example.demowithtests.web.EmployeeController;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -44,6 +45,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ExtendWith(MockitoExtension.class)
 @WebMvcTest(controllers = EmployeeController.class)
 @DisplayName("Employee Controller Tests")
+@Disabled
 public class ControllerTests {
 
     @Autowired

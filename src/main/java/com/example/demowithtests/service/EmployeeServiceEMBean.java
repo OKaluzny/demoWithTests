@@ -26,10 +26,10 @@ public class EmployeeServiceEMBean implements EmployeeServiceEM {
     @Override
     @Transactional //jakarta
     public Employee createWithJpa(Employee employee) {
-        return entityManager.merge(employee);
-        /*entityManager.persist(employee);
+        //return entityManager.merge(employee);
+        entityManager.persist(employee);
         entityManager.flush();
-        return entityManager.find(Employee.class, employee);*/
+        return entityManager.find(Employee.class, employee);
     }
 
     /**

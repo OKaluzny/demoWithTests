@@ -74,6 +74,15 @@ public interface EmployeeRepository extends JpaRepository<Employee, Integer> {
     //Integer saveEmployee(String name, String email, String country, String gender);
     void saveEmployee(String name, String email, String country, String gender);
 
+    /**
+     * Updates an employee's name, email, and country in the database.
+     *
+     * @param name    The new name of the employee.
+     * @param email   The new email of the employee.
+     * @param country The new country of the employee.
+     * @param id      The id of the employee to update.
+     * @return The number of rows affected by the update operation.
+     */
     @Transactional
     @Modifying(flushAutomatically = true, clearAutomatically = true)
     @Query(value = "UPDATE users SET name = ?1, email = ?2, country = ?3 WHERE id = ?4", nativeQuery = true)

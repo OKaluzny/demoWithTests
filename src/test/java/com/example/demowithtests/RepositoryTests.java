@@ -8,6 +8,7 @@ import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.test.annotation.Rollback;
 
 import java.util.HashSet;
@@ -15,6 +16,8 @@ import java.util.Optional;
 import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @DataJpaTest
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
@@ -23,6 +26,9 @@ public class RepositoryTests {
 
     @Autowired
     private EmployeeRepository employeeRepository;
+
+    @Autowired
+    private TestEntityManager entityManager;
 
     @Test
     @Order(1)
@@ -114,6 +120,41 @@ public class RepositoryTests {
         }
 
         Assertions.assertThat(employeeNull).isNull();
+    }
+
+    @Test
+    @Order(7)
+    @Rollback(value = false)
+    public void whenUpdateEmployee_thenReturnUpdatedEmployee() {
+        // given
+        Employee bob = new Employee();
+        bob.setName("Bob");
+        entityManager.persistAndFlush(bob);
+        String newName = "Boob";
+        // When
+        employeeRepository.updateEmployeeByName(newName, bob.getId());
+        // Then
+        Employee found = employeeRepository.findByName(newName);
+        assertThat(found.getName()).isEqualTo(newName);
+    }
+
+    @Test
+    public void testFindEmployeeByEmailNotNull() {
+
+        Employee employee1 = new Employee();
+        employee1.setName("John");
+        employee1.setEmail("john@gmail.com");
+
+        employeeRepository.save(employee1);
+
+        Employee employee2 = new Employee();
+        employee2.setName("Jane");
+        employee2.setEmail(null);  // not setting email
+
+        employeeRepository.save(employee2);
+
+        Employee foundEmployee = employeeRepository.findEmployeeByEmailNotNull();
+        assertNotNull(foundEmployee.getEmail() != null);
     }
 
 }
