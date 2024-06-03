@@ -24,6 +24,7 @@
     </properties>
 
     <dependencies>
+
         <!-- spring-boot-starter-data-jpa -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -126,13 +127,13 @@
         <dependency>
             <groupId>org.mapstruct</groupId>
             <artifactId>mapstruct</artifactId>
-            <version>${org.mapstruct.version}</version>
+            <version>1.5.5.Final</version>
         </dependency>
         <!-- mapstruct-processor -->
         <dependency>
             <groupId>org.mapstruct</groupId>
             <artifactId>mapstruct-processor</artifactId>
-            <version>${org.mapstruct.version}</version>
+            <version>1.5.5.Final</version>
         </dependency>
 
         <dependency>
@@ -166,7 +167,7 @@
                         <path>
                             <groupId>org.mapstruct</groupId>
                             <artifactId>mapstruct-processor</artifactId>
-                            <version>${org.mapstruct.version}</version>
+                            <version>1.5.5.Final</version>
                         </path>
                         <path>
                             <groupId>org.projectlombok</groupId>
@@ -191,30 +192,31 @@
                 <artifactId>flyway-maven-plugin</artifactId>
                 <version>8.4.1</version>
             </plugin>-->
-            <plugin>
-                <groupId>io.fabric8</groupId>
-                <artifactId>docker-maven-plugin</artifactId>
-                <version>0.43.4</version>
-                <executions>
-                    <execution>
-                        <id>docker-build</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>build</goal>
-                        </goals>
-                        <configuration>
-                            <images>
-                                <image>
-                                    <name>demo-app</name>
-                                    <build>
-                                        <dockerFile>${project.basedir}/Dockerfile</dockerFile>
-                                    </build>
-                                </image>
-                            </images>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
+
+<!--            <plugin>-->
+<!--                <groupId>io.fabric8</groupId>-->
+<!--                <artifactId>docker-maven-plugin</artifactId>-->
+<!--                <version>0.43.4</version>-->
+<!--                <executions>-->
+<!--                    <execution>-->
+<!--                        <id>docker-build</id>-->
+<!--                        <phase>package</phase>-->
+<!--                        <goals>-->
+<!--                            <goal>build</goal>-->
+<!--                        </goals>-->
+<!--                        <configuration>-->
+<!--                            <images>-->
+<!--                                <image>-->
+<!--                                    <name>demo-app</name>-->
+<!--                                    <build>-->
+<!--                                        <dockerFile>${project.basedir}/Dockerfile</dockerFile>-->
+<!--                                    </build>-->
+<!--                                </image>-->
+<!--                            </images>-->
+<!--                        </configuration>-->
+<!--                    </execution>-->
+<!--                </executions>-->
+<!--            </plugin>-->
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>

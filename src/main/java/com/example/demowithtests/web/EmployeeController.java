@@ -43,6 +43,36 @@ public class EmployeeController {
     private final DocumentMapper documentMapper;
     private final DocumentService documentService;
 
+
+    @DeleteMapping("/users/soft/{id}")
+    public Employee softDeleteEmployee(@PathVariable Integer id) {
+        employeeService.softDelete(id);
+        return employeeService.getById(id);
+    }
+    @GetMapping("/users/active")
+    @ResponseStatus(HttpStatus.CREATED)
+    @Operation(summary = "This is endpoint take active employees.", description = "Take active employees.", tags = {"Employee"})
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "400", description = "Invalid input"),
+            @ApiResponse(responseCode = "404", description = "NOT FOUND. Specified employees request not found.")})
+    public List<Employee> getAllActiveEmployees() {
+        return employeeService.findAllActive();
+    }
+    @GetMapping("/users/user/active/{id}")
+    @ResponseStatus(HttpStatus.CREATED)
+    @Operation(summary = "This is endpoint take active employee.", description = "Take active employee.", tags = {"Employee"})
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "400", description = "Invalid input"),
+            @ApiResponse(responseCode = "404", description = "NOT FOUND. Specified employee request not found.")})
+
+    public Employee getActiveEmployeeById(@PathVariable Integer id) {
+        Optional<Employee> employee = employeeService.findActiveById(id);
+     // if(employee.isPresent())
+            return employee.get();
+
+    }
+
+
     @PostMapping(USER_ENDPOINT)
     @ResponseStatus(HttpStatus.CREATED)
     @Operation(summary = "This is endpoint to add a new employee.", description = "Create request to add a new employee.", tags = {"Employee"})
@@ -214,6 +244,7 @@ public class EmployeeController {
     public Employee addDocument(@PathVariable("id") Integer id, @RequestBody @Valid DocumentDto documentDto) {
         log.debug("addDocumentToUser() EmployeeController - start: documentDto = {}", documentDto);
         Document document = documentMapper.toDocument(documentDto);
+        document.setEmployee(employeeService.getById(id));//save employee to document
         Document savedDocument = documentService.create(document);
         log.debug("addDocumentToUser() EmployeeController - end: documentDto = {}", documentDto);
         return employeeService.setDocument(id, savedDocument);

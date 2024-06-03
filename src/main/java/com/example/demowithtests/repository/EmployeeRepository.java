@@ -17,6 +17,11 @@ import java.util.Optional;
 
 @Repository
 public interface EmployeeRepository extends JpaRepository<Employee, Integer> {
+    @Query("SELECT e FROM Employee e WHERE e.isDeleted = false")
+    List<Employee> findAllActive();
+
+    @Query("SELECT e FROM Employee e WHERE e.id = ?1 AND e.isDeleted = false")
+    Optional<Employee> findActiveById(Integer id);
 
     @Query(value = "select e from Employee e where e.country =?1")
     @EntityGraph(attributePaths = {"addresses"})

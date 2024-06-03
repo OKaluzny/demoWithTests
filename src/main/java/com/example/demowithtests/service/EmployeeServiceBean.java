@@ -50,6 +50,26 @@ public class EmployeeServiceBean implements EmployeeService {
         //return employeeRepository.saveAndFlush(employee);
     }
 
+    @Override
+    public List<Employee> findAllActive() {
+        return employeeRepository.findAllActive();
+    }
+
+    @Override
+    public Optional<Employee> findActiveById(Integer id) {
+        return employeeRepository.findActiveById(id);
+    }
+
+    @Override
+    public void softDelete(Integer id) {
+        Optional<Employee> employeeOptional = employeeRepository.findById(id);
+        if (employeeOptional.isPresent()) {
+            Employee employee = employeeOptional.get();
+            employee.setIsDeleted(true);
+            employeeRepository.save(employee);
+        }
+    }
+
     /**
      * @param employee
      * @return
@@ -271,7 +291,7 @@ public class EmployeeServiceBean implements EmployeeService {
     /**
      * Sets the document for the employee with the specified ID.
      *
-     * @param id the ID of the employee
+     * @param id       the ID of the employee
      * @param document the document to be assigned to the employee
      * @return the updated employee with the assigned document
      * @throws EntityNotFoundException if no employee is found with the specified ID
@@ -280,7 +300,7 @@ public class EmployeeServiceBean implements EmployeeService {
     public Employee setDocument(Integer id, Document document) {
         return employeeRepository.findById(id)
                 .map(entity -> {
-            entity.setDocument(document);
+                    entity.setDocument(document);
                     historyService.create("The document was assigned to the person with id: " + id,
                             entity.getDocument());
                     return employeeRepository.save(entity);
@@ -302,7 +322,7 @@ public class EmployeeServiceBean implements EmployeeService {
                     historyService.create("The document was removed from the person with id: " + id,
                             entity.getDocument());
                     entity.setDocument(null);
-            return employeeRepository.save(entity);
-        }).orElseThrow(() -> new EntityNotFoundException("Employee not found with id = " + id));
+                    return employeeRepository.save(entity);
+                }).orElseThrow(() -> new EntityNotFoundException("Employee not found with id = " + id));
     }
 }
