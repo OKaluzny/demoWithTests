@@ -100,4 +100,10 @@ public interface EmployeeRepository extends JpaRepository<Employee, Integer> {
     @EntityGraph(type = EntityGraph.EntityGraphType.FETCH, value = "user_entity-graph")
     <S extends Employee> List<S> saveAll(Iterable<S> entities);
 
+    Boolean existsEmployeeByEmail(String email);
+
+    @Modifying
+    @Transactional
+    @Query(value = "UPDATE users SET is_deleted = true WHERE id = ?1", nativeQuery = true)
+    void softRemoveById(Integer id);
 }

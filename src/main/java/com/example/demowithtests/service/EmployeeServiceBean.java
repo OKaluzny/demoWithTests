@@ -46,7 +46,11 @@ public class EmployeeServiceBean implements EmployeeService {
     @ActivateCustomAnnotations({Name.class, ToLowerCase.class})
     // @Transactional(propagation = Propagation.MANDATORY)
     public Employee create(Employee employee) {
-        return employeeRepository.save(employee);
+        if(employeeRepository.existsEmployeeByEmail(employee.getEmail())){
+            throw new RuntimeException("Employee with this email already exists");
+        }
+        Employee savedEmployee = employeeRepository.save(employee);
+        return savedEmployee;
         //return employeeRepository.saveAndFlush(employee);
     }
 
@@ -133,6 +137,11 @@ public class EmployeeServiceBean implements EmployeeService {
     @Override
     public void removeAll() {
         employeeRepository.deleteAll();
+    }
+
+    @Override
+    public void softRemoveById(Integer id) {
+        employeeRepository.softRemoveById(id);
     }
 
     /*private boolean IsEmployeePresent(Employee employee) {
@@ -304,5 +313,10 @@ public class EmployeeServiceBean implements EmployeeService {
                     entity.setDocument(null);
             return employeeRepository.save(entity);
         }).orElseThrow(() -> new EntityNotFoundException("Employee not found with id = " + id));
+    }
+
+    @Override
+    public Boolean testMethod(String email) {
+        return employeeRepository.existsEmployeeByEmail(email);
     }
 }

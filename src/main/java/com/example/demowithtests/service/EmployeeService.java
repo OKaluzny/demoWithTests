@@ -27,6 +27,10 @@ public interface EmployeeService {
 
     void removeAll();
 
+    void softRemoveById(Integer id);
+
+    Boolean testMethod(String email);
+
     //Page<Employee> findByCountryContaining(String country, Pageable pageable);
 
     /**

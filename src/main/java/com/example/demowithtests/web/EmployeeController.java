@@ -125,6 +125,12 @@ public class EmployeeController {
         employeeService.removeAll();
     }
 
+    @PutMapping("/users/softremove/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public void removeUserSoftly(@PathVariable Integer id){
+        employeeService.softRemoveById(id);
+    }
+
     @GetMapping("/users/country")
     @ResponseStatus(HttpStatus.OK)
     public Page<EmployeeReadDto> findByCountry(@RequestParam(required = false) String country,
@@ -226,5 +232,15 @@ public class EmployeeController {
         Employee employee = employeeService.removeDocument(id);
         log.debug("removeDocumentFromUser() EmployeeController - end: id = {}", id);
         return employee;
+    }
+
+    @GetMapping("/test")
+    public String testMethod(@RequestParam String email){
+        if(employeeService.testMethod(email)){
+            return "Failure was catch";
+        }
+        else {
+            return "Failure wasn't catch";
+        }
     }
 }
