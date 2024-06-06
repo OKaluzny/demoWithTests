@@ -8,9 +8,13 @@ import com.example.demowithtests.service.history.HistoryService;
 import com.example.demowithtests.util.annotations.entity.ActivateCustomAnnotations;
 import com.example.demowithtests.util.annotations.entity.Name;
 import com.example.demowithtests.util.annotations.entity.ToLowerCase;
+import com.example.demowithtests.util.exception.EmailException;
 import com.example.demowithtests.util.exception.ResourceNotFoundException;
 import com.example.demowithtests.util.exception.ResourceWasDeletedException;
+import com.example.demowithtests.util.exception.SoftDeleteException;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Email;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -43,11 +47,12 @@ public class EmployeeServiceBean implements EmployeeService {
      * @return the newly created Employee object
      */
     @Override
-    @ActivateCustomAnnotations({Name.class, ToLowerCase.class})
-    // @Transactional(propagation = Propagation.MANDATORY)
-    public Employee create(Employee employee) {
+    @ActivateCustomAnnotations({Name.class, ToLowerCase.class, Email.class})
+    public Employee create( Employee employee) {
+        if(employeeRepository.existsByEmail(employee.getEmail())) {
+            throw new EmailException();
+        }
         return employeeRepository.save(employee);
-        //return employeeRepository.saveAndFlush(employee);
     }
 
     @Override
@@ -63,7 +68,11 @@ public class EmployeeServiceBean implements EmployeeService {
     @Override
     public void softDelete(Integer id) {
         Optional<Employee> employeeOptional = employeeRepository.findById(id);
+
         if (employeeOptional.isPresent()) {
+            if (employeeOptional.get().getIsDeleted()) {
+                throw  new SoftDeleteException();
+            }
             Employee employee = employeeOptional.get();
             employee.setIsDeleted(true);
             employeeRepository.save(employee);
@@ -76,14 +85,15 @@ public class EmployeeServiceBean implements EmployeeService {
      */
     @Override
     public void createAndSave(Employee employee) {
-        employeeRepository.saveEmployee(employee.getName(), employee.getEmail(), employee.getCountry(), String.valueOf(employee.getGender()));
+        employeeRepository.saveEmployee(employee.getName(),
+                                        employee.getEmail(),
+                                        employee.getCountry(),
+                                        String.valueOf(employee.getGender()));
     }
-
     @Override
     public List<Employee> getAll() {
         return employeeRepository.findAll();
     }
-
     @Override
     public Page<Employee> getAllWithPagination(Pageable pageable) {
         log.debug("getAllWithPagination() - start: pageable = {}", pageable);
@@ -216,7 +226,9 @@ public class EmployeeServiceBean implements EmployeeService {
     @Override
     public List<String> getSortCountry() {
         List<Employee> employeeList = employeeRepository.findAll();
-        return employeeList.stream().map(Employee::getCountry).filter(c -> c.startsWith("U")).sorted(Comparator.naturalOrder()).collect(Collectors.toList());
+        return employeeList.stream().map(Employee::getCountry)
+                .filter(c -> c.startsWith("U"))
+                .sorted(Comparator.naturalOrder()).collect(Collectors.toList());
     }
 
     @Override
@@ -236,13 +248,17 @@ public class EmployeeServiceBean implements EmployeeService {
 
     @Override
     public Set<String> sendEmailsAllUkrainian() {
-        var ukrainians = employeeRepository.findAllUkrainian().orElseThrow(() -> new EntityNotFoundException("Employees from Ukraine not found!"));
+        var ukrainians = employeeRepository.findAllUkrainian()
+                .orElseThrow(() -> new EntityNotFoundException("Employees from Ukraine not found!"));
         var emails = new HashSet<String>();
         ukrainians.forEach(employee -> {
             emailSenderService.sendEmail(
                     /*employee.getEmail(),*/
                     "kaluzny.oleg@gmail.com", //для тесту
-                    "Need to update your information", String.format("Dear " + employee.getName() + "!\n" + "\n" + "The expiration date of your information is coming up soon. \n" + "Please. Don't delay in updating it. \n" + "\n" + "Best regards,\n" + "Ukrainian Info Service."));
+                    "Need to update your information",
+                    String.format("Dear " + employee.getName() + "!\n" + "\n" + "The expiration date of your" +
+                            " information is coming up soon. \n" + "Please. Don't delay in updating it. \n" + "\n" +
+                            "Best regards,\n" + "Ukrainian Info Service."));
             emails.add(employee.getEmail());
         });
 

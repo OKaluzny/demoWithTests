@@ -1,62 +1,57 @@
 package com.example.demowithtests.util.exception;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.context.request.WebRequest;
-
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 import jakarta.mail.AuthenticationFailedException;
 import jakarta.mail.SendFailedException;
-import java.util.Date;
 
-@ControllerAdvice
+import static com.example.demowithtests.util.exception.ErrorDetails.getResponseEntityErrorsMap;
+
+@RestControllerAdvice
 public class GlobalExceptionHandler {
-
+    @ExceptionHandler(SoftDeleteException.class)
+    public ResponseEntity<ErrorDetails> softDeleteException(HttpServletRequest request) {
+        return getResponseEntityErrorsMap(request.getRequestURI(),
+                                          HttpStatus.CONFLICT,
+                                       "Soft delete already done");
+    }
+    @ExceptionHandler(EmailException.class)
+    public ResponseEntity<ErrorDetails> emailArgumentNotValidException(HttpServletRequest request) {
+        return getResponseEntityErrorsMap(request.getRequestURI(),
+                                          HttpStatus.CONFLICT,
+                                        "Email already exist");
+    }
     @ExceptionHandler(ResourceNotFoundException.class)
-    public ResponseEntity<?> resourceNotFoundException(ResourceNotFoundException ex, WebRequest request) {
-        ErrorDetails errorDetails = new ErrorDetails(new Date(), ex.getMessage(), request.getDescription(true));
-        /*ErrorDetails errorDetails =
-                new ErrorDetails(new Date(),
-                        "Employee not found with id =" + request.getDescription(true),//getParameter("id"),
-                        request.getDescription(false));*/
-        return new ResponseEntity<>(errorDetails, HttpStatus.BAD_REQUEST);
+    public ResponseEntity<ErrorDetails> resourceNotFoundException(HttpServletRequest request) {
+        return getResponseEntityErrorsMap(request.getRequestURI(),
+                                          HttpStatus.BAD_REQUEST,
+                                     "Resource  not found");
     }
-
     @ExceptionHandler(ResourceWasDeletedException.class)
-    protected ResponseEntity<MyGlobalExceptionHandler> handleDeleteException() {
-        return new ResponseEntity<>(new MyGlobalExceptionHandler("This user was deleted"), HttpStatus.NOT_FOUND);
+    protected ResponseEntity<ErrorDetails> handleDeleteException(HttpServletRequest request) {
+        return getResponseEntityErrorsMap(request.getRequestURI(),
+                                          HttpStatus.NOT_FOUND,
+                                  "This user was deleted");
     }
-
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<?> globleExcpetionHandler(Exception ex, WebRequest request) {
-        ErrorDetails errorDetails = new ErrorDetails(new Date(), ex.getMessage(), request.getDescription(false));
-        return new ResponseEntity<>(errorDetails, HttpStatus.BAD_REQUEST);
+    public ResponseEntity<ErrorDetails> globleExcpetionHandler(Exception ex, HttpServletRequest request) {
+        return getResponseEntityErrorsMap(request.getRequestURI(),
+                                          HttpStatus.BAD_REQUEST,
+                                          ex.getMessage());
     }
-
     @ExceptionHandler(SendFailedException.class)
-    public ResponseEntity<?> methodArgumentNotValidException(SendFailedException ex, WebRequest request) {
-        ErrorDetails errorDetails = new ErrorDetails(
-                new Date(),
-                "Mail sending failed. " + ex.getMessage(),
-                request.getDescription(false));
-        return new ResponseEntity<>(errorDetails, HttpStatus.BAD_REQUEST);
+    public ResponseEntity<ErrorDetails> methodArgumentNotValidException(HttpServletRequest request) {
+        return getResponseEntityErrorsMap(request.getRequestURI(),
+                                          HttpStatus.BAD_REQUEST,
+                                  "Mail sending failed");
     }
-
     @ExceptionHandler(AuthenticationFailedException.class)
-    public ResponseEntity<?> methodAuthenticationFailedException(AuthenticationFailedException ex, WebRequest request) {
-        ErrorDetails errorDetails = new ErrorDetails(
-                new Date(),
-                "Mail authentication failed. " + ex.getMessage(),
-                request.getDescription(false));
-        return new ResponseEntity<>(errorDetails, HttpStatus.BAD_REQUEST);
-    }
-
-    @Data
-    @AllArgsConstructor
-    private static class MyGlobalExceptionHandler {
-        private String message;
+    public ResponseEntity<ErrorDetails> methodAuthenticationFailedException(HttpServletRequest request) {
+        return getResponseEntityErrorsMap(request.getRequestURI(),
+                                          HttpStatus.BAD_REQUEST,
+                                   "Mail authentication failed");
     }
 }

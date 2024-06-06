@@ -64,7 +64,6 @@ public class EmployeeController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "400", description = "Invalid input"),
             @ApiResponse(responseCode = "404", description = "NOT FOUND. Specified employee request not found.")})
-
     public Employee getActiveEmployeeById(@PathVariable Integer id) {
         Optional<Employee> employee = employeeService.findActiveById(id);
      // if(employee.isPresent())
