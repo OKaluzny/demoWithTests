@@ -2,6 +2,7 @@ package com.example.demowithtests.repository;
 
 import com.example.demowithtests.domain.Employee;
 import jakarta.validation.constraints.NotNull;
+import org.springframework.context.annotation.Bean;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.EntityGraph;
@@ -106,4 +107,7 @@ public interface EmployeeRepository extends JpaRepository<Employee, Integer> {
     @Transactional
     @Query(value = "UPDATE users SET is_deleted = true WHERE id = ?1", nativeQuery = true)
     void softRemoveById(Integer id);
+
+    @Query(value = "SELECT is_deleted FROM users where id =?1", nativeQuery = true)
+    Boolean findIsDeletedByEmployeeId(Integer id);
 }

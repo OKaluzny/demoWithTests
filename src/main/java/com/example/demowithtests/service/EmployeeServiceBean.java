@@ -8,8 +8,10 @@ import com.example.demowithtests.service.history.HistoryService;
 import com.example.demowithtests.util.annotations.entity.ActivateCustomAnnotations;
 import com.example.demowithtests.util.annotations.entity.Name;
 import com.example.demowithtests.util.annotations.entity.ToLowerCase;
+import com.example.demowithtests.util.exception.ProhibitedCountryException;
 import com.example.demowithtests.util.exception.ResourceNotFoundException;
 import com.example.demowithtests.util.exception.ResourceWasDeletedException;
+import com.example.demowithtests.util.exception.ResourceWasSoftDeletedException;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -48,6 +50,14 @@ public class EmployeeServiceBean implements EmployeeService {
     public Employee create(Employee employee) {
         if(employeeRepository.existsEmployeeByEmail(employee.getEmail())){
             throw new RuntimeException("Employee with this email already exists");
+        }
+
+        boolean prohibitedCountryChecker = employee.getAddresses().stream()
+                .filter(address -> address.getCountry().equals("RU"))
+                .toList().isEmpty();
+
+        if (!prohibitedCountryChecker){
+            throw new ProhibitedCountryException();
         }
         Employee savedEmployee = employeeRepository.save(employee);
         return savedEmployee;
@@ -141,6 +151,9 @@ public class EmployeeServiceBean implements EmployeeService {
 
     @Override
     public void softRemoveById(Integer id) {
+        if(employeeRepository.findIsDeletedByEmployeeId(id) == Boolean.TRUE) {
+            throw new ResourceWasSoftDeletedException();
+        }
         employeeRepository.softRemoveById(id);
     }
 

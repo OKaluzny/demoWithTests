@@ -6,13 +6,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 
 import jakarta.mail.AuthenticationFailedException;
 import jakarta.mail.SendFailedException;
 import java.util.Date;
 
-@ControllerAdvice
+@RestControllerAdvice
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(ResourceNotFoundException.class)
@@ -52,6 +53,20 @@ public class GlobalExceptionHandler {
                 "Mail authentication failed. " + ex.getMessage(),
                 request.getDescription(false));
         return new ResponseEntity<>(errorDetails, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(ProhibitedCountryException.class)
+    public ResponseEntity<?> prohibitedCountryException() {
+        return new ResponseEntity<>(new MyGlobalExceptionHandler("This country was prohibited"), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(ResourceWasSoftDeletedException.class)
+    public ResponseEntity<?> resourceWasSoftDeletedException(WebRequest request) {
+        ErrorDetails errorDetails = new ErrorDetails(
+                new Date(),
+                "Resource is already deleted softly" ,
+                request.getDescription(false));
+        return new ResponseEntity<>(errorDetails, HttpStatus.NOT_FOUND);
     }
 
     @Data
