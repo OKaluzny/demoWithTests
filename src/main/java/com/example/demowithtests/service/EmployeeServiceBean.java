@@ -1,5 +1,6 @@
 package com.example.demowithtests.service;
 
+import com.example.demowithtests.domain.Address;
 import com.example.demowithtests.domain.Document;
 import com.example.demowithtests.domain.Employee;
 import com.example.demowithtests.repository.EmployeeRepository;
@@ -322,6 +323,42 @@ public class EmployeeServiceBean implements EmployeeService {
                     return employeeRepository.save(entity);
                 })
                 .orElseThrow(() -> new EntityNotFoundException("Employee not found with id = " + id));
+    }
+    @Override
+    public Employee addAddress(Integer id, Address address) {
+        return employeeRepository.findById(id)
+               // .filter(e ->e.getIsDeleted().equals(false))
+                .map(entity -> {
+                    entity.getAddresses().add(address);
+                    return employeeRepository.save(entity);
+                })
+                .orElseThrow(() -> new EntityNotFoundException("Employee not found with id = " + id));
+    }
+    @Override
+    public Employee deaktivateAddress(Integer addressId, Integer employeeId) {
+        return employeeRepository.findById(employeeId)
+                .map(entity -> {
+                    entity.getAddresses().stream()
+                            .filter(address -> address.getId().equals(addressId))
+                            .findFirst()
+                            .ifPresent(address -> {
+                                address.setAddressHasActive(false);
+                            });
+                    return employeeRepository.save(entity);
+                })
+                .orElseThrow(() -> new EntityNotFoundException("Employee not found with id = " + employeeId));
+    }
+    @Override
+    public List<Employee> getAllUsersWithMoreThenOneAddress(){
+        return employeeRepository.findAllWithMoreThanOneAddress();
+    }
+    @Override
+    public  List<Employee> getAllUsersWithOneAddress(){
+        return employeeRepository.findAllWithOneAddress();
+    }
+    @Override
+    public List<Employee> getAllUsersWithNoAddress(){
+        return employeeRepository.findEmployeeWithoutAddresses();
     }
 
     /**

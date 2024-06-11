@@ -1,7 +1,9 @@
 package com.example.demowithtests.web;
 
+import com.example.demowithtests.domain.Address;
 import com.example.demowithtests.domain.Document;
 import com.example.demowithtests.domain.Employee;
+import com.example.demowithtests.dto.AddressDto;
 import com.example.demowithtests.dto.DocumentDto;
 import com.example.demowithtests.dto.EmployeeDto;
 import com.example.demowithtests.dto.EmployeeReadDto;
@@ -19,6 +21,7 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -70,6 +73,28 @@ public class EmployeeController {
             return employee.get();
 
     }
+
+    @PostMapping("/users/address/{userId}")
+    public Employee addAddressToEmployee(@RequestBody Address address, @PathVariable Integer userId) {
+        return employeeService.addAddress(userId, address);
+    }
+    @PostMapping("/users/address/deactive/{addressId}/{userId}")
+    public Employee softDeleteAddress(@PathVariable Integer addressId, @PathVariable Integer userId) {
+      return  employeeService.deaktivateAddress(addressId, userId);
+    }
+    @GetMapping("/users/more/one/address")
+    public List<Employee> getAllUsersWithActiveAddress() {
+        return employeeService.getAllUsersWithMoreThenOneAddress();
+    }
+    @GetMapping("/users/one/address")
+    public List<Employee> getAllUsersWithOneAddress() {
+        return employeeService.getAllUsersWithOneAddress();
+    }
+    @GetMapping("/users/no/address")
+    public List<Employee> getAllUsersWithNoAddress() {
+        return employeeService.getAllUsersWithNoAddress();
+    }
+
 
 
     @PostMapping(USER_ENDPOINT)

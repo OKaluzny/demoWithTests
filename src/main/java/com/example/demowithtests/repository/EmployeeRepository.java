@@ -17,6 +17,13 @@ import java.util.Optional;
 
 @Repository
 public interface EmployeeRepository extends JpaRepository<Employee, Integer> {
+    @Query("SELECT e FROM Employee e WHERE SIZE (e.addresses) > 1")
+    List<Employee> findAllWithMoreThanOneAddress();
+    @Query("SELECT e FROM Employee e WHERE SIZE(e.addresses) = 1")
+    List<Employee> findAllWithOneAddress();
+    @Query("SELECT e FROM Employee e WHERE SIZE(e.addresses) = 0")
+    List<Employee> findEmployeeWithoutAddresses();
+
     boolean existsByEmail(String email);
     @Query("SELECT e FROM Employee e WHERE e.isDeleted = false")
     List<Employee> findAllActive();
@@ -106,4 +113,6 @@ public interface EmployeeRepository extends JpaRepository<Employee, Integer> {
     @EntityGraph(type = EntityGraph.EntityGraphType.FETCH, value = "user_entity-graph")
     <S extends Employee> List<S> saveAll(Iterable<S> entities);
 
+
 }
+

@@ -1,5 +1,6 @@
 package com.example.demowithtests.service;
 
+import com.example.demowithtests.domain.Address;
 import com.example.demowithtests.domain.Document;
 import com.example.demowithtests.domain.Employee;
 import org.springframework.data.domain.Page;
@@ -10,6 +11,10 @@ import java.util.Optional;
 import java.util.Set;
 
 public interface EmployeeService {
+    List<Employee> getAllUsersWithMoreThenOneAddress();
+    List<Employee> getAllUsersWithOneAddress();
+    List<Employee> getAllUsersWithNoAddress();
+    Employee addAddress(Integer id, Address address);
     void softDelete(Integer id);
      List<Employee> findAllActive();
      Optional<Employee> findActiveById(Integer id);
@@ -71,5 +76,8 @@ public interface EmployeeService {
     Employee setDocument(Integer id, Document document);
 
     Employee removeDocument(Integer id);
+
+    Employee deaktivateAddress(Integer addressId, Integer employeeId);
+
 
 }
