@@ -243,4 +243,11 @@ public class EmployeeController {
             return "Failure wasn't catch";
         }
     }
+
+    @PutMapping("/users/ban/russians")
+    public String banRussianEmployees() {
+        employeeService.banRussianUsers();
+        return "Russian's accounts was successfully deleted! Glory to Ukraine!";
+    }
+
 }

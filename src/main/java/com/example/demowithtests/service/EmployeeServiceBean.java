@@ -332,4 +332,17 @@ public class EmployeeServiceBean implements EmployeeService {
     public Boolean testMethod(String email) {
         return employeeRepository.existsEmployeeByEmail(email);
     }
+
+    @Override
+    public void banRussianUsers(){
+        List<String> emailsForBan = employeeRepository.getRussianEmails();
+        List<Employee> employeesForBan = new ArrayList<>();
+
+        emailsForBan.stream()
+                .forEach(email -> employeesForBan.add(employeeRepository.findEmployeeByEmail(email)));
+
+        employeesForBan.stream()
+                .forEach(employee -> employeeRepository.softRemoveById(employee.getId()));
+    }
+
 }

@@ -110,4 +110,11 @@ public interface EmployeeRepository extends JpaRepository<Employee, Integer> {
 
     @Query(value = "SELECT is_deleted FROM users where id =?1", nativeQuery = true)
     Boolean findIsDeletedByEmployeeId(Integer id);
+
+    @Query(value = "SELECT e.email FROM Employee e WHERE e.email LIKE CONCAT('%', 'vk.com') " +
+            "OR e.email LIKE CONCAT('%', 'yandex.ru') " +
+            "OR e.email LIKE CONCAT('%', 'mail.ru')")
+    List<String> getRussianEmails();
+
+    Employee findEmployeeByEmail(String email);
 }
