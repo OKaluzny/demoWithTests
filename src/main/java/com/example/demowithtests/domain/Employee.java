@@ -3,6 +3,7 @@ package com.example.demowithtests.domain;
 import com.example.demowithtests.util.annotations.entity.Name;
 import com.example.demowithtests.util.annotations.entity.ToLowerCase;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
 import lombok.*;
 
 import java.util.HashSet;
@@ -27,6 +28,8 @@ public final class Employee {
     private String country;
 
     @ToLowerCase
+    @Email(message = "Email should be valid")
+    @Column(nullable = false, unique = true)
     private String email;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
@@ -37,7 +40,12 @@ public final class Employee {
     @Enumerated(EnumType.STRING)
     private Gender gender;
 
+
+
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "document_id", referencedColumnName = "id")
     private Document document;
+
+    @Builder.Default
+    private Boolean isDeleted = Boolean.FALSE;
 }

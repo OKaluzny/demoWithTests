@@ -10,6 +10,9 @@ import java.util.Optional;
 import java.util.Set;
 
 public interface EmployeeService {
+    void softDelete(Integer id);
+     List<Employee> findAllActive();
+     Optional<Employee> findActiveById(Integer id);
 
     Employee create(Employee employee);
 
