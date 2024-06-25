@@ -19,20 +19,21 @@ import java.util.Optional;
 public interface EmployeeRepository extends JpaRepository<Employee, Integer> {
 
     @Query(value = "select e from Employee e where e.country =?1")
-    @EntityGraph(attributePaths = {"addresses"})
+        //@EntityGraph(attributePaths = {"addresses"})
     List<Employee> findEmployeesByCountry(String country);
 
     //ToDo write implementation
-    @Query(value = "select count(*) as amount from users where country = ?1", nativeQuery = true) //sql
+    @Query(value = "select count(*) as amount from users where country = ?1", nativeQuery = true)
+    //sql
     int countEmployeesByCountry(String country);
 
+    @EntityGraph(type = EntityGraph.EntityGraphType.FETCH, value = "employee_entity-graph")
     Page<Employee> findEmployeesByEmail(String email, Pageable pageable);
 
     @EntityGraph(type = EntityGraph.EntityGraphType.FETCH, attributePaths = "addresses")
     List<Employee> findByNameContaining(String name);
 
-    @Query(value = "SELECT u.* FROM users u JOIN addresses a ON u.id = a.employee_id " +
-            "WHERE u.gender = :gender AND a.country = :country", nativeQuery = true)
+    @Query(value = "SELECT u.* FROM users u JOIN addresses a ON u.id = a.employee_id " + "WHERE u.gender = :gender AND a.country = :country", nativeQuery = true)
     /*@Query(value = "" +
             "select users.id, users.name, users.email, employee_id, addresses.country AS address_co, users.country AS users_co, gender " +
             "from users " +
@@ -41,8 +42,7 @@ public interface EmployeeRepository extends JpaRepository<Employee, Integer> {
             "where users.gender = :gender and addresses.country = :country", nativeQuery = true)*/
     List<Employee> findByGender(String gender, String country);
 
-    @Query(value = "SELECT * FROM users WHERE SUBSTRING(country, 1, 1) = LOWER(SUBSTRING(country, 1, 1))",
-            nativeQuery = true)
+    @Query(value = "SELECT * FROM users WHERE SUBSTRING(country, 1, 1) = LOWER(SUBSTRING(country, 1, 1))", nativeQuery = true)
     List<Employee> findAllByCountryStartsWithLowerCase();
 
     @Query(value = "SELECT * FROM users WHERE country NOT IN :countries", nativeQuery = true)
@@ -71,7 +71,7 @@ public interface EmployeeRepository extends JpaRepository<Employee, Integer> {
     @Transactional
     @Modifying(flushAutomatically = true, clearAutomatically = true)
     @Query(value = "INSERT INTO users(name, email, country, gender) VALUES (:name, :email, :country, :gender)", nativeQuery = true)
-    //Integer saveEmployee(String name, String email, String country, String gender);
+        //Integer saveEmployee(String name, String email, String country, String gender);
     void saveEmployee(String name, String email, String country, String gender);
 
     /**
