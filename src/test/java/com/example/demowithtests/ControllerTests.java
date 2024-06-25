@@ -5,6 +5,8 @@ import com.example.demowithtests.dto.EmployeeDto;
 import com.example.demowithtests.dto.EmployeeReadDto;
 import com.example.demowithtests.service.EmployeeService;
 import com.example.demowithtests.service.EmployeeServiceEM;
+import com.example.demowithtests.service.document.DocumentService;
+import com.example.demowithtests.util.mappers.DocumentMapper;
 import com.example.demowithtests.util.mappers.EmployeeMapper;
 import com.example.demowithtests.web.EmployeeController;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -55,10 +57,16 @@ public class ControllerTests {
     EmployeeService service;
 
     @MockBean
+    DocumentService documentService;
+
+    @MockBean
     EmployeeServiceEM serviceEM;
 
     @MockBean
     EmployeeMapper employeeMapper;
+
+    @MockBean
+    DocumentMapper documentMapper;
 
     @Autowired
     private MockMvc mockMvc;
