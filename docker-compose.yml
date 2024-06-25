@@ -33,7 +33,7 @@ services:
   # Database Service (Postgres)
   db:
     # Use the Docker Image postgres. This will pull the 12 version.
-    image: postgres:16-alpine
+    image: postgres:16
     # Give the container the name postgres-db. You can changes to something else.
     container_name: postgres-db
     restart: always
