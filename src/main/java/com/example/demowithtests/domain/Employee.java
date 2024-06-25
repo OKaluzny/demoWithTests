@@ -15,6 +15,7 @@ import java.util.Set;
 @Setter
 @Getter
 @Builder
+@NamedEntityGraph(name = "employee_entity-graph", attributeNodes = @NamedAttributeNode("addresses"))
 public final class Employee {
 
     @Id
