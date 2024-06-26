@@ -15,6 +15,13 @@ import org.springframework.web.bind.annotation.*;
 public class DocumentController implements DocumentResource {
 
     private final DocumentService documentService;
+    @Override
+    @GetMapping("/documents/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public Document getDocumentById(@PathVariable Integer id) {
+        return documentService.getById(id);
+    }
+
 
     /**
      * @param document
@@ -31,10 +38,5 @@ public class DocumentController implements DocumentResource {
      * @param id
      * @return
      */
-    @Override
-    @GetMapping("/documents/{id}")
-    @ResponseStatus(HttpStatus.OK)
-    public Document getDocumentById(@PathVariable Integer id) {
-        return documentService.getById(id);
-    }
+
 }

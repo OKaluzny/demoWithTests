@@ -14,6 +14,10 @@ import java.time.LocalDateTime;
 public class DocumentServiceBean implements DocumentService {
 
     private final DocumentRepository documentRepository;
+    @Override
+    public Document getByIdGraph(Integer id) {
+        return documentRepository.findById(id).orElseThrow();
+    }
 
     /**
      * @param document
@@ -33,6 +37,7 @@ public class DocumentServiceBean implements DocumentService {
     public Document getById(Integer id) {
         return documentRepository.findById(id).orElseThrow();
     }
+
 
     /**
      * @param id

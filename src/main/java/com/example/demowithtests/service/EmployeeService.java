@@ -2,6 +2,7 @@ package com.example.demowithtests.service;
 
 import com.example.demowithtests.domain.Document;
 import com.example.demowithtests.domain.Employee;
+import com.example.demowithtests.dto.EmployeeAndDocumentDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -10,6 +11,9 @@ import java.util.Optional;
 import java.util.Set;
 
 public interface EmployeeService {
+    EmployeeAndDocumentDto getEmployeeWithDocuments(Integer id);
+    List<Employee> findAllEmployee();
+    List<Employee> findAllEmployeeWithoutGraph();
     void softDelete(Integer id);
      List<Employee> findAllActive();
      Optional<Employee> findActiveById(Integer id);

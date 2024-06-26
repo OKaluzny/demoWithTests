@@ -3,6 +3,7 @@ package com.example.demowithtests.service.document;
 import com.example.demowithtests.domain.Document;
 
 public interface DocumentService {
+    Document getByIdGraph(Integer id);
 
     Document create(Document document);
 

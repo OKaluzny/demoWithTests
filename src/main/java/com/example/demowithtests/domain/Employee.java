@@ -2,12 +2,21 @@ package com.example.demowithtests.domain;
 
 import com.example.demowithtests.util.annotations.entity.Name;
 import com.example.demowithtests.util.annotations.entity.ToLowerCase;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.HashSet;
 import java.util.Set;
 
+
+@NamedEntityGraph(
+        name = "employee-entity-graph",
+        attributeNodes = {
+                @NamedAttributeNode(value = "addresses")
+
+        }
+        )
 @Entity
 @Table(name = "users")
 @AllArgsConstructor
@@ -38,9 +47,9 @@ public final class Employee {
     private Gender gender;
 
 
-
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "document_id", referencedColumnName = "id")
+    @JsonIgnore
     private Document document;
 
     @Builder.Default

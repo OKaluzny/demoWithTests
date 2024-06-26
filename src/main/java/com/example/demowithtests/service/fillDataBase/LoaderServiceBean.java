@@ -1,6 +1,7 @@
 package com.example.demowithtests.service.fillDataBase;
 
 import com.example.demowithtests.domain.Address;
+import com.example.demowithtests.domain.Document;
 import com.example.demowithtests.domain.Employee;
 import com.example.demowithtests.repository.EmployeeRepository;
 import com.github.javafaker.Faker;
@@ -8,7 +9,14 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
+
+import static java.time.LocalDateTime.*;
+import static java.util.concurrent.TimeUnit.*;
 
 @Slf4j
 @AllArgsConstructor
@@ -40,7 +48,7 @@ public class LoaderServiceBean implements LoaderService {
         long seed = 1;
 
         Faker faker = new Faker(new Locale("en"), new Random(seed));
-        for (int i = 0; i < 2_000; i++) {
+        for (int i = 0; i < 100_000; i++) {
 
             String name = faker.name().name();
             //String country = faker.country().name();
@@ -62,11 +70,20 @@ public class LoaderServiceBean implements LoaderService {
                                     .addressHasActive(Boolean.valueOf(faker.address().streetAddress(true)))
                                     .build()));
 
+
+            Document document = Document.builder()
+                    .number(faker.code().ean8())
+                    .expireDate(faker.date().past(365, DAYS)
+                            .toInstant()
+                            .atZone(ZoneId.systemDefault()).toLocalDateTime())
+                    .build();
+
             Employee employee = Employee.builder()
                     .name(name)
                     .country(country)
                     .email(email.toLowerCase().replaceAll(" ", "") + "@mail.com")
                     .addresses(addresses)
+                    .document(document)
                     .isDeleted(Boolean.FALSE)
                     .build();
 

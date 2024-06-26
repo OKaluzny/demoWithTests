@@ -3,6 +3,7 @@ package com.example.demowithtests.web;
 import com.example.demowithtests.domain.Document;
 import com.example.demowithtests.domain.Employee;
 import com.example.demowithtests.dto.DocumentDto;
+import com.example.demowithtests.dto.EmployeeAndDocumentDto;
 import com.example.demowithtests.dto.EmployeeDto;
 import com.example.demowithtests.dto.EmployeeReadDto;
 import com.example.demowithtests.service.EmployeeService;
@@ -42,13 +43,39 @@ public class EmployeeController {
     private final EmployeeMapper employeeMapper;
     private final DocumentMapper documentMapper;
     private final DocumentService documentService;
+    @GetMapping("/graph-user/{id}")
+    public Employee getEmployeeGraph(@PathVariable Integer id) {
 
+        return employeeService.getById(id);
+    }
+    @GetMapping("/documents/graph/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public Document getDocumentByINameGraph(@PathVariable Integer id) {
+        return documentService.getByIdGraph(id);
+    }
+    @GetMapping("/user/with/document/{id}")
+    public EmployeeAndDocumentDto getEmployeeWithDocument(@PathVariable Integer id) {
+
+        return employeeService.getEmployeeWithDocuments(id);
+    }
+
+
+
+    @GetMapping("/users/without-graph")
+    public List<Employee> getAllEmployees() {
+        return employeeService.findAllEmployee();
+    }
+    @GetMapping("users/graph")
+    public List<Employee> getAllEmployeesGraph() {
+        return employeeService.findAllEmployeeWithoutGraph();
+    }
 
     @DeleteMapping("/users/soft/{id}")
     public Employee softDeleteEmployee(@PathVariable Integer id) {
         employeeService.softDelete(id);
         return employeeService.getById(id);
     }
+
     @GetMapping("/users/active")
     @ResponseStatus(HttpStatus.CREATED)
     @Operation(summary = "This is endpoint take active employees.", description = "Take active employees.", tags = {"Employee"})
@@ -58,6 +85,7 @@ public class EmployeeController {
     public List<Employee> getAllActiveEmployees() {
         return employeeService.findAllActive();
     }
+
     @GetMapping("/users/user/active/{id}")
     @ResponseStatus(HttpStatus.CREATED)
     @Operation(summary = "This is endpoint take active employee.", description = "Take active employee.", tags = {"Employee"})
@@ -67,8 +95,8 @@ public class EmployeeController {
 
     public Employee getActiveEmployeeById(@PathVariable Integer id) {
         Optional<Employee> employee = employeeService.findActiveById(id);
-     // if(employee.isPresent())
-            return employee.get();
+        // if(employee.isPresent())
+        return employee.get();
 
     }
 

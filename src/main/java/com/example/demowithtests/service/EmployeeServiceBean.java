@@ -2,6 +2,9 @@ package com.example.demowithtests.service;
 
 import com.example.demowithtests.domain.Document;
 import com.example.demowithtests.domain.Employee;
+import com.example.demowithtests.dto.DocDto;
+import com.example.demowithtests.dto.DocumentDto;
+import com.example.demowithtests.dto.EmployeeAndDocumentDto;
 import com.example.demowithtests.repository.EmployeeRepository;
 import com.example.demowithtests.service.emailSevice.EmailSenderService;
 import com.example.demowithtests.service.history.HistoryService;
@@ -34,6 +37,14 @@ public class EmployeeServiceBean implements EmployeeService {
     private final EmployeeRepository employeeRepository;
     private final EmailSenderService emailSenderService;
     private final HistoryService historyService;
+    @Override
+    public List<Employee> findAllEmployee() {
+        return employeeRepository.findAll(); }
+    @Override
+    public List<Employee> findAllEmployeeWithoutGraph(){
+        return employeeRepository.findAll();
+
+    }
 
 
     /**
@@ -108,6 +119,29 @@ public class EmployeeServiceBean implements EmployeeService {
             throw new EntityNotFoundException("Employee was deleted with id = " + id);
         }*/
         return employee;
+    }
+    @Override
+    public EmployeeAndDocumentDto getEmployeeWithDocuments(Integer id){
+        Optional<Employee> employee = employeeRepository.findById(id);
+        DocDto doc = DocDto.builder()
+                .id(employee.get().getDocument().getId())
+                .number(employee.get().getDocument().getNumber())
+                .uuid(employee.get().getDocument().getUuid())
+                .expireDate(employee.get().getDocument().getExpireDate())
+                .isHandled(employee.get().getDocument().getIsHandled())
+                .build();
+        EmployeeAndDocumentDto dto = EmployeeAndDocumentDto.builder()
+                .id(employee.get().getId())
+                .name(employee.get().getName())
+                .country(employee.get().getCountry())
+                .email(employee.get().getEmail())
+                .documentNumber(employee.get().getDocument().getNumber())
+                .document(doc)
+                .build();
+
+        return dto;
+
+
     }
 
     /**

@@ -17,6 +17,14 @@ import java.util.Optional;
 
 @Repository
 public interface EmployeeRepository extends JpaRepository<Employee, Integer> {
+   @EntityGraph(value = "employee-entity-graph",
+           type = EntityGraph.EntityGraphType.LOAD)
+ Optional<Employee> findById(Integer id);
+    @NotNull
+    List <Employee> findAll();
+    @NotNull
+    Page<Employee> findAll(Pageable pageable);
+
     @Query("SELECT e FROM Employee e WHERE e.isDeleted = false")
     List<Employee> findAllActive();
 
@@ -62,8 +70,7 @@ public interface EmployeeRepository extends JpaRepository<Employee, Integer> {
     @Transactional
     void updateEmployeeByName(String name, Integer id);
 
-    @NotNull
-    Page<Employee> findAll(Pageable pageable);
+
 
     @EntityGraph(attributePaths = {"addresses", "document"})
     Page<Employee> findByName(String name, Pageable pageable);
