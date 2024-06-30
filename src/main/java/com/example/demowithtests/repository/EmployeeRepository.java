@@ -17,14 +17,30 @@ import java.util.Optional;
 
 @Repository
 public interface EmployeeRepository extends JpaRepository<Employee, Integer> {
-    @Query("SELECT e FROM Employee e WHERE SIZE (e.addresses) > 1")
+
+    @Query(value = """
+            SELECT * FROM public.users u
+            WHERE (SELECT COUNT(*) FROM public.addresses a
+            WHERE a.employee_id = u.id) > 1
+            """, nativeQuery = true)
     List<Employee> findAllWithMoreThanOneAddress();
-    @Query("SELECT e FROM Employee e WHERE SIZE(e.addresses) = 1")
+
+    @Query(value = """
+            SELECT * FROM public.users u
+            WHERE (SELECT COUNT(*) FROM public.addresses a
+            WHERE a.employee_id = u.id) = 1
+            """, nativeQuery = true)
     List<Employee> findAllWithOneAddress();
-    @Query("SELECT e FROM Employee e WHERE SIZE(e.addresses) = 0")
+    @Query(value = """
+        SELECT * FROM public.users u
+        WHERE (SELECT  COUNT(*) FROM public.addresses a
+        WHERE a.employee_id = u.id) = 0
+        """, nativeQuery = true)
     List<Employee> findEmployeeWithoutAddresses();
 
+
     boolean existsByEmail(String email);
+
     @Query("SELECT e FROM Employee e WHERE e.isDeleted = false")
     List<Employee> findAllActive();
 
@@ -36,7 +52,8 @@ public interface EmployeeRepository extends JpaRepository<Employee, Integer> {
     List<Employee> findEmployeesByCountry(String country);
 
     //ToDo write implementation
-    @Query(value = "select count(*) as amount from users where country = ?1", nativeQuery = true) //sql
+    @Query(value = "select count(*) as amount from users where country = ?1", nativeQuery = true)
+    //sql
     int countEmployeesByCountry(String country);
 
     Page<Employee> findEmployeesByEmail(String email, Pageable pageable);
@@ -84,7 +101,7 @@ public interface EmployeeRepository extends JpaRepository<Employee, Integer> {
     @Transactional
     @Modifying(flushAutomatically = true, clearAutomatically = true)
     @Query(value = "INSERT INTO users(name, email, country, gender) VALUES (:name, :email, :country, :gender)", nativeQuery = true)
-    //Integer saveEmployee(String name, String email, String country, String gender);
+        //Integer saveEmployee(String name, String email, String country, String gender);
     void saveEmployee(String name, String email, String country, String gender);
 
     /**
