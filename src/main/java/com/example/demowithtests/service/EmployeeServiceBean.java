@@ -364,7 +364,8 @@ public class EmployeeServiceBean implements EmployeeService {
                // .filter(e ->e.getIsDeleted().equals(false))
                 .map(entity -> {
                     entity.getAddresses().add(address);
-                    return employeeRepository.save(entity);
+                   return employeeRepository.save(entity);
+
                 })
                 .orElseThrow(() -> new EntityNotFoundException("Employee not found with id = " + id));
     }

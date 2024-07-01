@@ -79,7 +79,7 @@ public interface EmployeeRepository extends JpaRepository<Employee, Integer> {
     List<Employee> findAllByCountryNotIn(@Param("countries") List<String> countries);
 
     Employee findByName(String name);
-
+    @Query(value = "SELECT * FROM users e WHERE e.email IS NOT NULL LIMIT 1", nativeQuery = true)
     Employee findEmployeeByEmailNotNull();
 
     @Query("update Employee set name = ?1 where id = ?2")

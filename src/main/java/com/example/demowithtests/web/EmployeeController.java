@@ -68,7 +68,7 @@ public class EmployeeController {
     public List<Employee> getAllEmployees() {
         return employeeService.findAllEmployee();
     }
-    @GetMapping("users/graph")
+    @GetMapping("/users/graph")
     public List<Employee> getAllEmployeesGraph() {
         return employeeService.findAllEmployeeWithoutGraph();
     }
