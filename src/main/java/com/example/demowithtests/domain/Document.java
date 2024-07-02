@@ -24,11 +24,14 @@ public final class Document {
     private String number;
 
     @Builder.Default
+    @Column(name = "uuid")
     private String uuid = UUID.randomUUID().toString();
 
+    @Column(name = "expire_date")
     private LocalDateTime expireDate;
 
     @Builder.Default
+    @Column(name = "is_handled")
     private Boolean isHandled = Boolean.FALSE;
 
     @ToString.Exclude

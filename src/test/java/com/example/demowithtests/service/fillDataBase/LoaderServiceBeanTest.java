@@ -29,7 +29,7 @@ public class LoaderServiceBeanTest {
 
         // Then
         assertNotNull(employees);
-        assertEquals(100000, employees.size());
+        assertEquals(1000, employees.size());
 
         for (Employee employee : employees) {
             assertNotNull(employee.getName());

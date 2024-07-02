@@ -27,10 +27,9 @@ public record EmployeeDto(
         @Schema(description = "Name of the country.", example = "England", requiredMode = Schema.RequiredMode.REQUIRED)
         String country,
 
-        @Email
-        @NotNull
-        @BlockedEmailDomains(contains = {".com1", ".ru", ".su"})
-        @Schema(description = "Email address of an employee.", example = "billys@mail.com", requiredMode = Schema.RequiredMode.REQUIRED)
+
+//        @BlockedEmailDomains(contains = {".com1", ".ru", ".su"})
+//        @Schema(description = "Email address of an employee.", example = "billys@mail.com", requiredMode = Schema.RequiredMode.REQUIRED)
         String email,
 
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")

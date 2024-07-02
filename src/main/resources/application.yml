@@ -22,6 +22,13 @@ spring:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     #open-in-view: false
     #generate-ddl: true
+    properties:
+      hibernate:
+       generate_statistics: true
+    logging:
+      level:
+         org.hibernate.stat: DEBUG
+
   flyway:
     #    locations: filesystem:.\src\main\resources\db\migration
     enabled: true

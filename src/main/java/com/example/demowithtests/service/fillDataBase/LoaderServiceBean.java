@@ -48,7 +48,7 @@ public class LoaderServiceBean implements LoaderService {
         long seed = 1;
 
         Faker faker = new Faker(new Locale("en"), new Random(seed));
-        for (int i = 0; i < 100_000; i++) {
+        for (int i = 0; i < 1000; i++) {
 
             String name = faker.name().name();
             //String country = faker.country().name();
@@ -71,23 +71,18 @@ public class LoaderServiceBean implements LoaderService {
                                     .build()));
 
 
-            Document document = Document.builder()
-                    .number(faker.code().ean8())
-                    .expireDate(faker.date().past(365, DAYS)
-                            .toInstant()
-                            .atZone(ZoneId.systemDefault()).toLocalDateTime())
-                    .build();
+
 
             Employee employee = Employee.builder()
                     .name(name)
                     .country(country)
                     .email(email.toLowerCase().replaceAll(" ", "") + "@mail.com")
                     .addresses(addresses)
-                    .document(document)
                     .isDeleted(Boolean.FALSE)
                     .build();
 
             employees.add(employee);
+
         }
         return employees;
     }

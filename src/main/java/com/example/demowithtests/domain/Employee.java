@@ -32,13 +32,14 @@ public final class Employee {
     private Integer id;
 
     @Name
+    @Column(name = "name")
     private String name;
 
+    @Column(name = "country")
     private String country;
 
-    @ToLowerCase
-    @Email(message = "Email should be valid")
-    @Column(nullable = false, unique = true)
+//    @ToLowerCase
+//    @Email(message = "Email should be valid")
     private String email;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
@@ -56,5 +57,6 @@ public final class Employee {
     private Document document;
 
     @Builder.Default
+    @Column(name = "is_deleted")
     private Boolean isDeleted = Boolean.FALSE;
 }
