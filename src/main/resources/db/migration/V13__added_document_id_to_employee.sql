@@ -1,0 +1,1 @@
+alter table users add if not exists document_id integer;

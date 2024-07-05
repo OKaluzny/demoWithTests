@@ -1,6 +1,7 @@
 package com.example.demowithtests.util.exception;
 
 import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -12,6 +13,12 @@ import static com.example.demowithtests.util.exception.ErrorDetails.getResponseE
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<ErrorDetails> dataIntegrityViolationException(HttpServletRequest request) {
+        return getResponseEntityErrorsMap(request.getRequestURI(),
+                                          HttpStatus.BAD_REQUEST,
+                                          "User must be at least 18 years old.");
+    }
     @ExceptionHandler(SoftDeleteException.class)
     public ResponseEntity<ErrorDetails> softDeleteException(HttpServletRequest request) {
         return getResponseEntityErrorsMap(request.getRequestURI(),

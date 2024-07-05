@@ -34,6 +34,8 @@ public final class Employee {
     @Name
     @Column(name = "name")
     private String name;
+    @Column(name = "age")
+    private Integer age;
 
     @Column(name = "country")
     private String country;

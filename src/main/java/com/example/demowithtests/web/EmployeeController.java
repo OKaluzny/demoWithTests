@@ -3,11 +3,7 @@ package com.example.demowithtests.web;
 import com.example.demowithtests.domain.Address;
 import com.example.demowithtests.domain.Document;
 import com.example.demowithtests.domain.Employee;
-import com.example.demowithtests.dto.AddressDto;
-import com.example.demowithtests.dto.DocumentDto;
-import com.example.demowithtests.dto.EmployeeAndDocumentDto;
-import com.example.demowithtests.dto.EmployeeDto;
-import com.example.demowithtests.dto.EmployeeReadDto;
+import com.example.demowithtests.dto.*;
 import com.example.demowithtests.service.EmployeeService;
 import com.example.demowithtests.service.EmployeeServiceEM;
 import com.example.demowithtests.service.document.DocumentService;
@@ -46,6 +42,14 @@ public class EmployeeController {
     private final EmployeeMapper employeeMapper;
     private final DocumentMapper documentMapper;
     private final DocumentService documentService;
+
+
+    @PostMapping("/users/age")
+    @ResponseStatus(HttpStatus.CREATED)
+    public Employee createEmployee(@RequestBody EmployeeAndAgeDto employee) {
+        return employeeService.saveEmployeeWithAge(employee);
+
+    }
     @GetMapping("/graph-user/{id}")
     public Employee getEmployeeGraph(@PathVariable Integer id) {
 

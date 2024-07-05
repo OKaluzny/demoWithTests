@@ -5,6 +5,7 @@ import com.example.demowithtests.domain.Document;
 import com.example.demowithtests.domain.Employee;
 import com.example.demowithtests.dto.DocDto;
 import com.example.demowithtests.dto.DocumentDto;
+import com.example.demowithtests.dto.EmployeeAndAgeDto;
 import com.example.demowithtests.dto.EmployeeAndDocumentDto;
 import com.example.demowithtests.repository.EmployeeRepository;
 import com.example.demowithtests.service.emailSevice.EmailSenderService;
@@ -21,6 +22,7 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -42,6 +44,22 @@ public class EmployeeServiceBean implements EmployeeService {
     private final EmployeeRepository employeeRepository;
     private final EmailSenderService emailSenderService;
     private final HistoryService historyService;
+
+    public Employee saveEmployeeWithAge(EmployeeAndAgeDto employee) {
+        Employee employee1 = Employee.builder()
+                .name(employee.getName())
+                .age(employee.getAge())
+                .country(employee.getCountry())
+                .email(employee.getEmail())
+                .build();
+        try {
+            return employeeRepository.save(employee1);
+        }catch (DataIntegrityViolationException e){
+            throw  e;
+        }
+
+
+    }
     @Override
     public List<Employee> findAllEmployee() {
         return employeeRepository.findAll(); }
