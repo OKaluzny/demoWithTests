@@ -1,0 +1,81 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "com.example.demowithtests.grpc";
+option java_outer_classname = "EmployeeOuterClass";
+
+package employee;
+
+service EmployeeService {
+  rpc CreateEmployee (CreateEmployeeRequest) returns (EmployeeResponse) {}
+  rpc GetEmployee (GetEmployeeRequest) returns (EmployeeResponse) {}
+  rpc UpdateEmployee (UpdateEmployeeRequest) returns (EmployeeResponse) {}
+  rpc DeleteEmployee (DeleteEmployeeRequest) returns (DeleteEmployeeResponse) {}
+}
+
+enum GenderProto {
+  MALE = 0;
+  FEMALE = 1;
+}
+
+message AddressProto {
+  int64 id = 1;
+  bool address_has_active = 2;
+  string country = 3;
+  string city = 4;
+  string street = 5;
+}
+
+message DocumentProto {
+  int32 id = 1;
+  string number = 2;
+  string uuid = 3;
+  string expire_date = 4;
+  bool is_handled = 5;
+}
+
+message EmployeeProto {
+  int32 id = 1;
+  string name = 2;
+  string country = 3;
+  string email = 4;
+  repeated AddressProto addresses = 5;
+  GenderProto gender = 6;
+  DocumentProto document = 7;
+}
+
+message CreateEmployeeRequest {
+  string name = 1;
+  string country = 2;
+  string email = 3;
+  repeated AddressProto addresses = 4;
+  GenderProto gender = 5;
+  DocumentProto document = 6;
+}
+
+message GetEmployeeRequest {
+  int32 id = 1;
+}
+
+message UpdateEmployeeRequest {
+  int32 id = 1;
+  string name = 2;
+  string country = 3;
+  string email = 4;
+  repeated AddressProto addresses = 5;
+  GenderProto gender = 6;
+  DocumentProto document = 7;
+}
+
+message DeleteEmployeeRequest {
+  int32 id = 1;
+}
+
+message DeleteEmployeeResponse {
+  bool success = 1;
+  string message = 2;
+}
+
+message EmployeeResponse {
+  EmployeeProto employee = 1;
+}
