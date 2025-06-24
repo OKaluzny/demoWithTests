@@ -5,7 +5,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.2.0</version>
+        <version>3.2.2</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
@@ -65,21 +65,21 @@
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-api</artifactId>
-            <version>5.9.3</version>
+            <version>5.10.1</version>
             <scope>test</scope>
         </dependency>
         <!-- Junit 5 engine -->
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-engine</artifactId>
-            <version>5.9.3</version>
+            <version>5.10.1</version>
             <scope>test</scope>
         </dependency>
         <!-- Junit mockito -->
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-junit-jupiter</artifactId>
-            <version>5.3.0</version>
+            <version>5.7.0</version>
             <scope>test</scope>
         </dependency>
         <!-- lombok -->
@@ -99,26 +99,26 @@
         <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
-            <version>2.2.220</version>
+            <version>2.2.224</version>
             <scope>test</scope>
         </dependency>
         <!-- swagger -->
         <dependency>
             <groupId>org.springdoc</groupId>
             <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
-            <version>2.2.0</version>
+            <version>2.3.0</version>
         </dependency>
         <!-- flyway -->
         <dependency>
             <groupId>org.flywaydb</groupId>
             <artifactId>flyway-core</artifactId>
-            <version>10.11.0</version>
+            <version>10.15.0</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/org.flywaydb/flyway-database-postgresql -->
         <dependency>
             <groupId>org.flywaydb</groupId>
             <artifactId>flyway-database-postgresql</artifactId>
-            <version>10.14.0</version>
+            <version>10.15.0</version>
             <scope>runtime</scope>
         </dependency>
 
@@ -158,7 +158,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.11.0</version>
+                <version>3.12.1</version>
                 <configuration>
                     <source>${java.version}</source>
                     <target>${java.version}</target>
@@ -194,7 +194,7 @@
             <plugin>
                 <groupId>io.fabric8</groupId>
                 <artifactId>docker-maven-plugin</artifactId>
-                <version>0.43.4</version>
+                <version>0.44.0</version>
                 <executions>
                     <execution>
                         <id>docker-build</id>
@@ -218,7 +218,15 @@
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
-                <version>0.8.11</version>
+                <version>0.8.12</version>
+                <configuration>
+                    <excludes>
+                        <exclude>com/example/demowithtests/dto/**</exclude>
+                        <exclude>com/example/demowithtests/domain/**</exclude>
+                        <exclude>com/example/demowithtests/**/DocumentServiceBean.class</exclude>
+                        <exclude>com/sun/tools/attach/**</exclude>
+                    </excludes>
+                </configuration>
                 <executions>
                     <execution>
                         <goals>
@@ -273,12 +281,13 @@
 <!--                        </configuration>-->
 <!--                    </execution>-->
                 </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>3.2.5</version>
                 <configuration>
-                    <excludes>
-                        <exclude>com/example/demowithtests/dto/**</exclude>
-                        <exclude>com/example/demowithtests/domain/**</exclude>
-                        <exclude>com/example/demowithtests/**/DocumentServiceBean.class</exclude>
-                    </excludes>
+                    <argLine>--add-opens java.base/java.lang=ALL-UNNAMED</argLine>
                 </configuration>
             </plugin>
         </plugins>
