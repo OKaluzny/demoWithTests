@@ -76,12 +76,14 @@ public class EmployeeController {
 
     @GetMapping("/users/pages")
     @ResponseStatus(HttpStatus.OK)
-    public Page<EmployeeReadDto> getPage(
+    public List<EmployeeReadDto> getPage(
             @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "5") int size) {
         log.debug("getPage() - start: page= {}, size = {}", page, size);
         var paging = PageRequest.of(page, size);
-        var content = employeeService.getAllWithPagination(paging)
-                .map(employeeMapper::toEmployeeReadDto);
+        var pageContent = employeeService.getAllWithPagination(paging);
+        var content = pageContent.getContent().stream()
+                .map(employeeMapper::toEmployeeReadDto)
+                .toList();
         log.debug("getPage() - end: content = {}", content);
         return content;
     }
