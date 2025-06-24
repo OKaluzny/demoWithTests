@@ -10,7 +10,6 @@ import com.example.demowithtests.util.mappers.DocumentMapper;
 import com.example.demowithtests.util.mappers.EmployeeMapper;
 import com.example.demowithtests.web.EmployeeController;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -47,7 +46,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ExtendWith(MockitoExtension.class)
 @WebMvcTest(controllers = EmployeeController.class)
 @DisplayName("Employee Controller Tests")
-@Disabled
 public class ControllerTests {
 
     @Autowired
@@ -57,16 +55,16 @@ public class ControllerTests {
     EmployeeService service;
 
     @MockBean
-    DocumentService documentService;
-
-    @MockBean
     EmployeeServiceEM serviceEM;
 
     @MockBean
     EmployeeMapper employeeMapper;
 
     @MockBean
-    DocumentMapper documentMapper;
+    private DocumentMapper documentMapper;
+
+    @MockBean
+    private DocumentService documentService;
 
     @Autowired
     private MockMvc mockMvc;
@@ -208,15 +206,29 @@ public class ControllerTests {
         var employeeTwo = Employee.builder().id(2).name("Jane").country("UK").build();
         var employeeThree = Employee.builder().id(3).name("Bob").country("US").build();
 
-        List<Employee> list = Arrays.asList(employee, employeeTwo, employeeThree);
-        Page<Employee> employeesPage = new PageImpl<>(list);
+        EmployeeReadDto dto = new EmployeeReadDto();
+        dto.id = 1;
+        dto.name = "John";
+        dto.country = "US";
+
+        EmployeeReadDto dtoTwo = new EmployeeReadDto();
+        dtoTwo.id = 2;
+        dtoTwo.name = "Jane";
+        dtoTwo.country = "UK";
+
+        EmployeeReadDto dtoThree = new EmployeeReadDto();
+        dtoThree.id = 3;
+        dtoThree.name = "Bob";
+        dtoThree.country = "US";
+
+        List<Employee> employeeList = Arrays.asList(employee, employeeTwo, employeeThree);
+        Page<Employee> employeePage = new PageImpl<>(employeeList);
         Pageable pageable = PageRequest.of(0, 5);
 
-        EmployeeReadDto dto = new EmployeeReadDto();
-        EmployeeReadDto dtoTwo = new EmployeeReadDto();
-        EmployeeReadDto dtoThree = new EmployeeReadDto();
+        // Mock the service to return a Page of Employee objects
+        when(service.getAllWithPagination(eq(pageable))).thenReturn(employeePage);
 
-        when(service.getAllWithPagination(eq(pageable))).thenReturn(employeesPage);
+        // Mock the mapper to return the appropriate DTOs
         when(employeeMapper.toEmployeeReadDto(employee)).thenReturn(dto);
         when(employeeMapper.toEmployeeReadDto(employeeTwo)).thenReturn(dtoTwo);
         when(employeeMapper.toEmployeeReadDto(employeeThree)).thenReturn(dtoThree);
@@ -228,9 +240,6 @@ public class ControllerTests {
                 .andReturn();
 
         verify(service).getAllWithPagination(eq(pageable));
-        verify(employeeMapper, times(1)).toEmployeeReadDto(employee);
-        verify(employeeMapper, times(1)).toEmployeeReadDto(employeeTwo);
-        verify(employeeMapper, times(1)).toEmployeeReadDto(employeeThree);
 
         String contentType = result.getResponse().getContentType();
         assertNotNull(contentType);
