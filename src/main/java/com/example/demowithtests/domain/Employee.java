@@ -33,6 +33,7 @@ public final class Employee {
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "employee_id")
     @OrderBy("id desc, country asc")
+    @Builder.Default
     private Set<Address> addresses = new HashSet<>();
 
     @Enumerated(EnumType.STRING)
