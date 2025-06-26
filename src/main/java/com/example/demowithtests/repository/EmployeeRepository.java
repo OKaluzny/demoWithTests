@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.lang.NonNullApi;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -50,6 +51,7 @@ public interface EmployeeRepository extends JpaRepository<Employee, Integer> {
 
     Employee findByName(String name);
 
+    @Query(value = "SELECT * FROM users WHERE email IS NOT NULL ORDER BY id LIMIT 1", nativeQuery = true)
     Employee findEmployeeByEmailNotNull();
 
     @Query("update Employee set name = ?1 where id = ?2")

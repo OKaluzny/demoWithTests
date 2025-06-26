@@ -17,7 +17,6 @@ import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @DataJpaTest
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
@@ -157,4 +156,31 @@ public class RepositoryTests {
         assertNotNull(foundEmployee.getEmail() != null);
     }
 
+    @Test
+    @Order(8)
+    @Rollback(value = false)
+    @DisplayName("Update employee using updateEmployee method test")
+    public void testUpdateEmployee() {
+        // given
+        Employee employee = new Employee();
+        employee.setName("Alice");
+        employee.setEmail("alice@example.com");
+        employee.setCountry("USA");
+        employeeRepository.save(employee);
+
+        String newName = "Alicia";
+        String newEmail = "alicia@example.com";
+        String newCountry = "Canada";
+
+        // when
+        Integer updatedRows = employeeRepository.updateEmployee(newName, newEmail, newCountry, employee.getId());
+
+        // then
+        assertThat(updatedRows).isEqualTo(1);
+
+        Employee updatedEmployee = employeeRepository.findById(employee.getId()).orElseThrow();
+        assertThat(updatedEmployee.getName()).isEqualTo(newName);
+        assertThat(updatedEmployee.getEmail()).isEqualTo(newEmail);
+        assertThat(updatedEmployee.getCountry()).isEqualTo(newCountry);
+    }
 }

@@ -69,4 +69,14 @@ public interface EmployeeService {
 
     Employee removeDocument(Integer id);
 
+    /**
+     * Updates an employee's name, email, and country in the database.
+     *
+     * @param name    The new name of the employee.
+     * @param email   The new email of the employee.
+     * @param country The new country of the employee.
+     * @param id      The id of the employee to update.
+     * @return The number of rows affected by the update operation.
+     */
+    Integer updateEmployee(String name, String email, String country, Integer id);
 }

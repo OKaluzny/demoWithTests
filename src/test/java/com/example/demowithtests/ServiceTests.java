@@ -210,5 +210,24 @@ public class ServiceTests {
         assertThat(result.get(0).getName()).isEqualTo("John");
         assertThat(result.get(1).getName()).isEqualTo("Smith");
     }
-}
 
+    @Test
+    @DisplayName("Update employee test")
+    public void testUpdateEmployee() {
+        // arrange
+        String name = "John Updated";
+        String email = "john.updated@example.com";
+        String country = "Canada";
+        Integer id = 1;
+        Integer expectedRowsUpdated = 1;
+
+        when(employeeRepository.updateEmployee(name, email, country, id)).thenReturn(expectedRowsUpdated);
+
+        // act
+        Integer result = service.updateEmployee(name, email, country, id);
+
+        // assert
+        assertEquals(expectedRowsUpdated, result);
+        verify(employeeRepository).updateEmployee(name, email, country, id);
+    }
+}
