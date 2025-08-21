@@ -229,4 +229,11 @@ public class EmployeeController {
         log.debug("removeDocumentFromUser() EmployeeController - end: id = {}", id);
         return employee;
     }
+
+    @GetMapping("/employees/emails")
+    @ResponseStatus(HttpStatus.OK)
+    public Employee findEmployee (@RequestParam String email) {
+        Employee employee = employeeService.findEmployeeByEmail(email);
+        return employee;
+    }
 }

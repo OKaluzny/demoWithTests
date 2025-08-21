@@ -1,4 +1,4 @@
-package com.example.demowithtests.util.config;
+package com.example.demowithtests.config;
 
 import com.example.demowithtests.service.grpc.EmployeeGrpcService;
 import io.grpc.Server;

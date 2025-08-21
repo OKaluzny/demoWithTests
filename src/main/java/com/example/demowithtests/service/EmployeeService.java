@@ -79,4 +79,6 @@ public interface EmployeeService {
      * @return The number of rows affected by the update operation.
      */
     Integer updateEmployee(String name, String email, String country, Integer id);
+
+    Employee findEmployeeByEmail(String email);
 }

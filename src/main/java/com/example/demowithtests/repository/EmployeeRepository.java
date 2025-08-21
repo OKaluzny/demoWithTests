@@ -19,8 +19,10 @@ import java.util.Optional;
 @Repository
 public interface EmployeeRepository extends JpaRepository<Employee, Integer> {
 
-    @Query(value = "select e from Employee e where e.country =?1")
+    //@Query(value = "select e from Employee e where e.country =?1")
         //@EntityGraph(attributePaths = {"addresses"})
+    //@Query(value = "select * from users where country =?1" , nativeQuery = true)
+    @EntityGraph(type = EntityGraph.EntityGraphType.FETCH, value = "employee_entity-graph")
     List<Employee> findEmployeesByCountry(String country);
 
     //ToDo write implementation
@@ -67,6 +69,10 @@ public interface EmployeeRepository extends JpaRepository<Employee, Integer> {
 
     Page<Employee> findByCountryContaining(String country, Pageable pageable);
 
+    //@Query(value = "SELECT * FROM users WHERE email = ?1", nativeQuery = true)
+    @EntityGraph(type = EntityGraph.EntityGraphType.FETCH, attributePaths = "addresses")
+    Employee findEmployeesByEmail(String email);
+
     @Query(value = "SELECT * FROM users WHERE country = 'Ukraine'", nativeQuery = true)
     Optional<List<Employee>> findAllUkrainian();
 
@@ -93,7 +99,8 @@ public interface EmployeeRepository extends JpaRepository<Employee, Integer> {
     @Override
     @Modifying(clearAutomatically = true, flushAutomatically = true)
     @Transactional
-    @EntityGraph(type = EntityGraph.EntityGraphType.FETCH, value = "user_entity-graph")
+    //@EntityGraph(type = EntityGraph.EntityGraphType.FETCH, value = "user_entity-graph")
+    @EntityGraph(type = EntityGraph.EntityGraphType.FETCH, attributePaths = "addresses")
     <S extends Employee> S save(S entity);
 
     @Override

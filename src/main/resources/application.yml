@@ -48,6 +48,26 @@ springdoc:
     path: /swagger-ui.html # swagger-ui custom path
   api-docs:
     path: /v3/api-docs.yaml
+  # Kafka configuration
+  kafka:
+    bootstrap-servers: localhost:9092
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      acks: all
+      retries: 3
+      batch-size: 16384
+      linger-ms: 1
+      buffer-memory: 33554432
+    consumer:
+      group-id: employee-service-group
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      auto-offset-reset: earliest
+      enable-auto-commit: true
+      auto-commit-interval: 1000
+      properties:
+        spring.json.trusted.packages: "com.example.demowithtests.dto"
 management: # spring actuator
   endpoints:
     #enabled-by-default: true # If changed to false, you can enable separate functionality as indicated below
@@ -58,5 +78,3 @@ management: # spring actuator
       exposure:
        # exclude: "*"
         include: "*"
-
-

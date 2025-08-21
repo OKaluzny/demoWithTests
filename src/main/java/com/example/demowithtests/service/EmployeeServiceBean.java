@@ -5,6 +5,7 @@ import com.example.demowithtests.domain.Employee;
 import com.example.demowithtests.repository.EmployeeRepository;
 import com.example.demowithtests.service.emailSevice.EmailSenderService;
 import com.example.demowithtests.service.history.HistoryService;
+import com.example.demowithtests.service.kafka.EmployeeEventPublisher;
 import com.example.demowithtests.util.annotations.entity.ActivateCustomAnnotations;
 import com.example.demowithtests.util.annotations.entity.Name;
 import com.example.demowithtests.util.annotations.entity.ToLowerCase;
@@ -34,6 +35,7 @@ public class EmployeeServiceBean implements EmployeeService {
     private final EmployeeRepository employeeRepository;
     private final EmailSenderService emailSenderService;
     private final HistoryService historyService;
+    private final EmployeeEventPublisher employeeEventProducer;
 
 
     /**
@@ -46,7 +48,16 @@ public class EmployeeServiceBean implements EmployeeService {
     @ActivateCustomAnnotations({Name.class, ToLowerCase.class})
     // @Transactional(propagation = Propagation.MANDATORY)
     public Employee create(Employee employee) {
-        return employeeRepository.save(employee);
+        Employee savedEmployee = employeeRepository.save(employee);
+
+        // Send Kafka event for employee creation
+        try {
+            employeeEventProducer.sendEmployeeCreatedEvent(savedEmployee);
+        } catch (Exception e) {
+            log.error("Failed to send employee created event for employee ID: {}", savedEmployee.getId(), e);
+        }
+
+        return savedEmployee;
         //return employeeRepository.saveAndFlush(employee);
     }
 
@@ -101,10 +112,29 @@ public class EmployeeServiceBean implements EmployeeService {
     @Override
     public Employee updateById(Integer id, Employee employee) {
         return employeeRepository.findById(id).map(entity -> {
+            // Create a copy of the previous employee data for Kafka event
+            Employee previousEmployee = Employee.builder()
+                    .id(entity.getId())
+                    .name(entity.getName())
+                    .email(entity.getEmail())
+                    .country(entity.getCountry())
+                    .gender(entity.getGender())
+                    .build();
+
+            // Update the entity
             entity.setName(employee.getName());
             entity.setEmail(employee.getEmail());
             entity.setCountry(employee.getCountry());
-            return employeeRepository.save(entity);
+            Employee updatedEmployee = employeeRepository.save(entity);
+
+            // Send Kafka event for employee update
+            try {
+                employeeEventProducer.sendEmployeeUpdatedEvent(previousEmployee, updatedEmployee);
+            } catch (Exception e) {
+                log.error("Failed to send employee updated event for employee ID: {}", updatedEmployee.getId(), e);
+            }
+
+            return updatedEmployee;
         }).orElseThrow(() -> new EntityNotFoundException("Employee not found with id = " + id));
     }
 
@@ -114,6 +144,14 @@ public class EmployeeServiceBean implements EmployeeService {
         var employee = employeeRepository.findById(id)
                 // .orElseThrow(() -> new EntityNotFoundException("Employee not found with id = " + id));
                 .orElseThrow(ResourceWasDeletedException::new);
+
+        // Send Kafka event for employee deletion before deleting
+        try {
+            employeeEventProducer.sendEmployeeDeletedEvent(employee);
+        } catch (Exception e) {
+            log.error("Failed to send employee deleted event for employee ID: {}", employee.getId(), e);
+        }
+
         //employee.setIsDeleted(true);
         employeeRepository.delete(employee);
         //repository.save(employee);
@@ -318,5 +356,10 @@ public class EmployeeServiceBean implements EmployeeService {
     @Override
     public Integer updateEmployee(String name, String email, String country, Integer id) {
         return employeeRepository.updateEmployee(name, email, country, id);
+    }
+
+    @Override
+    public Employee findEmployeeByEmail(String email) {
+        return employeeRepository.findEmployeesByEmail(email);
     }
 }

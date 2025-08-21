@@ -118,6 +118,7 @@ public class ServiceTests {
         EmployeeServiceBean serviceBean = new EmployeeServiceBean(
                 mockRepository,
                 null,
+                null,
                 null
         );
         String testEmailAddress = "test@email.com";
@@ -147,6 +148,7 @@ public class ServiceTests {
         EmployeeRepository mockRepository = mock(EmployeeRepository.class);
         EmployeeServiceBean serviceBean = new EmployeeServiceBean(
                 mockRepository,
+                null,
                 null,
                 null
         );
