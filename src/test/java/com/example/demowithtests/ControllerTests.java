@@ -9,14 +9,14 @@ import com.example.demowithtests.service.document.DocumentService;
 import com.example.demowithtests.util.mappers.DocumentMapper;
 import com.example.demowithtests.util.mappers.EmployeeMapper;
 import com.example.demowithtests.web.EmployeeController;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.json.JsonMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -48,22 +48,21 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @DisplayName("Employee Controller Tests")
 public class ControllerTests {
 
-    @Autowired
-    ObjectMapper mapper;
+    private final JsonMapper mapper = JsonMapper.builder().build();
 
-    @MockBean
+    @MockitoBean
     EmployeeService service;
 
-    @MockBean
+    @MockitoBean
     EmployeeServiceEM serviceEM;
 
-    @MockBean
+    @MockitoBean
     EmployeeMapper employeeMapper;
 
-    @MockBean
+    @MockitoBean
     private DocumentMapper documentMapper;
 
-    @MockBean
+    @MockitoBean
     private DocumentService documentService;
 
     @Autowired
